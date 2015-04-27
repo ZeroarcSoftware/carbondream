@@ -1,4 +1,4 @@
-/** carbondream by Zeroarc Software
+/* carbondream - Copyright 2015 Zeroarc Software, LLC
  *
  * Entry point into component
  */
