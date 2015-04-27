@@ -1,0 +1,3 @@
+# Don't publish jsx source
+*.jsx
+

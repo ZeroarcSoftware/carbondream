@@ -1,0 +1,38 @@
+{
+  "name": "carbondream",
+  "version": "0.0.1",
+  "description": "Reactjs based web annotation engine",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "watch": "$(npm bin)/watchify -d -e src/entry.js -t babelify -o index.js -v",
+    "build": "$(npm bin)/browserify -e src/entry.js -t babelify -o index.js",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZeroarcSoftware/carbondream.git"
+  },
+  "keywords": [
+    "reactjs",
+    "react-component",
+    "annotation"
+  ],
+  "author": "Zeroarc Software",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZeroarcSoftware/carbondream/issues"
+  },
+  "homepage": "https://github.com/ZeroarcSoftware/carbondream",
+  "devDependencies": {
+    "babelify": "^6.0.2",
+    "browserify": "^9.0.8",
+    "watchify": "^3.2.0"
+  },
+  "dependencies": {
+    "react": "^0.13.2"
+  }
+}
