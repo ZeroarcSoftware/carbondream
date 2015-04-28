@@ -43,9 +43,11 @@ var Input = React.createClass({
 
     return (
       <div className={classNames}>
-        <input type='text' value={this.state.value} onChange={this.handleChange} />
-        <a onClick={this.handleSaveClick}><i className='fa fa-check'></i></a>
-        <a onClick={this.handleCancelClick}><i className='fa fa-times'></i></a>
+        <div className='shadow-helper'>
+          <input type='text' value={this.state.value} onChange={this.handleChange} />
+          <a onClick={this.handleSaveClick}><i className='fa fa-check'></i></a>
+          <a onClick={this.handleCancelClick}><i className='fa fa-times'></i></a>
+        </div>
       </div>
     );
   }

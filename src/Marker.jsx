@@ -8,15 +8,9 @@ var React = require('react/addons');
 
 
 var Marker = React.createClass({
-  propTypes: {
-  },
-
   render() {
-    var divStyle = {
-      position: 'relative',
-    };
     return (
-      <div style={divStyle}><i className='fa fa-map-marker'></i></div>
+      <div className='cd-marker'><i className='fa fa-map-marker'></i></div>
     );
   }
 });

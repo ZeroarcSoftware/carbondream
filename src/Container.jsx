@@ -11,7 +11,7 @@ var Immutable = require('immutable');
 var Annotation = require('./Annotation');
 
 // Globals
-var DEFAULT_MOUSE_OFFSET = {x: -6, y: -18};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
+var DEFAULT_MOUSE_OFFSET = {x: -6, y: -20};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
 var DEFAULT_SCALE_FACTOR = 1;                   // Default scale factor
 
 var Container = React.createClass({
@@ -20,11 +20,15 @@ var Container = React.createClass({
   },
 
   getInitialState() {
+    var stateJSON = localStorage['annotationState'] || '{}';
+    var state = JSON.parse(stateJSON);
+    var annotations = state.annotations || [];
+
     return {
       scale: DEFAULT_SCALE_FACTOR,
-      annotations: Immutable.List(),
+      annotations: Immutable.List(annotations),
       pendingAnnotation: null,
-      lastAnnotationId: 0
+      lastAnnotationId: state.lastAnnotationId || 0
     };
   },
 
@@ -47,6 +51,7 @@ var Container = React.createClass({
       pendingAnnotation: annotation,
       lastAnnotationId: annotation.Id
     });
+
   },
 
   handleAnnotationSave(id, content) {
@@ -58,6 +63,8 @@ var Container = React.createClass({
       pendingAnnotation: null,
       annotations: annotations
     });
+
+    localStorage['annotationState'] = JSON.stringify({annotations: annotations, lastAnnotationId: a.Id});
   },
 
   handleAnnotationCancel(id) {

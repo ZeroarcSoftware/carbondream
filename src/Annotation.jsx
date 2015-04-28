@@ -11,10 +11,6 @@ var Marker = require('./Marker');
 var Content = require('./Content');
 var Input = require('./Input');
 
-// Globals
-var DEFAULT_Content_OFFSET = {x: 10, y: -15};
-
-
 var Annotation = React.createClass({
   propTypes: {
     content: React.PropTypes.string.isRequired,
@@ -27,16 +23,15 @@ var Annotation = React.createClass({
     var {x,y,...other} = this.props;
 
     var divStyle = {
-      position: 'absolute',
       left: x,
       top: y,
     };
 
     return (
-      <div style={divStyle}>
+      <div style={divStyle} className='cd-annotation'>
+        <Marker />
         <Content {...other} />
         <Input {...other} />
-        <Marker />
       </div>
     );
   }
