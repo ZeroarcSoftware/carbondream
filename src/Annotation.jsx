@@ -20,26 +20,22 @@ var Annotation = React.createClass({
     content: React.PropTypes.string.isRequired,
     x: React.PropTypes.number.isRequired,
     y: React.PropTypes.number.isRequired,
-    pending: React.PropTypes.bool,
-  },
-
-  getInitialState() {
-    return {
-      isEditing: this.props.pending || false
-    };
+    pending: React.PropTypes.bool.isRequired,
   },
 
   render() {
+    var {x,y,...other} = this.props;
+
     var divStyle = {
       position: 'absolute',
-      left: this.props.x,
-      top: this.props.y,
+      left: x,
+      top: y,
     };
 
     return (
       <div style={divStyle}>
-        <Content visible={!this.state.isEditing} content={this.props.content} />
-        <Input visible={this.state.isEditing} content={this.props.content} />
+        <Content {...other} />
+        <Input {...other} />
         <Marker />
       </div>
     );

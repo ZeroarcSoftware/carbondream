@@ -14,7 +14,7 @@ var Input = require('./Input');
 var Content = React.createClass({
   propTypes: {
     content: React.PropTypes.string.isRequired,
-    visible: React.PropTypes.bool.isRequired,
+    pending: React.PropTypes.bool.isRequired,
   },
 
   render() {
@@ -24,7 +24,7 @@ var Content = React.createClass({
 
     var classNames = ClassNames({
       'cd-annotation-input': true,
-      'hidden': !this.props.visible
+      'hidden': this.props.pending
     });
 
     return (
