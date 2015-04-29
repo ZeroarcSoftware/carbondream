@@ -7,6 +7,15 @@
 
 /* Annotation specific */
 
+.cd-container {
+  width:      100%;
+  height:     100%; 
+  z-index:    100;
+  top:        0; 
+  left:       0; 
+  position:   fixed; 
+}
+
 .cd-marker {
   color: rgb(99, 131, 255);
   text-shadow: 2px 3px 2px grey;
@@ -16,50 +25,109 @@
   position: absolute;
 }
 
-.cd-annotation-content,
-.cd-annotation-input {
-  padding: 10px;
+.cd-annotation-input, 
+.cd-annotation-content {
   margin: 10px;
-  border: solid 1px rgba(0, 0, 0, 0.37);
   border-radius: 3px;
   box-shadow: 2px 3px 4px 2px grey;
-  top: -40px;
+  top: -55px;
   left: 22px;
-  background-color: #F2F2F2;
+  background-color: #FFF;
+  position: relative;
+  min-height: 3.5em;
+  min-width: 14.5em;
+  max-width: 14.5em;
+  padding: 0px;
+}
+
+.cd-annotation-content {
+
+}
+
+.cd-annotation-content-text {
+  padding: 10px; 8px; 0px; 0px;
+  min-height: 3.5em;
+  z-index: 2;
   position: relative;
 }
 
-.cd-annotation-content::after,
-.cd-annotation-input::after,
-.cd-annotation-content::before,
-.cd-annotation-input::before {
+.cd-annotation-input textarea {
+  min-height: 5.5em;
+  width: 100%;
+  z-index: 1;
+  position: relative;  
+  border: 0px;
+  border-radius: 3px;
+  padding: 10px; 8px; 0px; 0px;
+  font-size: 0.8em;
+  line-height: 1.3;
+}
+
+.cd-annotation-content-info,
+.cd-annotation-input-controls {
+  padding: 5px 5px 5px 5px;
+  text-align: right;
+  border-top: solid 1px rgba(0  , 0, 0, 0.13);
   background-color: #F2F2F2;
-  border-left: solid 1px rgba(0, 0, 0, 0.37);
-  border-bottom: solid 1px rgba(0, 0, 0, 0.37);
+  bottom: 0px;
+  position: relative;
+  border-radius: 3px;
+  z-index: 2;
+}
+
+.cd-annotation-input-controls .fa-check {
+  color: #5cb85c;
+  padding-right: 10px;
+}
+
+.cd-annotation-input-controls .fa-times {
+  color: #d9534f;
+  padding-right: 5px;
+}
+
+/* Adds smart quotes */
+.cd-annotation-content-text::before {
+  content: "\201C";
+}
+
+.cd-annotation-content-text::after {
+  content: "\201D";
+}
+
+
+
+/* Start shadow bubble */
+/* This is all to get a comment bubble with a matching shadow */
+.cd-shadow-bubble::after,
+.cd-shadow-bubble::before {
+  background-color: white;
+  /* border-left: solid 1px rgba(0, 0, 0, 0.37); */
+  /* border-bottom: solid 1px rgba(0, 0, 0, 0.37); */
   content: "\00a0";
   display: block;
-  left: -11px;
+  left: 22px;
   position: absolute;
-  top: 9px;
+  top: -4px;
   transform: rotate( 45deg );
   width:  20px;
   height:  20px;
-  z-index: 0;
+  z-index: 1;
 }
 
-.cd-annotation-content::before,
-.cd-annotation-input::before {
-  box-shadow: 2px 3px 4px 2px grey;
+.cd-shadow-bubble::before {
+  box-shadow: 2px 2px 4px 3px grey;
   content: "\00a0";
   display: block;
-  left: -8px;
+  left: 26px;
   z-index: -1;
 }
 
-.shadow-helper {
-  position: relative;
-  z-index: 1;
-}
+/* End shadow bubble */
+
+
+/*
+ * General helper classes
+ */
 
 .hidden {
   display: none;

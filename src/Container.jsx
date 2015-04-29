@@ -68,12 +68,14 @@ var Container = React.createClass({
   },
 
   handleAnnotationCancel(id) {
+    console.log('cancel ' + id);
     this.setState({
       pendingAnnotation: null,
       lastAnnotationId: this.state.lastAnnotationId -= 1
     });
   },
 
+  /* Going with 100% size div for now
   componentDidMount() {
     document.addEventListener('click', this.handleClick);
   },
@@ -81,6 +83,7 @@ var Container = React.createClass({
   componentWillUnmount() {
     document.removeEventListener('click', this.handleClick);
   },
+  */
 
   render() {
     var pA = this.state.pendingAnnotation;
@@ -107,7 +110,7 @@ var Container = React.createClass({
     });
 
     return (
-      <div>
+      <div className='cd-container' onClick={this.handleClick}>
         {annotations}
         {pAnnotationComponent}
       </div>

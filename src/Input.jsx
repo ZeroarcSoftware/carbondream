@@ -42,11 +42,15 @@ var Input = React.createClass({
     });
 
     return (
-      <div className={classNames}>
-        <div className='shadow-helper'>
-          <input type='text' value={this.state.value} onChange={this.handleChange} />
-          <a onClick={this.handleSaveClick}><i className='fa fa-check'></i></a>
-          <a onClick={this.handleCancelClick}><i className='fa fa-times'></i></a>
+      <div>
+        <div className='cd-shadow-bubble'>
+        </div>
+        <div className={classNames}>
+          <textarea value={this.state.value} onChange={this.handleChange} />
+          <div className='cd-annotation-input-controls'>
+            <a onClick={this.handleSaveClick}><i className='fa fa-check'></i></a>
+            <a onClick={this.handleCancelClick}><i className='fa fa-times'></i></a>
+          </div>
         </div>
       </div>
     );

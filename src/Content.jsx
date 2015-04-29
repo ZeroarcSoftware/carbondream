@@ -25,9 +25,16 @@ var Content = React.createClass({
 
     // Inner shadow-helper class is used to help z-index the text over the shadow/comment bubble
     return (
-      <div className={classNames}>
-        <div className='shadow-helper'>
-          {this.props.content}
+      <div>
+        <div className='cd-shadow-bubble'>
+        </div>
+        <div className={classNames}>
+          <div className='cd-annotation-content-text'>
+            {this.props.content}
+          </div>
+          <div className='cd-annotation-content-info'>
+            Comment #1 by Justin 7 days ago
+          </div>
         </div>
       </div>
     );
