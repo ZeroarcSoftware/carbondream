@@ -36,20 +36,33 @@ var Input = React.createClass({
   },
 
   render() {
-    var classNames = ClassNames({
+    var textAreaStyle = {
+      minHeight: '5.5em'
+    };
+
+    if (this.state.value.length) {
+      var ems = Math.min(Math.floor(this.state.value.length / 30) + 5.5, 14);
+      textAreaStyle.minHeight = ems + 'em';
+    }
+
+    var editorClasses = ClassNames({
+      'cd-annotation-editor': true,
+      'hidden': !this.props.pending,
+    });
+
+    var inputClasses = ClassNames({
       'cd-annotation-input': true,
-      'hidden': !this.props.pending
     });
 
     return (
-      <div>
+      <div className={editorClasses}>
         <div className='cd-shadow-bubble'>
         </div>
-        <div className={classNames}>
-          <textarea value={this.state.value} onChange={this.handleChange} />
+        <div className={inputClasses}>
+          <textarea style={textAreaStyle} value={this.state.value} onChange={this.handleChange} />
           <div className='cd-annotation-input-controls'>
-            <a onClick={this.handleSaveClick}><i className='fa fa-check'></i></a>
-            <a onClick={this.handleCancelClick}><i className='fa fa-times'></i></a>
+            <button className='save' onClick={this.handleSaveClick}><i className='fa fa-check'> Save</i></button>
+            <button className='cancel' onClick={this.handleCancelClick}><i className='fa fa-times'> Cancel</i></button>
           </div>
         </div>
       </div>

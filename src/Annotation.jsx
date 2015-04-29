@@ -17,10 +17,28 @@ var Annotation = React.createClass({
     x: React.PropTypes.number.isRequired,
     y: React.PropTypes.number.isRequired,
     pending: React.PropTypes.bool.isRequired,
+    shouldDisplayViewer: React.PropTypes.bool.isRequired,
+    displayAnnotationViewer: React.PropTypes.func.isRequired,
+    hideAnnotationViewer: React.PropTypes.func.isRequired,
+  },
+
+  handleMouseOver(e) {
+    e.preventDefault();
+    this.props.displayAnnotationViewer(this.props.id);
+  },
+
+  handleMouseOut(e) {
+    e.preventDefault();
+    this.props.hideAnnotationViewer(this.props.id);
   },
 
   render() {
-    var {x,y,...other} = this.props;
+    var {
+      x,
+      y,
+      displayAnnotationViewer,
+      hideAnnotationViewer,
+      ...other} = this.props;
 
     var divStyle = {
       left: x,
@@ -28,8 +46,8 @@ var Annotation = React.createClass({
     };
 
     return (
-      <div style={divStyle} className='cd-annotation'>
-        <Marker />
+      <div style={divStyle} className='cd-annotation' onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <Marker id={this.props.id} displayAnnotationViewer={displayAnnotationViewer} hideAnnotationViewer={hideAnnotationViewer}  />
         <Content {...other} />
         <Input {...other} />
       </div>

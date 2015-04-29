@@ -28,7 +28,8 @@ var Container = React.createClass({
       scale: DEFAULT_SCALE_FACTOR,
       annotations: Immutable.List(annotations),
       pendingAnnotation: null,
-      lastAnnotationId: state.lastAnnotationId || 0
+      lastAnnotationId: state.lastAnnotationId || 0,
+      visibleViewerId: null,
     };
   },
 
@@ -75,15 +76,27 @@ var Container = React.createClass({
     });
   },
 
-  /* Going with 100% size div for now
-  componentDidMount() {
-    document.addEventListener('click', this.handleClick);
+  displayAnnotationViewer(id) {
+    console.log('display viewer: ' + id);
+
+    console.log('display clearing timer: ' + this.viewerHideTimer);
+    clearTimeout(this.viewerHideTimer);
+
+    this.setState({visibleViewerId: id});
   },
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleClick);
+  hideAnnotationViewer(id) {
+    console.log('hide viewer: ' + id);
+
+    console.log('hide clearing timer: ' + this.viewerHideTimer);
+    clearTimeout(this.viewerHideTimer);
+
+    this.viewerHideTimer = setTimeout(() => {
+      console.log('hide timer fired for id: ' + id);
+      this.setState({visibleViewerId: null});
+    }, 1000);
+    console.log('timer for id ' + id + ' is: ' + this.viewerHideTimer);
   },
-  */
 
   render() {
     var pA = this.state.pendingAnnotation;
@@ -104,6 +117,9 @@ var Container = React.createClass({
           id={m.Id}
           content={m.content}
           pending={false}
+          shouldDisplayViewer={m.Id === this.state.visibleViewerId}
+          displayAnnotationViewer={this.displayAnnotationViewer}
+          hideAnnotationViewer={this.hideAnnotationViewer}
           x={m.x * this.state.scale}
           y={m.y * this.state.scale} />
       );
