@@ -37,7 +37,7 @@ var Container = React.createClass({
     e.stopPropagation();
     console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    if (this.state.pendingAnnotation) return;
+    if (this.state.pendingAnnotation || this.state.visibleViewerId) return;
 
     var id = this.state.lastAnnotationId + 1;
     var mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
@@ -61,13 +61,45 @@ var Container = React.createClass({
     var a = this.state.pendingAnnotation;
     a.content = content;
     a.timeStamp = Date.now();
-    var annotations = this.state.annotations.push(a);
+
+    var annotations = this.state.annotations;
+
+    // Check to see if this exists already
+    var index = annotations.findIndex((value) => {
+      if (value.Id === id) return true;
+      return false;
+    });
+
+    if (index > 0) {
+      annotations = annotations.set(index, a);
+    }
+    else {
+      annotations = this.state.annotations.push(a);
+    }
+
     this.setState({
       pendingAnnotation: null,
       annotations: annotations
     });
 
-    localStorage['annotationState'] = JSON.stringify({annotations: annotations, lastAnnotationId: a.Id});
+    localStorage['annotationState'] = JSON.stringify({
+      annotations: annotations,
+      lastAnnotationId: Math.ceil(a.Id, this.state.lastAnnotationId)  // Only change the Id if its higher, in case we are editing
+    });
+  },
+
+  // If editing, pull the annotation out and put it in pending, force viewer to null
+  editAnnotation(id) {
+    console.log('delete ' + id);
+    var annotation = this.state.annotations.find((value) => {
+      if (value.Id === id) return true;
+      return false;
+    });
+
+    this.setState({
+      pendingAnnotation: annotation,
+      visibleViewerId: null
+    });
   },
 
   deleteAnnotation(id) {
@@ -91,25 +123,17 @@ var Container = React.createClass({
   },
 
   displayAnnotationViewer(id) {
-    console.log('display viewer: ' + id);
-
-    console.log('display clearing timer: ' + this.viewerHideTimer);
     clearTimeout(this.viewerHideTimer);
 
     this.setState({visibleViewerId: id});
   },
 
   hideAnnotationViewer(id) {
-    console.log('hide viewer: ' + id);
-
-    console.log('hide clearing timer: ' + this.viewerHideTimer);
     clearTimeout(this.viewerHideTimer);
 
     this.viewerHideTimer = setTimeout(() => {
-      console.log('hide timer fired for id: ' + id);
       this.setState({visibleViewerId: null});
     }, 1000);
-    console.log('timer for id ' + id + ' is: ' + this.viewerHideTimer);
   },
 
   render() {
@@ -137,6 +161,7 @@ var Container = React.createClass({
           displayAnnotationViewer={this.displayAnnotationViewer}
           hideAnnotationViewer={this.hideAnnotationViewer}
           deleteAnnotation={this.deleteAnnotation}
+          editAnnotation={this.editAnnotation}
           x={m.x * this.state.scale}
           y={m.y * this.state.scale} />
       );

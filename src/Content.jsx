@@ -19,6 +19,7 @@ var Content = React.createClass({
     pending: React.PropTypes.bool.isRequired,
     shouldDisplayViewer: React.PropTypes.bool.isRequired,
     deleteAnnotation: React.PropTypes.func.isRequired,
+    editAnnotation: React.PropTypes.func.isRequired,
 
     //Optional
     timeStamp: React.PropTypes.number,
@@ -30,6 +31,7 @@ var Content = React.createClass({
 
   handleEditClick(e) {
     e.stopPropagation();
+    this.props.editAnnotation(this.props.id);
   },
 
   handleDeleteClick(e) {
