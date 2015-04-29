@@ -17,18 +17,24 @@ var Annotation = React.createClass({
     x: React.PropTypes.number.isRequired,
     y: React.PropTypes.number.isRequired,
     pending: React.PropTypes.bool.isRequired,
-    shouldDisplayViewer: React.PropTypes.bool.isRequired,
-    displayAnnotationViewer: React.PropTypes.func.isRequired,
-    hideAnnotationViewer: React.PropTypes.func.isRequired,
+    deleteAnnotation: React.PropTypes.func.isRequired,
+
+    //Optional
+    timeStamp: React.PropTypes.number,
+    shouldDisplayViewer: React.PropTypes.bool,
+    displayAnnotationViewer: React.PropTypes.func,
+    hideAnnotationViewer: React.PropTypes.func,
   },
 
   handleMouseOver(e) {
-    e.preventDefault();
+    e.stopPropagation();
+    if (this.props.pending) return;
     this.props.displayAnnotationViewer(this.props.id);
   },
 
   handleMouseOut(e) {
-    e.preventDefault();
+    e.stopPropagation();
+    if (this.props.pending) return;
     this.props.hideAnnotationViewer(this.props.id);
   },
 
@@ -45,11 +51,14 @@ var Annotation = React.createClass({
       top: y,
     };
 
+    var contentComponent = !this.props.pending ? <Content {...other} /> : '';
+    var inputComponent = this.props.pending ? <Input {...other} /> : '';
+
     return (
       <div style={divStyle} className='cd-annotation' onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <Marker id={this.props.id} displayAnnotationViewer={displayAnnotationViewer} hideAnnotationViewer={hideAnnotationViewer}  />
-        <Content {...other} />
-        <Input {...other} />
+        <Marker id={this.props.id} />
+        {contentComponent}
+        {inputComponent}
       </div>
     );
   }

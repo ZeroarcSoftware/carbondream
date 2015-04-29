@@ -13,8 +13,8 @@ var Input = React.createClass({
     id: React.PropTypes.number.isRequired,
     content: React.PropTypes.string.isRequired,
     pending: React.PropTypes.bool.isRequired,
-    handleAnnotationSave: React.PropTypes.func,
-    handleAnnotationCancel: React.PropTypes.func,
+    saveAnnotation: React.PropTypes.func,
+    cancelAnnotation: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -26,22 +26,22 @@ var Input = React.createClass({
   },
 
   handleSaveClick(e) {
-    e.preventDefault();
-    this.props.handleAnnotationSave(this.props.id, this.state.value);
+    e.stopPropagation();
+    this.props.saveAnnotation(this.props.id, this.state.value);
   },
 
   handleCancelClick(e) {
-    e.preventDefault();
-    this.props.handleAnnotationCancel(this.props.id);
+    e.stopPropagation();
+    this.props.cancelAnnotation(this.props.id);
   },
 
   render() {
     var textAreaStyle = {
-      minHeight: '5.5em'
+      minHeight: '6.5em'
     };
 
     if (this.state.value.length) {
-      var ems = Math.min(Math.floor(this.state.value.length / 30) + 5.5, 14);
+      var ems = Math.min(Math.floor(this.state.value.length / 30) + 6.5, 14);
       textAreaStyle.minHeight = ems + 'em';
     }
 
@@ -59,7 +59,7 @@ var Input = React.createClass({
         <div className='cd-shadow-bubble'>
         </div>
         <div className={inputClasses}>
-          <textarea style={textAreaStyle} value={this.state.value} onChange={this.handleChange} />
+          <textarea autoFocus style={textAreaStyle} value={this.state.value} onChange={this.handleChange} />
           <div className='cd-annotation-input-controls'>
             <button className='save' onClick={this.handleSaveClick}><i className='fa fa-check'> Save</i></button>
             <button className='cancel' onClick={this.handleCancelClick}><i className='fa fa-times'> Cancel</i></button>

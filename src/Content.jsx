@@ -6,6 +6,7 @@
 // External
 var React = require('react/addons');
 var ClassNames = require('classnames');
+var Timeago = require('timeago');
 
 // Local
 var Input = require('./Input');
@@ -17,6 +18,10 @@ var Content = React.createClass({
     content: React.PropTypes.string.isRequired,
     pending: React.PropTypes.bool.isRequired,
     shouldDisplayViewer: React.PropTypes.bool.isRequired,
+    deleteAnnotation: React.PropTypes.func.isRequired,
+
+    //Optional
+    timeStamp: React.PropTypes.number,
   },
 
   getInitialState() {
@@ -24,20 +29,20 @@ var Content = React.createClass({
   },
 
   handleEditClick(e) {
-    e.preventDefault();
+    e.stopPropagation();
   },
 
   handleDeleteClick(e) {
-    e.preventDefault();
+    e.stopPropagation();
+    this.props.deleteAnnotation(this.props.id);
   },
 
+  // These allow event propogation because parent needs mouse events
   handleMouseOver(e) {
-    e.preventDefault();
     this.setState({shouldDisplayControls: true});
   },
 
   handleMouseOut(e) {
-    e.preventDefault();
     this.setState({shouldDisplayControls: false});
   },
 
@@ -70,7 +75,7 @@ var Content = React.createClass({
             {this.props.content}
           </div>
           <div className='cd-annotation-content-info'>
-            Comment #{this.props.id} by Justin 7 days ago
+            Comment #{this.props.id} by Justin {Timeago(this.props.timeStamp)}
           </div>
         </div>
       </div>

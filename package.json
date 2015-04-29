@@ -36,6 +36,7 @@
     "classnames": "^1.2.1",
     "font-awesome": "^4.3.0",
     "immutable": "^3.7.2",
-    "react": "^0.13.2"
+    "react": "^0.13.2",
+    "timeago": "^0.2.0"
   }
 }

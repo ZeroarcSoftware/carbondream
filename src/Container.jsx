@@ -34,7 +34,7 @@ var Container = React.createClass({
   },
 
   handleClick(e) {
-    e.preventDefault();
+    e.stopPropagation();
     console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     if (this.state.pendingAnnotation) return;
@@ -44,6 +44,7 @@ var Container = React.createClass({
     var annotation = {
       Id: id += 1,
       content: '',
+      timeStamp: Date.now(),
       x: (e.clientX + mouseOffset.x) / this.state.scale,
       y: (e.clientY + mouseOffset.y) / this.state.scale
     };
@@ -55,10 +56,11 @@ var Container = React.createClass({
 
   },
 
-  handleAnnotationSave(id, content) {
+  saveAnnotation(id, content) {
     console.log('save ' + id);
     var a = this.state.pendingAnnotation;
     a.content = content;
+    a.timeStamp = Date.now();
     var annotations = this.state.annotations.push(a);
     this.setState({
       pendingAnnotation: null,
@@ -68,7 +70,19 @@ var Container = React.createClass({
     localStorage['annotationState'] = JSON.stringify({annotations: annotations, lastAnnotationId: a.Id});
   },
 
-  handleAnnotationCancel(id) {
+  deleteAnnotation(id) {
+    console.log('delete ' + id);
+    var index = this.state.annotations.findIndex((value) => {
+      if (value.Id === id) return true;
+      return false;
+    });
+
+    var annotations = this.state.annotations.delete(index);
+    this.setState({annotations: annotations});
+    localStorage['annotationState'] = JSON.stringify({annotations: annotations});
+  },
+
+  cancelAnnotation(id) {
     console.log('cancel ' + id);
     this.setState({
       pendingAnnotation: null,
@@ -103,23 +117,26 @@ var Container = React.createClass({
 
     var pAnnotationComponent = this.state.pendingAnnotation
       ? <Annotation id={pA.Id}
-          content={pA.content}
-          pending={true}
-          handleAnnotationSave={this.handleAnnotationSave}
-          handleAnnotationCancel={this.handleAnnotationCancel}
-          x={pA.x * this.state.scale}
-          y={pA.y * this.state.scale} />
-      : '';
+        content={pA.content}
+        pending={true}
+        saveAnnotation={this.saveAnnotation}
+        cancelAnnotation={this.cancelAnnotation}
+        deleteAnnotation={this.deleteAnnotation}
+        x={pA.x * this.state.scale}
+        y={pA.y * this.state.scale} />
+          : '';
 
     var annotations = this.state.annotations.map((m) => {
       return (
         <Annotation key={m.Id}
           id={m.Id}
           content={m.content}
+          timeStamp={m.timeStamp}
           pending={false}
           shouldDisplayViewer={m.Id === this.state.visibleViewerId}
           displayAnnotationViewer={this.displayAnnotationViewer}
           hideAnnotationViewer={this.hideAnnotationViewer}
+          deleteAnnotation={this.deleteAnnotation}
           x={m.x * this.state.scale}
           y={m.y * this.state.scale} />
       );
