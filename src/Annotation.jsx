@@ -85,18 +85,20 @@ var Annotation = React.createClass({
       break;
       case 'square':
         verticalOffset = height;
-      indicator = <Square id={this.props.id} width={width} height={height} />;
+        indicator = <Square id={this.props.id} width={width} height={height} />;
       break;
       case 'circle':
+        // For circles, we need to use the biggest mouse value as diameter
         var diameter = Math.max(width,height);
-      verticalOffset = diameter;
+        verticalOffset = diameter;
 
-      if (this.props.shouldDisplayViewer || this.props.pending) {
-        divStyle.minHeight = diameter + 'px';
-        divStyle.minWidth = diameter + 280 + 'px';
-      }
+        // We have to adjust the outer div differently for circles for proper alignment
+        if (this.props.shouldDisplayViewer || this.props.pending) {
+          divStyle.minHeight = diameter + 'px';
+          divStyle.minWidth = diameter + 280 + 'px';
+        }
 
-      indicator = <Circle id={this.props.id} width={diameter} height={diameter} />;
+        indicator = <Circle id={this.props.id} width={diameter} height={diameter} />;
       break;
       case 'highlight':
         indicator = <Highlight id={this.props.id} width={width} />;

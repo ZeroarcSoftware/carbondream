@@ -47,7 +47,7 @@ var Container = React.createClass({
     var id = this.state.lastAnnotationId + 1;
     var mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
     var annotation = {
-      Id: id += 1,
+      Id: id,
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
@@ -73,7 +73,7 @@ var Container = React.createClass({
     var id = this.state.lastAnnotationId + 1;
     var mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
     var annotation = {
-      Id: id += 1,
+      Id: id,
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
@@ -97,6 +97,7 @@ var Container = React.createClass({
       || this.state.mode === 'marker'
       || !this.state.pendingAnnotation) return;
 
+    // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.drawing) return;
 
     console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
@@ -114,6 +115,9 @@ var Container = React.createClass({
     if (this.state.visibleViewerId
       || this.state.mode === 'marker'
       || !this.state.pendingAnnotation) return;
+
+    // If drawing is false, we have already popped the input dialog
+    if (!this.state.pendingAnnotation.drawing) return;
 
     console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
@@ -134,6 +138,10 @@ var Container = React.createClass({
       lastAnnotationId: this.state.lastAnnotationId,
       mode: mode
     });
+
+    if (this.state.pendingAnnotation) {
+      this.cancelAnnotation(this.state.pendingAnnotation.Id);
+    }
   },
 
   saveAnnotation(id, content) {
@@ -203,6 +211,8 @@ var Container = React.createClass({
   },
 
   displayAnnotationViewer(id) {
+    if (this.state.pendingAnnotation) return;
+
     clearTimeout(this.viewerHideTimer);
 
     this.setState({visibleViewerId: id});

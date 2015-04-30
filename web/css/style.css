@@ -17,6 +17,7 @@
 
 .cd-mode-toggle {
   position: absolute;
+  z-index: 101;
   right: 0px;
   top: 0px;
   opacity: 0.4;

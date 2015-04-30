@@ -64,6 +64,7 @@ var Content = React.createClass({
       'fade-in': this.state.shouldDisplayControls,
     });
 
+    // If we are passed a vertical offset, adjust it for the comment bubble and use it
     var divStyle = this.props.verticalOffset ? {top: (this.props.verticalOffset/2 - 20) + 'px'} : {};
 
     // Inner shadow-helper class is used to help z-index the text over the shadow/comment bubble

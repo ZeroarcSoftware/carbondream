@@ -18,9 +18,14 @@ var ModeToggle = React.createClass({
     };
   },
 
+  // This is neccessary to prevent mouseup/down from triggering actions on parents
+  blockEvent(e) {
+    e.stopPropagation();
+  },
+
   render() {
     return (
-      <div className='cd-mode-toggle'>
+      <div className='cd-mode-toggle' onMouseUp={this.blockEvent} onMouseDown={this.blockEvent}>
         <button className={this.props.mode === 'marker' ? 'selected' : ''} onClick={this.handleClick('marker')} title='Switch to marker'><i className='fa fa-map-marker'></i></button>
         <button className={this.props.mode === 'square' ? 'selected' : ''} onClick={this.handleClick('square')} title='Switch to square'><i className='fa fa-square-o'></i></button>
         <button className={this.props.mode === 'circle' ? 'selected' : ''} onClick={this.handleClick('circle')} title='Switch to circle'><i className='fa fa-circle-o'></i></button>

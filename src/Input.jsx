@@ -40,6 +40,7 @@ var Input = React.createClass({
       minHeight: '6.5em'
     };
 
+    // Allow input area to grow to a certain length before using scroll bar
     if (this.state.value.length) {
       var ems = Math.min(Math.floor(this.state.value.length / 30) + 6.5, 14);
       textAreaStyle.minHeight = ems + 'em';
@@ -55,6 +56,7 @@ var Input = React.createClass({
     });
 
 
+    // If we are passed a vertical offset, adjust it for the comment bubble and use it
     var divStyle = this.props.verticalOffset ? {top: (this.props.verticalOffset/2 - 20) + 'px'} : {};
 
     return (
