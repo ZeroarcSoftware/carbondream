@@ -23,6 +23,7 @@ var Content = React.createClass({
 
     //Optional
     timeStamp: React.PropTypes.number,
+    verticalOffset: React.PropTypes.number,
   },
 
   getInitialState() {
@@ -63,9 +64,11 @@ var Content = React.createClass({
       'fade-in': this.state.shouldDisplayControls,
     });
 
+    var divStyle = this.props.verticalOffset ? {top: (this.props.verticalOffset/2 - 20) + 'px'} : {};
+
     // Inner shadow-helper class is used to help z-index the text over the shadow/comment bubble
     return (
-      <div className={viewerClasses}>
+      <div style={divStyle} className={viewerClasses}>
         <div className='cd-shadow-bubble'>
         </div>
         <div className={contentClasses} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>

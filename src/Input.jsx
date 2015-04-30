@@ -54,8 +54,11 @@ var Input = React.createClass({
       'cd-annotation-input': true,
     });
 
+
+    var divStyle = this.props.verticalOffset ? {top: (this.props.verticalOffset/2 - 20) + 'px'} : {};
+
     return (
-      <div className={editorClasses}>
+      <div style={divStyle} className={editorClasses}>
         <div className='cd-shadow-bubble'>
         </div>
         <div className={inputClasses}>

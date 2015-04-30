@@ -1,6 +1,6 @@
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
  *
- * Single annotation square
+ * Annotation square shape
  */
 
 //External

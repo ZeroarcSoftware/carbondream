@@ -76,27 +76,38 @@ var Annotation = React.createClass({
     }
 
     var indicator = '';
+    var verticalOffset = null;
+
 
     switch(this.props.type) {
       case 'marker':
         indicator = <Marker id={this.props.id} />;
       break;
       case 'square':
-        indicator = <Square id={this.props.id} width={width} height={height} />;
+        verticalOffset = height;
+      indicator = <Square id={this.props.id} width={width} height={height} />;
       break;
       case 'circle':
-        indicator = <Circle id={this.props.id} width={width} height={height} />;
+        var diameter = Math.max(width,height);
+      verticalOffset = diameter;
+
+      if (this.props.shouldDisplayViewer || this.props.pending) {
+        divStyle.minHeight = diameter + 'px';
+        divStyle.minWidth = diameter + 280 + 'px';
+      }
+
+      indicator = <Circle id={this.props.id} width={diameter} height={diameter} />;
       break;
       case 'highlight':
         indicator = <Highlight id={this.props.id} width={width} />;
       break;
     }
 
-    var contentComponent = !this.props.drawing && !this.props.pending ? <Content {...other} /> : '';
-    var inputComponent = !this.props.drawing && this.props.pending ? <Input {...other} /> : '';
+    var contentComponent = !this.props.drawing && !this.props.pending ? <Content verticalOffset={verticalOffset} {...other} /> : '';
+    var inputComponent = !this.props.drawing && this.props.pending ? <Input verticalOffset={verticalOffset} {...other} /> : '';
 
     return (
-      <div style={divStyle} className='cd-annotation' onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <div style={divStyle} className={'cd-annotation ' + this.props.type} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         {contentComponent}
         {inputComponent}
         {indicator}

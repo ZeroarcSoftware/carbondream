@@ -11,7 +11,9 @@
 }
 
 
-/* Annotation specific */
+/*
+ * Mode switches
+ */
 
 .cd-mode-toggle {
   position: absolute;
@@ -38,6 +40,9 @@
   background-color: #5cb85c;
 }
 
+/*
+ * Top level container, capture all clicks
+ */
 
 .cd-container {
   width:      100%;
@@ -47,6 +52,10 @@
   left:       0;
   position:   fixed;
 }
+
+/*
+ * Shapes
+ */
 
 .cd-marker {
   color: rgb(99, 131, 255);
@@ -71,6 +80,35 @@
   box-shadow: 2px 3px 1px grey;
   position: absolute;
 }
+
+.cd-circle {
+  border: solid 3px rgb(99, 131, 255);
+  box-shadow: inset 2px 3px 1px grey;
+  position: relative;
+  border-radius: 50%;
+  top: 0px;
+  left: 0px;
+}
+
+.cd-circle.after {
+  content: "\00a0";
+  border: solid 3px rgb(99, 131, 255);
+  box-shadow: 2px 3px 1px grey;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.cd-highlight {
+  background-color: rgba(255, 255, 0, 0.37);
+  position: relative;
+  height: 1.3em;
+  top: 0px;
+  left: 0px;
+}
+
+/*
+ * Annotation bubble
+ */
 
 .cd-annotation {
   position: absolute;
@@ -98,9 +136,26 @@
   position: relative;
   top: -14px;
   float: right;
-  /* right: 0px; */
-  /* padding: 10px; */
+  right: 0px;
 }
+
+/* Per shape adjustments */
+.cd-annotation.highlight .cd-annotation-editor,
+.cd-annotation.highlight .cd-annotation-viewer {
+  top: -14px;
+  right: 15px;
+}
+
+.cd-annotation.circle .cd-annotation-editor,
+.cd-annotation.circle .cd-annotation-viewer {
+  right: 9px;
+}
+
+.cd-annotation.square .cd-annotation-editor,
+.cd-annotation.square .cd-annotation-viewer {
+  right: 10px;
+}
+
 
 .cd-annotation-content-text {
   padding: 10px; 8px; 0px; 0px;
