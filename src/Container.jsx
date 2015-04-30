@@ -9,9 +9,10 @@ var Immutable = require('immutable');
 
 // Local
 var Annotation = require('./Annotation');
+var ModeToggle = require('./ModeToggle');
 
 // Globals
-var DEFAULT_MOUSE_OFFSET = {x: -6, y: -20};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
+var DEFAULT_MOUSE_OFFSET = {x: -8, y: -30};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
 var DEFAULT_SCALE_FACTOR = 1;                   // Default scale factor
 
 var Container = React.createClass({
@@ -30,14 +31,18 @@ var Container = React.createClass({
       pendingAnnotation: null,
       lastAnnotationId: state.lastAnnotationId || 0,
       visibleViewerId: null,
+      mode: state.mode || 'marker',
     };
   },
 
   handleClick(e) {
     e.stopPropagation();
-    console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    if (this.state.pendingAnnotation || this.state.visibleViewerId) return;
+    if (this.state.pendingAnnotation
+      || this.state.visibleViewerId
+      || this.state.mode !== 'marker') return;
+
+    console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     var id = this.state.lastAnnotationId + 1;
     var mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
@@ -45,15 +50,90 @@ var Container = React.createClass({
       Id: id += 1,
       content: '',
       timeStamp: Date.now(),
-      x: (e.clientX + mouseOffset.x) / this.state.scale,
-      y: (e.clientY + mouseOffset.y) / this.state.scale
+      type: this.state.mode,
+      x1: (e.clientX + mouseOffset.x) / this.state.scale,
+      y1: (e.clientY + mouseOffset.y) / this.state.scale
     };
 
     this.setState({
       pendingAnnotation: annotation,
       lastAnnotationId: annotation.Id
     });
+  },
 
+  handleMouseDown(e) {
+    e.stopPropagation();
+
+    if (this.state.pendingAnnotation
+      || this.state.visibleViewerId
+      || this.state.mode === 'marker') return;
+
+    console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+
+    var id = this.state.lastAnnotationId + 1;
+    var mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
+    var annotation = {
+      Id: id += 1,
+      content: '',
+      timeStamp: Date.now(),
+      type: this.state.mode,
+      drawing: true,
+      x1: e.clientX / this.state.scale,
+      y1: e.clientY / this.state.scale,
+      x2: e.clientX / this.state.scale,
+      y2: e.clientY / this.state.scale,
+    };
+
+    this.setState({
+      pendingAnnotation: annotation,
+      lastAnnotationId: annotation.Id
+    });
+  },
+
+  handleMouseMove(e) {
+     e.stopPropagation();
+
+    if (this.state.visibleViewerId
+      || this.state.mode === 'marker'
+      || !this.state.pendingAnnotation) return;
+
+    if (!this.state.pendingAnnotation.drawing) return;
+
+    console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+
+    var annotation = this.state.pendingAnnotation;
+    annotation.x2 = e.clientX / this.state.scale;
+    annotation.y2 = e.clientY / this.state.scale;
+
+    this.setState({pendingAnnotation: annotation});
+  },
+
+  handleMouseUp(e) {
+    e.stopPropagation();
+
+    if (this.state.visibleViewerId
+      || this.state.mode === 'marker'
+      || !this.state.pendingAnnotation) return;
+
+    console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+
+    var annotation = this.state.pendingAnnotation;
+    annotation.drawing = false;
+    annotation.x2 = e.clientX / this.state.scale;
+    annotation.y2 = e.clientY / this.state.scale;
+
+    this.setState({pendingAnnotation: annotation});
+  },
+
+  switchMode(mode) {
+    console.log('mode is now: ' + mode);
+    this.setState({mode: mode});
+
+    localStorage['annotationState'] = JSON.stringify({
+      annotations: this.state.annotations,
+      lastAnnotationId: this.state.lastAnnotationId,
+      mode: mode
+    });
   },
 
   saveAnnotation(id, content) {
@@ -139,16 +219,21 @@ var Container = React.createClass({
   render() {
     var pA = this.state.pendingAnnotation;
 
-    var pAnnotationComponent = this.state.pendingAnnotation
-      ? <Annotation id={pA.Id}
+    var pAnnotationComponent = '';
+    if (this.state.pendingAnnotation) {
+      pAnnotationComponent = <Annotation id={pA.Id}
         content={pA.content}
         pending={true}
+        drawing={pA.drawing}
         saveAnnotation={this.saveAnnotation}
         cancelAnnotation={this.cancelAnnotation}
         deleteAnnotation={this.deleteAnnotation}
-        x={pA.x * this.state.scale}
-        y={pA.y * this.state.scale} />
-          : '';
+        type={pA.type}
+        x1={pA.x1 * this.state.scale}
+        y1={pA.y1 * this.state.scale}
+        x2={pA.x2 * this.state.scale}
+        y2={pA.y2 * this.state.scale} />;
+    }
 
     var annotations = this.state.annotations.map((m) => {
       return (
@@ -162,13 +247,17 @@ var Container = React.createClass({
           hideAnnotationViewer={this.hideAnnotationViewer}
           deleteAnnotation={this.deleteAnnotation}
           editAnnotation={this.editAnnotation}
-          x={m.x * this.state.scale}
-          y={m.y * this.state.scale} />
+          type={m.type}
+          x1={m.x1 * this.state.scale}
+          y1={m.y1 * this.state.scale}
+          x2={m.x2 * this.state.scale}
+          y2={m.y2 * this.state.scale} />
       );
     });
 
     return (
-      <div className='cd-container' onClick={this.handleClick}>
+      <div className='cd-container' onClick={this.handleClick} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onMouseMove={this.handleMouseMove}>
+        <ModeToggle mode={this.state.mode} switchMode={this.switchMode} />
         {annotations}
         {pAnnotationComponent}
       </div>

@@ -1,11 +1,43 @@
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
  *
- * General styles
  */
 
+/*
+ * General helper classes
+ */
+
+.hidden {
+  display: none;
+}
 
 
 /* Annotation specific */
+
+.cd-mode-toggle {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  opacity: 0.4;
+  -webkit-transition: opacity 200ms ease-in-out;
+  -moz-transition: opacity 200ms ease-in-out;
+  -o-transition: opacity 200ms ease-in-out;
+  -ms-transition: opacity 200ms ease-in-out;
+  transition: opacity  200ms ease-in-out;
+}
+
+.cd-mode-toggle:hover {
+  opacity: 1;
+}
+
+.cd-mode-toggle button {
+  width: 22px;
+  outline: none;
+}
+
+.cd-mode-toggle button.selected {
+  background-color: #5cb85c;
+}
+
 
 .cd-container {
   width:      100%;
@@ -18,12 +50,31 @@
 
 .cd-marker {
   color: rgb(99, 131, 255);
+  font-size: 1.5em;
   text-shadow: 2px 3px 2px grey;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.cd-square {
+  border: solid 2px rgb(99, 131, 255);
+  box-shadow: inset 2px 3px 1px grey;
   position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+.cd-square.after {
+  content: "\00a0";
+  border: solid 2px rgb(99, 131, 255);
+  box-shadow: 2px 3px 1px grey;
+  position: absolute;
 }
 
 .cd-annotation {
   position: absolute;
+  /* display: inline-block; */
 }
 
 .cd-annotation-input,
@@ -31,8 +82,8 @@
   margin: 10px;
   border-radius: 3px;
   box-shadow: 2px 3px 4px 2px grey;
-  top: -55px;
-  left: 22px;
+  top: -12px;
+  /* left: 22px; */
   background-color: #FFF;
   position: relative;
   min-height: 3.5em;
@@ -45,6 +96,10 @@
 .cd-annotation-viewer {
   z-index: 3;
   position: relative;
+  top: -14px;
+  float: right;
+  /* right: 0px; */
+  /* padding: 10px; */
 }
 
 .cd-annotation-content-text {
@@ -102,6 +157,7 @@
   transition: opacity  300ms ease-in-out;
 }
 
+.cd-mode-toggle button,
 .cd-annotation-content-controls button,
 .cd-annotation-input-controls button {
   text-align: center;
@@ -149,9 +205,9 @@
   background-color: white;
   content: "\00a0";
   display: block;
-  left: 22px;
+  left: 0px;
   position: absolute;
-  top: -29px;
+  top: 15px;
   transform: rotate( 45deg );
   width:  20px;
   height:  20px;
@@ -162,18 +218,10 @@
   box-shadow: 2px 2px 4px 3px grey;
   content: "\00a0";
   display: block;
-  left: 26px;
+  left: 3px;
   z-index: -1;
 }
 
 /* End shadow bubble */
 
-
-/*
- * General helper classes
- */
-
-.hidden {
-  display: none;
-}
 

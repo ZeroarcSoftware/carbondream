@@ -8,22 +8,36 @@ var React = require('react/addons');
 
 // Local
 var Marker = require('./Marker');
+var Square = require('./Square');
+var Circle = require('./Circle');
+var Highlight = require('./Highlight');
 var Content = require('./Content');
 var Input = require('./Input');
 
 var Annotation = React.createClass({
   propTypes: {
     content: React.PropTypes.string.isRequired,
-    x: React.PropTypes.number.isRequired,
-    y: React.PropTypes.number.isRequired,
+    x1: React.PropTypes.number.isRequired,
+    y1: React.PropTypes.number.isRequired,
     pending: React.PropTypes.bool.isRequired,
+    drawing: React.PropTypes.bool.isRequired,
     deleteAnnotation: React.PropTypes.func.isRequired,
+    shouldDisplayViewer: React.PropTypes.bool.isRequired,
+    type: React.PropTypes.string.isRequired,
 
     //Optional
+    x2: React.PropTypes.number,
+    y2: React.PropTypes.number,
     timeStamp: React.PropTypes.number,
-    shouldDisplayViewer: React.PropTypes.bool,
     displayAnnotationViewer: React.PropTypes.func,
     hideAnnotationViewer: React.PropTypes.func,
+  },
+
+  getDefaultProps() {
+    return {
+      drawing: false,
+      shouldDisplayViewer: false
+    };
   },
 
   handleMouseOver(e) {
@@ -40,25 +54,52 @@ var Annotation = React.createClass({
 
   render() {
     var {
-      x,
-      y,
+      x1,
+      y1,
+      x2,
+      y2,
       displayAnnotationViewer,
       hideAnnotationViewer,
       ...other} = this.props;
 
+    var width = x2 ? Math.abs(x1 - x2) : 0;
+    var height = y2 ? Math.abs(y1 - y2) : 0;
+
     var divStyle = {
-      left: x,
-      top: y,
+      left: x1,
+      top: y1,
     };
 
-    var contentComponent = !this.props.pending ? <Content {...other} /> : '';
-    var inputComponent = this.props.pending ? <Input {...other} /> : '';
+    if (this.props.shouldDisplayViewer || this.props.pending) {
+      divStyle.minHeight = height + 'px';
+      divStyle.minWidth = width + 280 + 'px';
+    }
+
+    var indicator = '';
+
+    switch(this.props.type) {
+      case 'marker':
+        indicator = <Marker id={this.props.id} />;
+      break;
+      case 'square':
+        indicator = <Square id={this.props.id} width={width} height={height} />;
+      break;
+      case 'circle':
+        indicator = <Circle id={this.props.id} width={width} height={height} />;
+      break;
+      case 'highlight':
+        indicator = <Highlight id={this.props.id} width={width} />;
+      break;
+    }
+
+    var contentComponent = !this.props.drawing && !this.props.pending ? <Content {...other} /> : '';
+    var inputComponent = !this.props.drawing && this.props.pending ? <Input {...other} /> : '';
 
     return (
       <div style={divStyle} className='cd-annotation' onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <Marker id={this.props.id} />
         {contentComponent}
         {inputComponent}
+        {indicator}
       </div>
     );
   }
