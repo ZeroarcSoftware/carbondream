@@ -1,21 +1,12 @@
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
  *
- * Entry point into component
+ * Entry point into carbondream
  */
-
-// External
-var React = require('react/addons');
+'use strict';
 
 // Local
-var Container = require('./Container.jsx');
-
+var Container = require('./Container');
 
 console.log('Weaving a new carbon dream.');
-document.addEventListener('DOMContentLoaded', () => {
-  React.render(
-    <Container />
-    , document.getElementById('content')
-  );
-});
 
-
+module.exports = Container;

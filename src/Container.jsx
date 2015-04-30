@@ -2,6 +2,7 @@
  *
  * Top level container component
  */
+'use strict';
 
 // External
 var React = require('react/addons');

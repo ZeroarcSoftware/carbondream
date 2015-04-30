@@ -2,7 +2,8 @@
 node_modules
 
 # Don't check in build artifacts, this is only published to npm
-index.js
+dist/
+test/index.js
 
 # Don't add anything from web
 web

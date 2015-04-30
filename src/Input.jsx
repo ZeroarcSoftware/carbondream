@@ -2,6 +2,7 @@
  *
  * Input dialog for annotation
  */
+'use strict';
 
 // External
 var React = require('react/addons');

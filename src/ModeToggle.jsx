@@ -2,6 +2,7 @@
  *
  * Controls to toggle annotation modes
  */
+'use strict';
 
 var React = require('react/addons');
 

@@ -2,6 +2,7 @@
  *
  * Annotation circle shape
  */
+'use strict';
 
 //External
 var React = require('react/addons');

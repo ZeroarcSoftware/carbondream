@@ -2,6 +2,7 @@
  *
  * Pop-up annotation Content
  */
+'use strict';
 
 // External
 var React = require('react/addons');

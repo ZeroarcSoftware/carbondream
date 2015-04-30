@@ -2,13 +2,14 @@
   "name": "carbondream",
   "version": "0.0.1",
   "description": "Reactjs based web annotation engine",
-  "main": "index.js",
+  "main": "dist/entry.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "watch": "$(npm bin)/watchify --extension=.jsx -d -e src/entry.js -t [ babelify --optional es7.objectRestSpread ] -o index.js -v",
-    "build": "$(npm bin)/browserify --extension=.jsx -e src/entry.js -t [ babelify --optional es7.objectRestSpread ] -o index.js && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
+    "build": "$(npm bin)/babel --optional es7.objectRestSpread src/ -d dist/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
+    "demo-watch": "$(npm bin)/watchify --extension=.jsx -d -e src/demo.js -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js -v",
+    "demo-build": "$(npm bin)/browserify --extension=.jsx -e src/demo.js -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -28,6 +29,7 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/carbondream",
   "devDependencies": {
+    "babel": "^5.1.13",
     "babelify": "^6.0.2",
     "browserify": "^9.0.8",
     "watchify": "^3.2.0"

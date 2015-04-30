@@ -33,7 +33,7 @@
 }
 
 .cd-mode-toggle button {
-  width: 22px;
+  width: 28px;
   outline: none;
 }
 
@@ -174,7 +174,7 @@
   border: 0px;
   border-radius: 3px;
   padding: 10px; 8px; 0px; 0px;
-  font-size: 0.8em;
+  font-size: 1em;
   line-height: 1.3;
   resize: none;
 }

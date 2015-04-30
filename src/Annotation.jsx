@@ -2,6 +2,7 @@
  *
  * Annotation component
  */
+'use strict';
 
 // External
 var React = require('react/addons');
@@ -72,7 +73,7 @@ var Annotation = React.createClass({
 
     if (this.props.shouldDisplayViewer || this.props.pending) {
       divStyle.minHeight = height + 'px';
-      divStyle.minWidth = width + 280 + 'px';
+      divStyle.minWidth = width + 230 + 'px';
     }
 
     var indicator = '';

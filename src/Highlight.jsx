@@ -2,6 +2,7 @@
  *
  * Annotation highlight shape
  */
+'use strict';
 
 //External
 var React = require('react/addons');
