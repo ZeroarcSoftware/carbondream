@@ -96,7 +96,7 @@ var Annotation = React.createClass({
         // We have to adjust the outer div differently for circles for proper alignment
         if (this.props.shouldDisplayViewer || this.props.pending) {
           divStyle.minHeight = diameter + 'px';
-          divStyle.minWidth = diameter + 280 + 'px';
+          divStyle.minWidth = diameter + 230 + 'px';
         }
 
         indicator = <Circle id={this.props.id} width={diameter} height={diameter} />;

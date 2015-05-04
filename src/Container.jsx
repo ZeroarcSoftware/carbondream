@@ -5,34 +5,32 @@
 'use strict';
 
 // External
-var React = require('react/addons');
-var Immutable = require('immutable');
+let React = require('react/addons');
+let Immutable = require('immutable');
 
 // Local
-var Annotation = require('./Annotation');
-var ModeToggle = require('./ModeToggle');
+let Annotation = require('./Annotation');
+let ModeToggle = require('./ModeToggle');
 
 // Globals
-var DEFAULT_MOUSE_OFFSET = {x: -8, y: -30};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
-var DEFAULT_SCALE_FACTOR = 1;                   // Default scale factor
+let DEFAULT_MOUSE_OFFSET = {x: -8, y: -30};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
+let DEFAULT_SCALE_FACTOR = 1;                   // Default scale factor
 
-var Container = React.createClass({
+let Container = React.createClass({
   propTypes: {
-    mouseOffset: React.PropTypes.object
+    annotations: React.PropTypes.object.isRequired,
+    onSave: React.PropTypes.func.isRequired,
+    onDelete: React.PropTypes.func.isRequired,
+    //Optional
+    mouseOffset: React.PropTypes.object,
   },
 
   getInitialState() {
-    var stateJSON = localStorage['annotationState'] || '{}';
-    var state = JSON.parse(stateJSON);
-    var annotations = state.annotations || [];
-
     return {
       scale: DEFAULT_SCALE_FACTOR,
-      annotations: Immutable.List(annotations),
       pendingAnnotation: null,
-      lastAnnotationId: state.lastAnnotationId || 0,
       visibleViewerId: null,
-      mode: state.mode || 'marker',
+      mode: 'marker',
     };
   },
 
@@ -45,10 +43,8 @@ var Container = React.createClass({
 
     console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    var id = this.state.lastAnnotationId + 1;
-    var mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
-    var annotation = {
-      Id: id,
+    let mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
+    let annotation = {
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
@@ -57,8 +53,7 @@ var Container = React.createClass({
     };
 
     this.setState({
-      pendingAnnotation: annotation,
-      lastAnnotationId: annotation.Id
+      pendingAnnotation: annotation
     });
   },
 
@@ -71,10 +66,8 @@ var Container = React.createClass({
 
     console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    var id = this.state.lastAnnotationId + 1;
-    var mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
-    var annotation = {
-      Id: id,
+    let mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
+    let annotation = {
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
@@ -87,7 +80,6 @@ var Container = React.createClass({
 
     this.setState({
       pendingAnnotation: annotation,
-      lastAnnotationId: annotation.Id
     });
   },
 
@@ -103,7 +95,7 @@ var Container = React.createClass({
 
     console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    var annotation = this.state.pendingAnnotation;
+    let annotation = this.state.pendingAnnotation;
     annotation.x2 = e.clientX / this.state.scale;
     annotation.y2 = e.clientY / this.state.scale;
 
@@ -122,7 +114,7 @@ var Container = React.createClass({
 
     console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    var annotation = this.state.pendingAnnotation;
+    let annotation = this.state.pendingAnnotation;
     annotation.drawing = false;
     annotation.x2 = e.clientX / this.state.scale;
     annotation.y2 = e.clientY / this.state.scale;
@@ -134,53 +126,27 @@ var Container = React.createClass({
     console.log('mode is now: ' + mode);
     this.setState({mode: mode});
 
-    localStorage['annotationState'] = JSON.stringify({
-      annotations: this.state.annotations,
-      lastAnnotationId: this.state.lastAnnotationId,
-      mode: mode
-    });
-
     if (this.state.pendingAnnotation) {
-      this.cancelAnnotation(this.state.pendingAnnotation.Id);
+      this.cancelAnnotation();
     }
   },
 
-  saveAnnotation(id, content) {
-    console.log('save ' + id);
-    var a = this.state.pendingAnnotation;
+  saveAnnotation(content) {
+    let a = this.state.pendingAnnotation;
     a.content = content;
     a.timeStamp = Date.now();
 
-    var annotations = this.state.annotations;
+    this.props.onSave(a);
+    this.setState({pendingAnnotation: null});
+  },
 
-    // Check to see if this exists already
-    var index = annotations.findIndex((value) => {
-      if (value.Id === id) return true;
-      return false;
-    });
-
-    if (index > 0) {
-      annotations = annotations.set(index, a);
-    }
-    else {
-      annotations = this.state.annotations.push(a);
-    }
-
-    this.setState({
-      pendingAnnotation: null,
-      annotations: annotations
-    });
-
-    localStorage['annotationState'] = JSON.stringify({
-      annotations: annotations,
-      lastAnnotationId: Math.ceil(a.Id, this.state.lastAnnotationId)  // Only change the Id if its higher, in case we are editing
-    });
+  deleteAnnotation(id) {
+    this.props.onDelete(id);
   },
 
   // If editing, pull the annotation out and put it in pending, force viewer to null
   editAnnotation(id) {
-    console.log('delete ' + id);
-    var annotation = this.state.annotations.find((value) => {
+    let annotation = this.props.annotations.find((value) => {
       if (value.Id === id) return true;
       return false;
     });
@@ -191,23 +157,9 @@ var Container = React.createClass({
     });
   },
 
-  deleteAnnotation(id) {
-    console.log('delete ' + id);
-    var index = this.state.annotations.findIndex((value) => {
-      if (value.Id === id) return true;
-      return false;
-    });
-
-    var annotations = this.state.annotations.delete(index);
-    this.setState({annotations: annotations});
-    localStorage['annotationState'] = JSON.stringify({annotations: annotations});
-  },
-
-  cancelAnnotation(id) {
-    console.log('cancel ' + id);
+  cancelAnnotation() {
     this.setState({
       pendingAnnotation: null,
-      lastAnnotationId: this.state.lastAnnotationId -= 1
     });
   },
 
@@ -228,9 +180,10 @@ var Container = React.createClass({
   },
 
   render() {
-    var pA = this.state.pendingAnnotation;
+    console.log('render');
+    let pA = this.state.pendingAnnotation;
 
-    var pAnnotationComponent = '';
+    let pAnnotationComponent = '';
     if (this.state.pendingAnnotation) {
       pAnnotationComponent = <Annotation id={pA.Id}
         content={pA.content}
@@ -246,7 +199,7 @@ var Container = React.createClass({
         y2={pA.y2 * this.state.scale} />;
     }
 
-    var annotations = this.state.annotations.map((m) => {
+    let annotations = this.props.annotations.map((m) => {
       return (
         <Annotation key={m.Id}
           id={m.Id}

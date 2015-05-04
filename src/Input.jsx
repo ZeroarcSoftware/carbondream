@@ -11,7 +11,6 @@ var ClassNames = require('classnames');
 
 var Input = React.createClass({
   propTypes: {
-    id: React.PropTypes.number.isRequired,
     content: React.PropTypes.string.isRequired,
     pending: React.PropTypes.bool.isRequired,
     saveAnnotation: React.PropTypes.func,
@@ -28,12 +27,12 @@ var Input = React.createClass({
 
   handleSaveClick(e) {
     e.stopPropagation();
-    this.props.saveAnnotation(this.props.id, this.state.value);
+    this.props.saveAnnotation(this.state.value);
   },
 
   handleCancelClick(e) {
     e.stopPropagation();
-    this.props.cancelAnnotation(this.props.id);
+    this.props.cancelAnnotation();
   },
 
   render() {
