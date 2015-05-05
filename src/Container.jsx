@@ -124,7 +124,7 @@ let Container = React.createClass({
   },
 
   switchMode(mode) {
-    console.log('mode is now: ' + mode);
+    //console.log('mode is now: ' + mode);
     this.setState({mode: mode});
 
     if (this.state.pendingAnnotation) {

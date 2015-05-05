@@ -6,17 +6,17 @@
 'use strict';
 
 // External
-var React = require('react/addons');
+let React = require('react/addons');
 
 // Local
-var Marker = require('./Marker');
-var Square = require('./Square');
-var Circle = require('./Circle');
-var Highlight = require('./Highlight');
-var Content = require('./Content');
-var Input = require('./Input');
+let Marker = require('./Marker');
+let Square = require('./Square');
+let Circle = require('./Circle');
+let Highlight = require('./Highlight');
+let Content = require('./Content');
+let Input = require('./Input');
 
-var Annotation = React.createClass({
+let Annotation = React.createClass({
   propTypes: {
     content: React.PropTypes.string.isRequired,
     x1: React.PropTypes.number.isRequired,
@@ -59,30 +59,34 @@ var Annotation = React.createClass({
   },
 
   render() {
-    var {
-      x1,
-      y1,
-      x2,
-      y2,
-      displayAnnotationViewer,
-      hideAnnotationViewer,
-      ...other} = this.props;
+    // Desctructing is on one line b/c vim indenting gets confused
+    let {x1, y1, x2, y2, displayAnnotationViewer, hideAnnotationViewer, ...other} = this.props;
 
-    var width = x2 ? Math.abs(x1 - x2) : 0;
-    var height = y2 ? Math.abs(y1 - y2) : 0;
+    x2 = x2 || x1;
+    y2 = y2 || y1;
 
-    var divStyle = {
-      left: x1,
-      top: y1,
+    // If x2 or y2 is defined, calculate dimensions, otherwise
+    // set to the same as x1,y1
+    let width = Math.abs(x1 - x2);
+    let height = Math.abs(y1 - y2);
+
+    // Figure out what direction the mouse is dragging. 1 === left to right, up to down
+    let xDir = x2 - x1 >= 0 ? 1 : -1;
+    let yDir = y2 - y1 >= 0 ? 1 : -1;
+
+    let divStyle = {
+      left: xDir === 1 ? x1 : x2,
+      top: yDir === 1 ? y1 : y2,
     };
 
+    // Force some min height and width if we are displaying
     if (this.props.shouldDisplayViewer || this.props.pending) {
       divStyle.minHeight = height + 'px';
       divStyle.minWidth = width + 230 + 'px';
     }
 
-    var indicator = '';
-    var verticalOffset = null;
+    let indicator = '';
+    let verticalOffset = null;
 
 
     switch(this.props.type) {
@@ -95,7 +99,7 @@ var Annotation = React.createClass({
       break;
       case 'circle':
         // For circles, we need to use the biggest mouse value as diameter
-        var diameter = Math.max(width,height);
+        let diameter = Math.max(width,height);
         verticalOffset = diameter;
 
         // We have to adjust the outer div differently for circles for proper alignment
@@ -107,12 +111,13 @@ var Annotation = React.createClass({
         indicator = <Circle id={this.props.id} width={diameter} height={diameter} />;
       break;
       case 'highlight':
+        divStyle.top = y1;  // Force back to y1, highlights must stay on same vertical height
         indicator = <Highlight id={this.props.id} width={width} />;
       break;
     }
 
-    var contentComponent = !this.props.drawing && !this.props.pending ? <Content verticalOffset={verticalOffset} {...other} /> : '';
-    var inputComponent = !this.props.drawing && this.props.pending ? <Input verticalOffset={verticalOffset} {...other} /> : '';
+    let contentComponent = !this.props.drawing && !this.props.pending ? <Content verticalOffset={verticalOffset} {...other} /> : '';
+    let inputComponent = !this.props.drawing && this.props.pending ? <Input verticalOffset={verticalOffset} {...other} /> : '';
 
     return (
       <div style={divStyle} className={'cd-annotation ' + this.props.type} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onClick={this.handleClick}>
