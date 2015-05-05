@@ -61,7 +61,6 @@
 .cd-marker {
   color: rgb(99, 131, 255);
   font-size: 1.5em;
-  text-shadow: 2px 3px 2px grey;
   position: absolute;
   top: 0px;
   left: 0px;
@@ -69,38 +68,21 @@
 
 .cd-square {
   border: solid 2px rgb(99, 131, 255);
-  box-shadow: inset 2px 3px 1px grey;
   position: relative;
   top: 0px;
   left: 0px;
-}
-
-.cd-square.after {
-  content: "\00a0";
-  border: solid 2px rgb(99, 131, 255);
-  box-shadow: 2px 3px 1px grey;
-  position: absolute;
 }
 
 .cd-circle {
-  border: solid 3px rgb(99, 131, 255);
-  box-shadow: inset 2px 3px 1px grey;
+  border: solid 2px rgb(99, 131, 255);
   position: relative;
   border-radius: 50%;
   top: 0px;
   left: 0px;
 }
 
-.cd-circle.after {
-  content: "\00a0";
-  border: solid 3px rgb(99, 131, 255);
-  box-shadow: 2px 3px 1px grey;
-  position: absolute;
-  border-radius: 50%;
-}
-
 .cd-highlight {
-  background-color: rgba(255, 255, 0, 0.37);
+  background-color: rgba(0, 255, 3, 0.33);
   position: relative;
   height: 1.3em;
   top: 0px;

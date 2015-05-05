@@ -23,7 +23,6 @@ var Square = React.createClass({
     return (
       <div>
         <div style={divStyle} className='cd-square'></div>
-        <div style={divStyle} className='cd-square after'></div>
       </div>
     );
   }

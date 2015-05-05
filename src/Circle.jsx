@@ -23,7 +23,6 @@ var Square = React.createClass({
     return (
       <div>
         <div style={divStyle} className='cd-circle'></div>
-        <div style={divStyle} className='cd-circle after'></div>
       </div>
     );
   }
