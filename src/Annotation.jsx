@@ -54,6 +54,10 @@ var Annotation = React.createClass({
     this.props.hideAnnotationViewer(this.props.id);
   },
 
+  handleClick(e) {
+    e.stopPropagation();
+  },
+
   render() {
     var {
       x1,
@@ -111,7 +115,7 @@ var Annotation = React.createClass({
     var inputComponent = !this.props.drawing && this.props.pending ? <Input verticalOffset={verticalOffset} {...other} /> : '';
 
     return (
-      <div style={divStyle} className={'cd-annotation ' + this.props.type} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <div style={divStyle} className={'cd-annotation ' + this.props.type} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onClick={this.handleClick}>
         {contentComponent}
         {inputComponent}
         {indicator}

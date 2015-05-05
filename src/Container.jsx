@@ -159,9 +159,12 @@ let Container = React.createClass({
   },
 
   cancelAnnotation() {
-    this.setState({
-      pendingAnnotation: null,
-    });
+    // TODO: This delays the close event by 50ms to prevent any other click events from firing
+    // Is this gross? I don't even know. Think about it some more and change if it is.
+    // Hard to see how to do this without timers or screwing up component isolation
+    setTimeout(() => {
+      this.setState({pendingAnnotation: null});
+    }, 50);
   },
 
   displayAnnotationViewer(id) {
@@ -220,7 +223,12 @@ let Container = React.createClass({
     });
 
     return (
-      <div className='cd-container' onClick={this.handleClick} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onMouseMove={this.handleMouseMove}>
+      <div className='cd-container'
+        onClick={this.handleClick}
+        onMouseDown={this.handleMouseDown}
+        onMouseUp={this.handleMouseUp}
+        onMouseMove={this.handleMouseMove}
+        >
         <ModeToggle mode={this.state.mode} switchMode={this.switchMode} />
         {annotations}
         {pAnnotationComponent}

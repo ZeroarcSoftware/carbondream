@@ -35,6 +35,20 @@ var Input = React.createClass({
     this.props.cancelAnnotation();
   },
 
+  handleKeyDown(e) {
+    e.stopPropagation();
+
+    // Capture escape key to cancel
+    if (e.keyCode === 27) this.props.cancelAnnotation();
+  },
+
+  handleBlur(e) {
+    e.stopPropagation();
+
+    // If the textarea blurs with no input, the user has clicked or tabbed out. Cancel.
+    if (this.state.value.length === 0) this.props.cancelAnnotation();
+  },
+
   render() {
     var textAreaStyle = {
       minHeight: '6.5em'
@@ -64,7 +78,13 @@ var Input = React.createClass({
         <div className='cd-shadow-bubble'>
         </div>
         <div className={inputClasses}>
-          <textarea autoFocus style={textAreaStyle} value={this.state.value} onChange={this.handleChange} />
+          <textarea autoFocus
+            style={textAreaStyle}
+            value={this.state.value}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
+            onBlur={this.handleBlur}
+          />
           <div className='cd-annotation-input-controls'>
             <button className='save' onClick={this.handleSaveClick}><i className='fa fa-check'> Save</i></button>
             <button className='cancel' onClick={this.handleCancelClick}><i className='fa fa-times'> Cancel</i></button>
