@@ -2,6 +2,7 @@
  *
  * Annotation square shape
  */
+
 'use strict';
 
 //External

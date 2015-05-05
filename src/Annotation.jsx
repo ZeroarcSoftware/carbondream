@@ -2,6 +2,7 @@
  *
  * Annotation component
  */
+
 'use strict';
 
 // External

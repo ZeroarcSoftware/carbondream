@@ -1,7 +1,8 @@
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
  *
- * Entry point into component
+ * Demo top level component. Integrates reflux for local storage.
  */
+
 'use strict';
 
 // External

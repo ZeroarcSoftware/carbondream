@@ -2,6 +2,7 @@
  *
  * Top level container component
  */
+
 'use strict';
 
 // External
@@ -41,7 +42,7 @@ let Container = React.createClass({
       || this.state.visibleViewerId
       || this.state.mode !== 'marker') return;
 
-    console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
     let annotation = {
@@ -64,7 +65,7 @@ let Container = React.createClass({
       || this.state.visibleViewerId
       || this.state.mode === 'marker') return;
 
-    console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
     let annotation = {
@@ -93,7 +94,7 @@ let Container = React.createClass({
     // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.drawing) return;
 
-    console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation;
     annotation.x2 = e.clientX / this.state.scale;
@@ -112,7 +113,7 @@ let Container = React.createClass({
     // If drawing is false, we have already popped the input dialog
     if (!this.state.pendingAnnotation.drawing) return;
 
-    console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation;
     annotation.drawing = false;
@@ -180,7 +181,6 @@ let Container = React.createClass({
   },
 
   render() {
-    console.log('render');
     let pA = this.state.pendingAnnotation;
 
     let pAnnotationComponent = '';

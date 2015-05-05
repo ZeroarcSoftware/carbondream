@@ -1,3 +1,8 @@
+/* carbondream - Copyright 2015 Zeroarc Software, LLC
+ *
+ * Demo: Annotation Reflux Store
+ */
+
 'use strict';
 
 //External
