@@ -39,7 +39,7 @@ var Input = React.createClass({
     e.stopPropagation();
 
     // Capture escape key to cancel
-    if (e.keyCode === 27) this.props.cancelAnnotation();
+    if (e.keyCode === 27 && this.state.value.length === 0) this.props.cancelAnnotation();
   },
 
   handleBlur(e) {
