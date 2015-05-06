@@ -55,7 +55,7 @@ let Annotation = React.createClass({
   },
 
   handleClick(e) {
-    e.stopPropagation();
+    if (this.props.type === 'marker' || this.props.type === 'highlight') e.stopPropagation();
   },
 
   render() {

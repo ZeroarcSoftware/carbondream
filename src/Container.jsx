@@ -39,10 +39,9 @@ let Container = React.createClass({
     e.stopPropagation();
 
     if (this.state.pendingAnnotation
-      || this.state.visibleViewerId
       || this.state.mode !== 'marker') return;
 
-      //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
     let annotation = {
@@ -180,7 +179,7 @@ let Container = React.createClass({
 
     this.viewerHideTimer = setTimeout(() => {
       this.setState({visibleViewerId: null});
-    }, 1000);
+    }, 250);
   },
 
   render() {
@@ -203,7 +202,7 @@ let Container = React.createClass({
     }
 
     // Sorting the annotations: largest area to smallest area, then highlights, then markers
-    // This allows us to assign a priority with biggest shapes being lowest in order to 
+    // This allows us to assign a priority with biggest shapes being lowest in order to
     // calculate a z-index that stacks them accordingly
     let sortedAnnotations = this.props.annotations.sort((m1, m2) => {
       if (m1.type === 'marker' || m2.type === 'marker') {
@@ -225,11 +224,10 @@ let Container = React.createClass({
     });
 
     let annotations = sortedAnnotations.map((m, i) => {
-      console.log('id: ' + m.Id + ', i: ' + i + ', ' + m.content);
       return (
         <Annotation key={m.Id}
           id={m.Id}
-          priority={i + 1} 
+          priority={i + 1}
           content={m.content}
           timeStamp={m.timeStamp}
           pending={false}
