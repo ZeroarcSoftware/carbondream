@@ -5,15 +5,15 @@
 'use strict';
 
 // External
-var React = require('react/addons');
-var ClassNames = require('classnames');
-var Timeago = require('timeago');
+let React = require('react/addons');
+let ClassNames = require('classnames');
+let Timeago = require('timeago');
 
 // Local
-var Input = require('./Input');
+let Input = require('./Input');
 
 
-var Content = React.createClass({
+let Content = React.createClass({
   propTypes: {
     id: React.PropTypes.number.isRequired,
     content: React.PropTypes.string.isRequired,
@@ -51,28 +51,34 @@ var Content = React.createClass({
   },
 
   render() {
-    var viewerClasses = ClassNames({
+    let viewerClasses = ClassNames({
       'cd-annotation-viewer': true,
       'hidden': this.props.pending || !this.props.shouldDisplayViewer,   //Hide if we are NOT pending and we SHOULD NOT display
     });
 
-    var contentClasses = ClassNames({
+    let contentClasses = ClassNames({
       'cd-annotation-content': true,
     });
 
-    var controlClasses = ClassNames({
+    let controlClasses = ClassNames({
       'cd-annotation-content-controls': true,
       'fade-in': this.state.shouldDisplayControls,
     });
 
-    // If we are passed a vertical offset, adjust it for the comment bubble and use it
-    var divStyle = this.props.verticalOffset ? {top: (this.props.verticalOffset/2 - 20) + 'px'} : {};
+    let shadowClasses = ClassNames({
+      'cd-shadow-bubble': true,
+      'invert': this.props.invert,
+    });
 
-    // Inner shadow-helper class is used to help z-index the text over the shadow/comment bubble
+    // These offsets are basically just figured out by trial and error
+    let divStyle = {
+      left: this.props.shapeWidth/2 - 130,
+      top: this.props.invert ? 34 + this.props.shapeHeight : -120
+    };
+
     return (
       <div style={divStyle} className={viewerClasses}>
-        <div className='cd-shadow-bubble'>
-        </div>
+        <div className={shadowClasses}></div>
         <div className={contentClasses} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <div className={controlClasses}>
             <button className='edit' onClick={this.handleEditClick}><i className='fa fa-check'> Edit</i></button>

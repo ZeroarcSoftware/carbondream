@@ -5,11 +5,11 @@
 'use strict';
 
 // External
-var React = require('react/addons');
-var ClassNames = require('classnames');
+let React = require('react/addons');
+let ClassNames = require('classnames');
 
 
-var Input = React.createClass({
+let Input = React.createClass({
   propTypes: {
     content: React.PropTypes.string.isRequired,
     pending: React.PropTypes.bool.isRequired,
@@ -50,33 +50,33 @@ var Input = React.createClass({
   },
 
   render() {
-    var textAreaStyle = {
+    let textAreaStyle = {
       minHeight: '6.5em'
     };
 
-    // Allow input area to grow to a certain length before using scroll bar
-    if (this.state.value.length) {
-      var ems = Math.min(Math.floor(this.state.value.length / 30) + 6.5, 14);
-      textAreaStyle.minHeight = ems + 'em';
-    }
-
-    var editorClasses = ClassNames({
+    let editorClasses = ClassNames({
       'cd-annotation-editor': true,
       'hidden': !this.props.pending,
     });
 
-    var inputClasses = ClassNames({
+    let inputClasses = ClassNames({
       'cd-annotation-input': true,
     });
 
+    let shadowClasses = ClassNames({
+      'cd-shadow-bubble': true,
+      'invert': this.props.invert,
+    });
 
-    // If we are passed a vertical offset, adjust it for the comment bubble and use it
-    var divStyle = this.props.verticalOffset ? {top: (this.props.verticalOffset/2 - 20) + 'px'} : {};
+    // These offsets are basically just figured out by trial and error
+    let divStyle = {
+      left: this.props.shapeWidth/2 - 130,
+      top: this.props.invert ? 34 + this.props.shapeHeight : -148
+    };
 
     return (
       <div style={divStyle} className={editorClasses}>
-        <div className='cd-shadow-bubble'>
-        </div>
+        <div className={shadowClasses}></div>
         <div className={inputClasses}>
           <textarea autoFocus
             style={textAreaStyle}

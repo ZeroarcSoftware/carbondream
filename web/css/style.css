@@ -98,7 +98,7 @@
 
 .cd-annotation-input,
 .cd-annotation-content {
-  margin: 10px;
+  /* margin: 10px; */
   border-radius: 3px;
   box-shadow: 2px 3px 4px 2px grey;
   top: -12px;
@@ -106,17 +106,16 @@
   background-color: #FFF;
   position: relative;
   min-height: 3.5em;
-  min-width: 16.5em;
-  max-width: 14.5em;
+  width: 260px;
   padding: 0px;
 }
 
 .cd-annotation-editor,
 .cd-annotation-viewer {
   z-index: 1000;
-  position: relative;
+  position: absolute;
   top: -14px;
-  float: right;
+  /* float: right; */
   right: 0px;
 }
 
@@ -168,6 +167,7 @@
   position: relative;
   border-radius: 3px;
   font-size: 0.8em;
+  z-index: 4;
 }
 
 .cd-annotation-content-info {
@@ -236,26 +236,24 @@
 
 /* Start shadow bubble */
 /* This is all to get a comment bubble with a matching shadow */
-.cd-shadow-bubble::after,
-.cd-shadow-bubble::before {
-  background-color: white;
+.cd-shadow-bubble {
+  background-color: rgb(242, 242, 242);
   content: "\00a0";
   display: block;
-  left: 0px;
+  left: 120px;
   position: absolute;
-  top: 15px;
+  bottom: 2px;
   transform: rotate( 45deg );
   width:  20px;
   height:  20px;
   z-index: 3;
+  box-shadow: 1px 1px 4px 2px grey;
 }
 
-.cd-shadow-bubble::before {
-  box-shadow: 2px 2px 4px 3px grey;
-  content: "\00a0";
-  display: block;
-  left: 3px;
-  z-index: 1;
+.cd-shadow-bubble.invert {
+  top: -22px;
+  background-color: #FFF;
+  box-shadow: 1px 1px 2px 1px grey;
 }
 
 /* End shadow bubble */

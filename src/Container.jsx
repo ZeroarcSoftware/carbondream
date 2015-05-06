@@ -49,7 +49,9 @@ let Container = React.createClass({
       timeStamp: Date.now(),
       type: this.state.mode,
       x1: (e.clientX + mouseOffset.x) / this.state.scale,
-      y1: (e.clientY + mouseOffset.y) / this.state.scale
+      y1: (e.clientY + mouseOffset.y) / this.state.scale,
+      x2: (e.clientX + mouseOffset.x + 14) / this.state.scale,
+      y2: (e.clientY + mouseOffset.y + 24) / this.state.scale,
     };
 
     this.setState({
@@ -64,7 +66,7 @@ let Container = React.createClass({
       || this.state.visibleViewerId
       || this.state.mode === 'marker') return;
 
-      //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
     let annotation = {
@@ -86,6 +88,7 @@ let Container = React.createClass({
   handleMouseMove(e) {
      e.stopPropagation();
 
+    console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
     if (this.state.visibleViewerId
       || this.state.mode === 'marker'
       || !this.state.pendingAnnotation) return;
@@ -93,7 +96,6 @@ let Container = React.createClass({
     // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.drawing) return;
 
-    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation;
     annotation.x2 = e.clientX / this.state.scale;
@@ -112,14 +114,22 @@ let Container = React.createClass({
     // If drawing is false, we have already popped the input dialog
     if (!this.state.pendingAnnotation.drawing) return;
 
-    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation;
     annotation.drawing = false;
     annotation.x2 = e.clientX / this.state.scale;
     annotation.y2 = e.clientY / this.state.scale;
 
-    this.setState({pendingAnnotation: annotation});
+    // Only save the pending change if the mark is bigger than a single point
+    // In this case, vertical or horizontal lines are allowed
+    if (Math.abs(annotation.x2 - annotation.x1) < 1
+      && Math.abs(annotation.y2 - annotation.y1) < 1) {
+      this.setState({pendingAnnotation: null});
+    }
+    else {
+      this.setState({pendingAnnotation: annotation});
+    }
   },
 
   switchMode(mode) {
