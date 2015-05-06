@@ -19,6 +19,7 @@ var Square = React.createClass({
     var divStyle = {
       height: this.props.height,
       width: this.props.width,
+      zIndex: this.props.priority,
     };
 
     return (

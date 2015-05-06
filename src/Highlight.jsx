@@ -16,7 +16,7 @@ var Highlight = React.createClass({
   render() {
     var divStyle = {
       width: this.props.width,
-
+      zIndex: this.props.priority,
     };
 
     return (

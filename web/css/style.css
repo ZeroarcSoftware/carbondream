@@ -17,7 +17,6 @@
 
 .cd-mode-toggle {
   position: absolute;
-  z-index: 101;
   right: 0px;
   top: 0px;
   opacity: 0.4;
@@ -48,7 +47,6 @@
 .cd-container {
   width:      100%;
   height:     100%;
-  z-index:    100;
   top:        0;
   left:       0;
   position:   fixed;
@@ -115,7 +113,7 @@
 
 .cd-annotation-editor,
 .cd-annotation-viewer {
-  z-index: 3;
+  z-index: 1000;
   position: relative;
   top: -14px;
   float: right;
@@ -143,15 +141,15 @@
 .cd-annotation-content-text {
   padding: 10px; 8px; 0px; 0px;
   min-height: 3.5em;
-  z-index: 2;
   position: relative;
   font-size: 1.1em;
   font-style: italic;
+  z-index: 4;
+  background-color: #FFF;
 }
 
 .cd-annotation-input textarea {
   width: 100%;
-  z-index: 1;
   position: relative;
   border: 0px;
   border-radius: 3px;
@@ -159,6 +157,7 @@
   font-size: 1em;
   line-height: 1.3;
   resize: none;
+  z-index: 4;
 }
 
 .cd-annotation-content-info,
@@ -168,7 +167,6 @@
   bottom: 0px;
   position: relative;
   border-radius: 3px;
-  z-index: 2;
   font-size: 0.8em;
 }
 
@@ -184,8 +182,8 @@
 
 .cd-annotation-content-controls {
   position: absolute;
+  z-index: 5;
   right: 0px;
-  z-index: 3;
   font-size: .5em;
   opacity: 0;
   -webkit-transition: opacity 300ms ease-in-out;
@@ -249,7 +247,7 @@
   transform: rotate( 45deg );
   width:  20px;
   height:  20px;
-  z-index: 1;
+  z-index: 3;
 }
 
 .cd-shadow-bubble::before {
@@ -257,7 +255,7 @@
   content: "\00a0";
   display: block;
   left: 3px;
-  z-index: -1;
+  z-index: 1;
 }
 
 /* End shadow bubble */

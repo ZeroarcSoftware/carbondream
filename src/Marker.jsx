@@ -10,8 +10,12 @@ var React = require('react/addons');
 
 var Marker = React.createClass({
   render() {
+    var divStyle = {
+      zIndex: this.props.priority,
+    };
+
     return (
-      <div className='cd-marker'>
+      <div style={divStyle} className='cd-marker'>
         <i className='fa fa-map-marker'></i>
       </div>
     );

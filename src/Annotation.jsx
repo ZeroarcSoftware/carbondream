@@ -91,11 +91,11 @@ let Annotation = React.createClass({
 
     switch(this.props.type) {
       case 'marker':
-        indicator = <Marker id={this.props.id} />;
+        indicator = <Marker id={this.props.id} priority={this.props.priority} />;
       break;
       case 'square':
         verticalOffset = height;
-        indicator = <Square id={this.props.id} width={width} height={height} />;
+        indicator = <Square id={this.props.id} width={width} height={height} priority={this.props.priority} />;
       break;
       case 'circle':
         // For circles, we need to use the biggest mouse value as diameter
@@ -108,11 +108,11 @@ let Annotation = React.createClass({
           divStyle.minWidth = diameter + 230 + 'px';
         }
 
-        indicator = <Circle id={this.props.id} width={diameter} height={diameter} />;
+        indicator = <Circle id={this.props.id} width={diameter} height={diameter} priority={this.props.priority} />;
       break;
       case 'highlight':
-        divStyle.top = y1;  // Force back to y1, highlights must stay on same vertical height
-        indicator = <Highlight id={this.props.id} width={width} />;
+        //   divStyle.top = y1;  // Force back to y1, highlights must stay on same vertical height
+        indicator = <Highlight id={this.props.id} width={width} priority={this.props.priority} />;
       break;
     }
 

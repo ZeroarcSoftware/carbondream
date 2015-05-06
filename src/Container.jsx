@@ -202,10 +202,34 @@ let Container = React.createClass({
         y2={pA.y2 * this.state.scale} />;
     }
 
-    let annotations = this.props.annotations.map((m) => {
+    // Sorting the annotations: largest area to smallest area, then highlights, then markers
+    // This allows us to assign a priority with biggest shapes being lowest in order to 
+    // calculate a z-index that stacks them accordingly
+    let sortedAnnotations = this.props.annotations.sort((m1, m2) => {
+      if (m1.type === 'marker' || m2.type === 'marker') {
+        if (m1.type === m2.type) return 0;
+        if (m1.type === 'marker') return 1;
+        return -1;
+      }
+
+      if (m1.type === 'highlight' || m2.type === 'highlight') {
+        if (m1.type === m2.type) return 0;
+        if (m1.type === 'highlight') return 1;
+        return -1;
+      }
+
+      let m1Area = Math.abs((m1.x1 - m1.x2) * (m1.y1 - m1.y2));
+      let m2Area = Math.abs((m2.x1 - m2.x2) * (m2.y1 - m2.y2));
+
+      return m2Area - m1Area;
+    });
+
+    let annotations = sortedAnnotations.map((m, i) => {
+      console.log('id: ' + m.Id + ', i: ' + i + ', ' + m.content);
       return (
         <Annotation key={m.Id}
           id={m.Id}
+          priority={i + 1} 
           content={m.content}
           timeStamp={m.timeStamp}
           pending={false}
