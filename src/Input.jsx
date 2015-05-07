@@ -50,10 +50,6 @@ let Input = React.createClass({
   },
 
   render() {
-    let textAreaStyle = {
-      minHeight: '6.5em'
-    };
-
     let editorClasses = ClassNames({
       'cd-annotation-editor': true,
       'hidden': !this.props.pending,
@@ -79,7 +75,6 @@ let Input = React.createClass({
         <div className={shadowClasses}></div>
         <div className={inputClasses}>
           <textarea autoFocus
-            style={textAreaStyle}
             value={this.state.value}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyDown}

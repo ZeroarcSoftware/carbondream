@@ -99,19 +99,23 @@ let Annotation = React.createClass({
       break;
     }
 
+    // Default offsets based on height/width of bubble
     let offset = {
-      vertical: -BUBBLEDIM.height,
+      vertical: -BUBBLEDIM.height - 10,
       horizontal: width/2 - BUBBLEDIM.width / 2,
     };
 
+    // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
     let invert = y1 - BUBBLEDIM.height <= 0 ? true : false;
-    if (invert) offset.vertical = 34;
+    if (invert) offset.vertical = BUBBLEDIM.height / 2;
 
+    // Check to see if we are going to draw past the left or right side of the viewport.
     let viewPortWidth = document.documentElement.clientWidth;
-
     let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) <= 0 ? true : false;
     let pullHorizontal = x1 + (width/2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
 
+    // If we need to push or pull the bubble, recalculate the offsets based on bubble size and
+    // marker position. This was fun to figure out. The 5 is just there for additional padding.
     if (pushHorizontal) {
       let additionalOffset = offset.horizontal + x1 - 5;
       offset.horizontal = offset.horizontal - additionalOffset;

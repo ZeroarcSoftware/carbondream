@@ -7,7 +7,7 @@
  */
 
 .hidden {
-  /* display: none; */
+  display: none;
 }
 
 
@@ -148,6 +148,7 @@
 }
 
 .cd-annotation-input textarea {
+  height: 88px;
   width: 100%;
   position: relative;
   border: 0px;
