@@ -21,10 +21,10 @@ let Content = React.createClass({
     shouldDisplayViewer: React.PropTypes.bool.isRequired,
     deleteAnnotation: React.PropTypes.func.isRequired,
     editAnnotation: React.PropTypes.func.isRequired,
+    offset: React.PropTypes.object.isRequired,
 
     //Optional
     timeStamp: React.PropTypes.number,
-    verticalOffset: React.PropTypes.number,
   },
 
   getInitialState() {
@@ -72,8 +72,8 @@ let Content = React.createClass({
 
     // These offsets are basically just figured out by trial and error
     let divStyle = {
-      left: this.props.shapeWidth/2 - 130,
-      top: this.props.invert ? 34 + this.props.shapeHeight : -120
+      left: this.props.offset.horizontal,
+      top: this.props.offset.vertical,
     };
 
     return (

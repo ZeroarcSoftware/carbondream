@@ -16,6 +16,9 @@ let Highlight = require('./Highlight');
 let Content = require('./Content');
 let Input = require('./Input');
 
+// Globals
+let BUBBLEDIM = {width: 260, height: 120};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
+
 let Annotation = React.createClass({
   propTypes: {
     content: React.PropTypes.string.isRequired,
@@ -76,7 +79,6 @@ let Annotation = React.createClass({
     };
 
     let indicator = '';
-    let invert = y1 - 120 <= 0 ? true : false;
 
     switch(this.props.type) {
       case 'marker':
@@ -91,13 +93,36 @@ let Annotation = React.createClass({
         indicator = <Circle id={this.props.id} width={width} height={height} priority={this.props.priority} />;
       break;
       case 'highlight':
-        //   divStyle.top = y1;  // Force back to y1, highlights must stay on same vertical height
+        divStyle.top = y1;  // Force back to y1, highlights must stay on same vertical height
+        height = 21; // Force height of highlight to allow correct bubble placement
         indicator = <Highlight id={this.props.id} width={width} priority={this.props.priority} />;
       break;
     }
 
-    let contentComponent = !this.props.drawing && !this.props.pending ? <Content invert={invert} shapeHeight={height} shapeWidth={width} {...other} /> : '';
-    let inputComponent = !this.props.drawing && this.props.pending ? <Input invert={invert} shapeHeight={height} shapeWidth={width} {...other} /> : '';
+    let offset = {
+      vertical: -BUBBLEDIM.height,
+      horizontal: width/2 - BUBBLEDIM.width / 2,
+    };
+
+    let invert = y1 - BUBBLEDIM.height <= 0 ? true : false;
+    if (invert) offset.vertical = 34;
+
+    let viewPortWidth = document.documentElement.clientWidth;
+
+    let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) <= 0 ? true : false;
+    let pullHorizontal = x1 + (width/2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
+
+    if (pushHorizontal) {
+      let additionalOffset = offset.horizontal + x1 - 5;
+      offset.horizontal = offset.horizontal - additionalOffset;
+    }
+    else if (pullHorizontal) {
+      let additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
+      offset.horizontal = offset.horizontal + additionalOffset;
+    }
+
+    let contentComponent = !this.props.drawing && !this.props.pending ? <Content invert={invert} offset={offset} {...other} /> : '';
+    let inputComponent = !this.props.drawing && this.props.pending ? <Input invert={invert} offset={offset} {...other} /> : '';
 
     return (
       <div style={divStyle} className={'cd-annotation ' + this.props.type} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onClick={this.handleClick}>

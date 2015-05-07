@@ -41,7 +41,7 @@ let Container = React.createClass({
     if (this.state.pendingAnnotation
       || this.state.mode !== 'marker') return;
 
-      console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
     let annotation = {
@@ -50,7 +50,7 @@ let Container = React.createClass({
       type: this.state.mode,
       x1: (e.clientX + mouseOffset.x) / this.state.scale,
       y1: (e.clientY + mouseOffset.y) / this.state.scale,
-      x2: (e.clientX + mouseOffset.x + 14) / this.state.scale,
+      x2: (e.clientX + mouseOffset.x + 14) / this.state.scale, //14 & 24 are the size of the marker
       y2: (e.clientY + mouseOffset.y + 24) / this.state.scale,
     };
 
@@ -66,7 +66,7 @@ let Container = React.createClass({
       || this.state.visibleViewerId
       || this.state.mode === 'marker') return;
 
-      console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
     let annotation = {
@@ -88,7 +88,8 @@ let Container = React.createClass({
   handleMouseMove(e) {
      e.stopPropagation();
 
-    console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+
     if (this.state.visibleViewerId
       || this.state.mode === 'marker'
       || !this.state.pendingAnnotation) return;
@@ -114,7 +115,7 @@ let Container = React.createClass({
     // If drawing is false, we have already popped the input dialog
     if (!this.state.pendingAnnotation.drawing) return;
 
-    console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation;
     annotation.drawing = false;

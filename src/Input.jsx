@@ -70,8 +70,8 @@ let Input = React.createClass({
 
     // These offsets are basically just figured out by trial and error
     let divStyle = {
-      left: this.props.shapeWidth/2 - 130,
-      top: this.props.invert ? 34 + this.props.shapeHeight : -148
+      left: this.props.offset.horizontal,
+      top: this.props.offset.vertical,
     };
 
     return (

@@ -7,7 +7,7 @@
  */
 
 .hidden {
-  display: none;
+  /* display: none; */
 }
 
 
@@ -105,7 +105,7 @@
   /* left: 22px; */
   background-color: #FFF;
   position: relative;
-  min-height: 3.5em;
+  height: 120px;
   width: 260px;
   padding: 0px;
 }
@@ -139,7 +139,7 @@
 
 .cd-annotation-content-text {
   padding: 10px; 8px; 0px; 0px;
-  min-height: 3.5em;
+  height: 74px;
   position: relative;
   font-size: 1.1em;
   font-style: italic;
