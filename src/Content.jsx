@@ -76,10 +76,17 @@ let Content = React.createClass({
       top: this.props.offset.vertical,
     };
 
-    // Apply offsets for shadow bubble
+    // Apply offsets for shadow bubble. Trial and error to figure
+    // out the maximums
     let shadowStyle = {};
-    if (this.props.pushHorizontal) shadowStyle.left = -this.props.offset.horizontal - 4;
-    else if (this.props.pullHorizontal) shadowStyle.left = -this.props.offset.horizontal - 4;
+    if (this.props.pushHorizontal || this.props.pullHorizontal) {
+      shadowStyle.left = -this.props.offset.horizontal - 4;
+
+      if (shadowStyle.left < 6)
+        shadowStyle.left = 6;
+      else if (shadowStyle.left > 234)
+        shadowStyle.left = 234;
+    }
 
     return (
       <div style={divStyle} className={viewerClasses}>

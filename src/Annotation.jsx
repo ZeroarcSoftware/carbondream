@@ -125,8 +125,12 @@ let Annotation = React.createClass({
       offset.horizontal = offset.horizontal + additionalOffset;
     }
 
-    let contentComponent = !this.props.drawing && !this.props.pending ? <Content invert={invert} pushHorizontal={pushHorizontal} pullHorizontal={pullHorizontal} offset={offset} {...other} /> : '';
-    let inputComponent = !this.props.drawing && this.props.pending ? <Input invert={invert} offset={offset} {...other} /> : '';
+    let contentComponent = !this.props.drawing && !this.props.pending
+      ?  <Content invert={invert} pushHorizontal={pushHorizontal} pullHorizontal={pullHorizontal} offset={offset} {...other} />
+      : '';
+    let inputComponent = !this.props.drawing && this.props.pending
+      ? <Input invert={invert} pushHorizontal={pushHorizontal} pullHorizontal={pullHorizontal} offset={offset} {...other} />
+      : '';
 
     return (
       <div style={divStyle} className={'cd-annotation ' + this.props.type} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onClick={this.handleClick}>

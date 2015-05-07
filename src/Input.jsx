@@ -64,15 +64,27 @@ let Input = React.createClass({
       'invert': this.props.invert,
     });
 
-    // These offsets are basically just figured out by trial and error
+    // Apply offsets for outer div
     let divStyle = {
       left: this.props.offset.horizontal,
       top: this.props.offset.vertical,
     };
 
+    // Apply offsets for shadow bubble. Trial and error to figure
+    // out the maximums
+    let shadowStyle = {};
+    if (this.props.pushHorizontal || this.props.pullHorizontal) {
+      shadowStyle.left = -this.props.offset.horizontal - 4;
+
+      if (shadowStyle.left < 6)
+        shadowStyle.left = 6;
+      else if (shadowStyle.left > 234)
+        shadowStyle.left = 234;
+    }
+
     return (
       <div style={divStyle} className={editorClasses}>
-        <div className={shadowClasses}></div>
+        <div style={shadowStyle} className={shadowClasses}></div>
         <div className={inputClasses}>
           <textarea autoFocus
             value={this.state.value}
