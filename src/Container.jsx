@@ -122,6 +122,18 @@ let Container = React.createClass({
     annotation.x2 = e.clientX / this.state.scale;
     annotation.y2 = e.clientY / this.state.scale;
 
+    if (annotation.x2 < annotation.x1) {
+      let old = annotation.x2;
+      annotation.x2 = annotation.x1;
+      annotation.x1 = old;
+    }
+
+    if (annotation.y2 < annotation.y1) {
+      let old = annotation.y2;
+      annotation.y2 = annotation.y1;
+      annotation.y1 = old;
+    }
+
     // Only save the pending change if the mark is bigger than a single point
     // In this case, vertical or horizontal lines are allowed
     if (Math.abs(annotation.x2 - annotation.x1) < 1

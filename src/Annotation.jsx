@@ -107,7 +107,7 @@ let Annotation = React.createClass({
 
     // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
     let invert = y1 - BUBBLEDIM.height <= 0 ? true : false;
-    if (invert) offset.vertical = BUBBLEDIM.height / 2;
+    if (invert) offset.vertical = height + 35;
 
     // Check to see if we are going to draw past the left or right side of the viewport.
     let viewPortWidth = document.documentElement.clientWidth;
@@ -119,10 +119,14 @@ let Annotation = React.createClass({
     if (pushHorizontal) {
       let additionalOffset = offset.horizontal + x1 - 5;
       offset.horizontal = offset.horizontal - additionalOffset;
+
+      if (this.props.type !== 'marker')
+        offset.shadow = x1 + width/2 - 14;
     }
     else if (pullHorizontal) {
       let additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
       offset.horizontal = offset.horizontal + additionalOffset;
+      offset.shadow = -offset.horizontal + width/2 - 10;
     }
 
     let contentComponent = !this.props.drawing && !this.props.pending
