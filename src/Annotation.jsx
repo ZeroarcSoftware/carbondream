@@ -106,7 +106,7 @@ let Annotation = React.createClass({
     };
 
     // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
-    let invert = y1 - BUBBLEDIM.height <= 0 ? true : false;
+    let invert = y1 - BUBBLEDIM.height - 10 <= 0 ? true : false;
     if (invert) offset.vertical = height + 35;
 
     // Check to see if we are going to draw past the left or right side of the viewport.

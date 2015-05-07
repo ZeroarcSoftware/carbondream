@@ -80,7 +80,7 @@ let Content = React.createClass({
     // out the maximums
     let shadowStyle = {};
     if (this.props.pushHorizontal || this.props.pullHorizontal) {
-      shadowStyle.left = this.props.offset.shadow || -this.props.offset.horizontal + 4;
+      shadowStyle.left = this.props.offset.shadow || -this.props.offset.horizontal - 4;
 
       if (shadowStyle.left < 6)
         shadowStyle.left = 6;
