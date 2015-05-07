@@ -70,15 +70,20 @@ let Content = React.createClass({
       'invert': this.props.invert,
     });
 
-    // These offsets are basically just figured out by trial and error
+    // Apply offsets for outer div
     let divStyle = {
       left: this.props.offset.horizontal,
       top: this.props.offset.vertical,
     };
 
+    // Apply offsets for shadow bubble
+    let shadowStyle = {};
+    if (this.props.pushHorizontal) shadowStyle.left = -this.props.offset.horizontal - 4;
+    else if (this.props.pullHorizontal) shadowStyle.left = -this.props.offset.horizontal - 4;
+
     return (
       <div style={divStyle} className={viewerClasses}>
-        <div className={shadowClasses}></div>
+        <div style={shadowStyle} className={shadowClasses}></div>
         <div className={contentClasses} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <div className={controlClasses}>
             <button className='edit' onClick={this.handleEditClick}><i className='fa fa-check'> Edit</i></button>

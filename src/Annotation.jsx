@@ -125,7 +125,7 @@ let Annotation = React.createClass({
       offset.horizontal = offset.horizontal + additionalOffset;
     }
 
-    let contentComponent = !this.props.drawing && !this.props.pending ? <Content invert={invert} offset={offset} {...other} /> : '';
+    let contentComponent = !this.props.drawing && !this.props.pending ? <Content invert={invert} pushHorizontal={pushHorizontal} pullHorizontal={pullHorizontal} offset={offset} {...other} /> : '';
     let inputComponent = !this.props.drawing && this.props.pending ? <Input invert={invert} offset={offset} {...other} /> : '';
 
     return (
