@@ -91,6 +91,7 @@ let Annotation = React.createClass({
       case 'marker':
         indicator = <Marker id={this.props.id} priority={this.props.priority} />;
         offset.vertical -= 25;
+        offset.horizontal = -BUBBLEDIM.width / 2;
       break;
       case 'square':
         indicator = <Square id={this.props.id} width={width} height={height} priority={this.props.priority} />;
@@ -126,11 +127,17 @@ let Annotation = React.createClass({
 
       if (this.props.type !== 'marker')
         offset.shadow = x1 + width/2 - 14;
+      else
+        offset.shadow = x1 - 14;
     }
     else if (pullHorizontal) {
       let additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
       offset.horizontal = offset.horizontal + additionalOffset;
-      offset.shadow = -offset.horizontal + width/2 - 10;
+
+      if (this.props.type !== 'marker')
+        offset.shadow = -offset.horizontal + width/2 - 10;
+      else
+        offset.shadow = -offset.horizontal - 10;
     }
 
     let contentComponent = !this.props.drawing && !this.props.pending

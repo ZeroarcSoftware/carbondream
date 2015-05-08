@@ -21,7 +21,6 @@ let Container = React.createClass({
     annotations: React.PropTypes.object.isRequired,
     onSave: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func.isRequired,
-    //Optional
     containerOffsetX: React.PropTypes.number.isRequired,
     containerOffsetY: React.PropTypes.number.isRequired,
   },
@@ -57,11 +56,13 @@ let Container = React.createClass({
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
-      x1: (e.clientX + offSetX) / this.state.scale,
-      y1: (e.clientY + offSetY) / this.state.scale,
-      x2: (e.clientX + offSetX) / this.state.scale, //14 & 24 are the size of the marker
-      y2: (e.clientY + offSetY) / this.state.scale,
+      x1: (e.clientX - offSetX) / this.state.scale,
+      y1: (e.clientY - offSetY) / this.state.scale,
+      x2: (e.clientX + 14 - offSetX) / this.state.scale, //14 & 24 are the size of the marker
+      y2: (e.clientY + 24 - offSetY) / this.state.scale,
     };
+
+    console.log(annotation);
 
     this.setState({
       pendingAnnotation: annotation
@@ -85,10 +86,10 @@ let Container = React.createClass({
       timeStamp: Date.now(),
       type: this.state.mode,
       drawing: true,
-      x1: e.clientX + offSetX / this.state.scale,
-      y1: e.clientY + offSetY / this.state.scale,
-      x2: e.clientX + offSetX / this.state.scale,
-      y2: e.clientY + offSetY / this.state.scale,
+      x1: e.clientX - offSetX / this.state.scale,
+      y1: e.clientY - offSetY / this.state.scale,
+      x2: e.clientX - offSetX / this.state.scale,
+      y2: e.clientY - offSetY / this.state.scale,
     };
 
     this.setState({
@@ -112,8 +113,8 @@ let Container = React.createClass({
     let offSetY = this.props.containerOffsetY;
 
     let annotation = this.state.pendingAnnotation;
-    annotation.x2 = e.clientX + offSetX / this.state.scale;
-    annotation.y2 = e.clientY + offSetY / this.state.scale;
+    annotation.x2 = e.clientX - offSetX / this.state.scale;
+    annotation.y2 = e.clientY - offSetY / this.state.scale;
 
     this.setState({pendingAnnotation: annotation});
   },
@@ -135,8 +136,8 @@ let Container = React.createClass({
 
     let offSetX = this.props.containerOffsetX;
     let offSetY = this.props.containerOffsetY;
-    annotation.x2 = e.clientX + offSetX / this.state.scale;
-    annotation.y2 = e.clientY + offSetY / this.state.scale;
+    annotation.x2 = e.clientX - offSetX / this.state.scale;
+    annotation.y2 = e.clientY - offSetY / this.state.scale;
 
     if (annotation.x2 < annotation.x1) {
       let old = annotation.x2;
