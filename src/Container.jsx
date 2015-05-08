@@ -14,8 +14,7 @@ let Annotation = require('./Annotation');
 let ModeToggle = require('./ModeToggle');
 
 // Globals
-let DEFAULT_MOUSE_OFFSET = {x: -8, y: -30};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
-let DEFAULT_SCALE_FACTOR = 1;                   // Default scale factor
+let DEFAULT_SCALE_FACTOR = 1;       // Default scale factor
 
 let Container = React.createClass({
   propTypes: {
@@ -23,7 +22,15 @@ let Container = React.createClass({
     onSave: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func.isRequired,
     //Optional
-    mouseOffset: React.PropTypes.object,
+    containerOffsetX: React.PropTypes.number.isRequired,
+    containerOffsetY: React.PropTypes.number.isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      containerOffsetX: 0,
+      containerOffsetY: 0,
+    };
   },
 
   getInitialState() {
@@ -41,17 +48,19 @@ let Container = React.createClass({
     if (this.state.pendingAnnotation
       || this.state.mode !== 'marker') return;
 
-    //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let mouseOffset = this.props.mouseOffset || DEFAULT_MOUSE_OFFSET;
+    let offSetX = this.props.containerOffsetX;
+    let offSetY = this.props.containerOffsetY;
+
     let annotation = {
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
-      x1: (e.clientX + mouseOffset.x) / this.state.scale,
-      y1: (e.clientY + mouseOffset.y) / this.state.scale,
-      x2: (e.clientX + mouseOffset.x + 14) / this.state.scale, //14 & 24 are the size of the marker
-      y2: (e.clientY + mouseOffset.y + 24) / this.state.scale,
+      x1: (e.clientX + offSetX) / this.state.scale,
+      y1: (e.clientY + offSetY) / this.state.scale,
+      x2: (e.clientX + offSetX) / this.state.scale, //14 & 24 are the size of the marker
+      y2: (e.clientY + offSetY) / this.state.scale,
     };
 
     this.setState({
@@ -68,16 +77,18 @@ let Container = React.createClass({
 
     //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let mouseOffset = this.props.mouseOffset || {x: 0, y: 0};
+    let offSetX = this.props.containerOffsetX;
+    let offSetY = this.props.containerOffsetY;
+
     let annotation = {
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
       drawing: true,
-      x1: e.clientX / this.state.scale,
-      y1: e.clientY / this.state.scale,
-      x2: e.clientX / this.state.scale,
-      y2: e.clientY / this.state.scale,
+      x1: e.clientX + offSetX / this.state.scale,
+      y1: e.clientY + offSetY / this.state.scale,
+      x2: e.clientX + offSetX / this.state.scale,
+      y2: e.clientY + offSetY / this.state.scale,
     };
 
     this.setState({
@@ -97,10 +108,12 @@ let Container = React.createClass({
     // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.drawing) return;
 
+    let offSetX = this.props.containerOffsetX;
+    let offSetY = this.props.containerOffsetY;
 
     let annotation = this.state.pendingAnnotation;
-    annotation.x2 = e.clientX / this.state.scale;
-    annotation.y2 = e.clientY / this.state.scale;
+    annotation.x2 = e.clientX + offSetX / this.state.scale;
+    annotation.y2 = e.clientY + offSetY / this.state.scale;
 
     this.setState({pendingAnnotation: annotation});
   },
@@ -119,8 +132,11 @@ let Container = React.createClass({
 
     let annotation = this.state.pendingAnnotation;
     annotation.drawing = false;
-    annotation.x2 = e.clientX / this.state.scale;
-    annotation.y2 = e.clientY / this.state.scale;
+
+    let offSetX = this.props.containerOffsetX;
+    let offSetY = this.props.containerOffsetY;
+    annotation.x2 = e.clientX + offSetX / this.state.scale;
+    annotation.y2 = e.clientY + offSetY / this.state.scale;
 
     if (annotation.x2 < annotation.x1) {
       let old = annotation.x2;

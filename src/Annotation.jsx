@@ -78,11 +78,19 @@ let Annotation = React.createClass({
       top: yDir === 1 ? y1 : y2,
     };
 
+    // Default offsets based on height/width of bubble
+    let offset = {
+      vertical: -BUBBLEDIM.height - 10,
+      horizontal: width/2 - BUBBLEDIM.width / 2,
+    };
+
     let indicator = '';
+
 
     switch(this.props.type) {
       case 'marker':
         indicator = <Marker id={this.props.id} priority={this.props.priority} />;
+        offset.vertical -= 25;
       break;
       case 'square':
         indicator = <Square id={this.props.id} width={width} height={height} priority={this.props.priority} />;
@@ -99,15 +107,11 @@ let Annotation = React.createClass({
       break;
     }
 
-    // Default offsets based on height/width of bubble
-    let offset = {
-      vertical: -BUBBLEDIM.height - 10,
-      horizontal: width/2 - BUBBLEDIM.width / 2,
-    };
-
     // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
-    let invert = y1 - BUBBLEDIM.height - 10 <= 0 ? true : false;
-    if (invert) offset.vertical = height + 35;
+    let invert = y1 + offset.vertical - 10 <= 0 ? true : false;
+    if (invert) offset.vertical = height + 36;
+
+    console.log(offset);
 
     // Check to see if we are going to draw past the left or right side of the viewport.
     let viewPortWidth = document.documentElement.clientWidth;

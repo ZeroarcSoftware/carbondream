@@ -64,7 +64,8 @@
   height:     100%;
   top:        0;
   left:       0;
-  position:   fixed;
+  position:   absolute;
+  z-index: 100;
 }
 
 /*
@@ -75,8 +76,8 @@
   color: rgb(99, 131, 255);
   font-size: 1.5em;
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: -26px;
+  left: -7px;
 }
 
 .cd-square {
