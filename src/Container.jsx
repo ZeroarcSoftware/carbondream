@@ -62,7 +62,7 @@ let Container = React.createClass({
     let offSetX = this.props.containerOffsetX;
     let offSetY = this.props.containerOffsetY;
 
-    let annotation = {
+    let annotation = Immutable.Map({
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
@@ -70,9 +70,7 @@ let Container = React.createClass({
       y1: (e.clientY - offSetY) / this.state.scale,
       x2: (e.clientX + 14 - offSetX) / this.state.scale, //14 & 24 are the size of the marker
       y2: (e.clientY + 24 - offSetY) / this.state.scale,
-    };
-
-    console.log(annotation);
+    });
 
     this.setState({
       pendingAnnotation: annotation
@@ -86,12 +84,12 @@ let Container = React.createClass({
       || this.state.visibleViewerId
       || this.state.mode === 'marker') return;
 
-    //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let offSetX = this.props.containerOffsetX;
     let offSetY = this.props.containerOffsetY;
 
-    let annotation = {
+    let annotation = Immutable.Map({
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
@@ -100,7 +98,7 @@ let Container = React.createClass({
       y1: e.clientY - offSetY / this.state.scale,
       x2: e.clientX - offSetX / this.state.scale,
       y2: e.clientY - offSetY / this.state.scale,
-    };
+    });
 
     this.setState({
       pendingAnnotation: annotation,
@@ -110,21 +108,21 @@ let Container = React.createClass({
   handleMouseMove(e) {
      e.stopPropagation();
 
-    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
-
     if (this.state.visibleViewerId
       || this.state.mode === 'marker'
       || !this.state.pendingAnnotation) return;
 
     // If drawing is not true, then don't proceed
-    if (!this.state.pendingAnnotation.drawing) return;
+    if (!this.state.pendingAnnotation.get('drawing')) return;
+
+    console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let offSetX = this.props.containerOffsetX;
     let offSetY = this.props.containerOffsetY;
 
-    let annotation = this.state.pendingAnnotation;
-    annotation.x2 = e.clientX - offSetX / this.state.scale;
-    annotation.y2 = e.clientY - offSetY / this.state.scale;
+    let annotation = this.state.pendingAnnotation
+      .set('x2', e.clientX - offSetX / this.state.scale)
+      .set('y2', e.clientY - offSetY / this.state.scale);
 
     this.setState({pendingAnnotation: annotation});
   },
@@ -137,34 +135,37 @@ let Container = React.createClass({
       || !this.state.pendingAnnotation) return;
 
     // If drawing is false, we have already popped the input dialog
-    if (!this.state.pendingAnnotation.drawing) return;
+    if (!this.state.pendingAnnotation.get('drawing')) return;
 
-    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
-
-    let annotation = this.state.pendingAnnotation;
-    annotation.drawing = false;
+    console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let offSetX = this.props.containerOffsetX;
     let offSetY = this.props.containerOffsetY;
-    annotation.x2 = e.clientX - offSetX / this.state.scale;
-    annotation.y2 = e.clientY - offSetY / this.state.scale;
 
-    if (annotation.x2 < annotation.x1) {
-      let old = annotation.x2;
-      annotation.x2 = annotation.x1;
-      annotation.x1 = old;
+    let annotation = this.state.pendingAnnotation
+      .set('drawing', false)
+      .set('x2', e.clientX - offSetX / this.state.scale)
+      .set('y2', e.clientY - offSetY / this.state.scale);
+
+    if (annotation.get('x2') < annotation.get('x1')) {
+      let newAnnotation = annotation
+        .set('x1', annotation.get('x2'))
+        .set('x2', annotation.get('x1'));
+      annotation = newAnnotation;
     }
 
-    if (annotation.y2 < annotation.y1) {
-      let old = annotation.y2;
-      annotation.y2 = annotation.y1;
-      annotation.y1 = old;
+    if (annotation.get('y2') < annotation.get('y1')) {
+      let newAnnotation = annotation
+        .set('y1', annotation.get('y2'))
+        .set('y2', annotation.get('y1'));
+
+      annotation = newAnnotation;
     }
 
     // Only save the pending change if the mark is bigger than a single point
     // In this case, vertical or horizontal lines are allowed
-    if (Math.abs(annotation.x2 - annotation.x1) < 1
-      && Math.abs(annotation.y2 - annotation.y1) < 1) {
+    if (Math.abs(annotation.get('x2') - annotation.get('x1')) < 1
+      && Math.abs(annotation.get('y2') - annotation.get('y1')) < 1) {
       this.setState({pendingAnnotation: null});
     }
     else {
@@ -182,9 +183,9 @@ let Container = React.createClass({
   },
 
   saveAnnotation(content) {
-    let a = this.state.pendingAnnotation;
-    a.content = content;
-    a.timeStamp = Date.now();
+    let a = this.state.pendingAnnotation
+      .set('content', content)
+      .set('timeStamp', Date.now());
 
     this.props.onSave(a);
     this.setState({pendingAnnotation: null});
@@ -197,7 +198,7 @@ let Container = React.createClass({
   // If editing, pull the annotation out and put it in pending, force viewer to null
   editAnnotation(id) {
     let annotation = this.props.annotations.find((value) => {
-      if (value.Id === id) return true;
+      if (value.get('Id') === id) return true;
       return false;
     });
 
@@ -241,7 +242,7 @@ let Container = React.createClass({
   },
 
   render() {
-    let pA = this.state.pendingAnnotation;
+    let pA = this.state.pendingAnnotation && this.state.pendingAnnotation.toJS();
 
     let pAnnotationComponent = '';
     if (this.state.pendingAnnotation) {
@@ -262,7 +263,10 @@ let Container = React.createClass({
     // Sorting the annotations: largest area to smallest area, then highlights, then markers
     // This allows us to assign a priority with biggest shapes being lowest in order to
     // calculate a z-index that stacks them accordingly
-    let sortedAnnotations = this.props.annotations.sort((m1, m2) => {
+    let sortedAnnotations = this.props.annotations.sort((a1, a2) => {
+      let m1 = a1.toJS();
+      let m2 = a2.toJS();
+
       if (m1.type === 'marker' || m2.type === 'marker') {
         if (m1.type === m2.type) return 0;
         if (m1.type === 'marker') return 1;
