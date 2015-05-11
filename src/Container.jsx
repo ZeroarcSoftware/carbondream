@@ -23,12 +23,17 @@ let Container = React.createClass({
     onDelete: React.PropTypes.func.isRequired,
     containerOffsetX: React.PropTypes.number.isRequired,
     containerOffsetY: React.PropTypes.number.isRequired,
+    // Optional
+    selectedId: React.PropTypes.number.isRequired,
+    onSelect: React.PropTypes.func,
+    onDeselect: React.PropTypes.func,
   },
 
   getDefaultProps() {
     return {
       containerOffsetX: 0,
       containerOffsetY: 0,
+      selectedId: 0,
     };
   },
 
@@ -36,9 +41,14 @@ let Container = React.createClass({
     return {
       scale: DEFAULT_SCALE_FACTOR,
       pendingAnnotation: null,
-      visibleViewerId: null,
+      visibleViewerId: this.props.selectedId || 0,
       mode: 'marker',
     };
+  },
+
+  // Listen for props in order to overwrite visible viewer with prop
+  componentWillReceiveProps(nextProps) {
+    this.setState({visibleViewerId: nextProps.selectedId});
   },
 
   handleClick(e) {
@@ -47,7 +57,7 @@ let Container = React.createClass({
     if (this.state.pendingAnnotation
       || this.state.mode !== 'marker') return;
 
-    console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let offSetX = this.props.containerOffsetX;
     let offSetY = this.props.containerOffsetY;
@@ -193,7 +203,7 @@ let Container = React.createClass({
 
     this.setState({
       pendingAnnotation: annotation,
-      visibleViewerId: null
+      visibleViewerId: 0
     });
   },
 
@@ -211,6 +221,10 @@ let Container = React.createClass({
 
     clearTimeout(this.viewerHideTimer);
 
+    // If a onSelect handler has been provided, invoke it
+    if (this.props.onSelect) {
+      this.props.onSelect(id);
+    }
     this.setState({visibleViewerId: id});
   },
 
@@ -218,7 +232,11 @@ let Container = React.createClass({
     clearTimeout(this.viewerHideTimer);
 
     this.viewerHideTimer = setTimeout(() => {
-      this.setState({visibleViewerId: null});
+      // If a onDeselect handler has been provided, invoke it
+      if (this.props.onDeselect) {
+        this.props.onDeselect();
+      }
+      this.setState({visibleViewerId: 0});
     }, 250);
   },
 
@@ -263,7 +281,8 @@ let Container = React.createClass({
       return m2Area - m1Area;
     });
 
-    let annotations = sortedAnnotations.map((m, i) => {
+    let annotations = sortedAnnotations.map((a, i) => {
+      let m = a.toJS();
       return (
         <Annotation key={m.Id}
           id={m.Id}

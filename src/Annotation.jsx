@@ -112,8 +112,6 @@ let Annotation = React.createClass({
     let invert = y1 + offset.vertical - 10 <= 0 ? true : false;
     if (invert) offset.vertical = height + 36;
 
-    console.log(offset);
-
     // Check to see if we are going to draw past the left or right side of the viewport.
     let viewPortWidth = document.documentElement.clientWidth;
     let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) <= 0 ? true : false;
