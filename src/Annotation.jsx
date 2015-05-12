@@ -28,6 +28,7 @@ let Annotation = React.createClass({
     drawing: React.PropTypes.bool.isRequired,
     deleteAnnotation: React.PropTypes.func.isRequired,
     shouldDisplayViewer: React.PropTypes.bool.isRequired,
+    deemphasize: React.PropTypes.bool.isRequired,
     type: React.PropTypes.string.isRequired,
 
     //Optional
@@ -89,22 +90,22 @@ let Annotation = React.createClass({
 
     switch(this.props.type) {
       case 'marker':
-        indicator = <Marker id={this.props.id} priority={this.props.priority} />;
+        indicator = <Marker deemphasize={this.props.deemphasize} priority={this.props.priority} />;
         offset.vertical -= 25;
         offset.horizontal = -BUBBLEDIM.width / 2;
       break;
       case 'square':
-        indicator = <Square id={this.props.id} width={width} height={height} priority={this.props.priority} />;
+        indicator = <Square deemphasize={this.props.deemphasize} width={width} height={height} priority={this.props.priority} />;
       break;
       case 'circle':
         // For circles, we need to use the biggest mouse value as diameter
         width = height = Math.max(width,height);
-        indicator = <Circle id={this.props.id} width={width} height={height} priority={this.props.priority} />;
+        indicator = <Circle deemphasize={this.props.deemphasize} width={width} height={height} priority={this.props.priority} />;
       break;
       case 'highlight':
         divStyle.top = y1;  // Force back to y1, highlights must stay on same vertical height
         height = 21; // Force height of highlight to allow correct bubble placement
-        indicator = <Highlight id={this.props.id} width={width} priority={this.props.priority} />;
+        indicator = <Highlight deemphasize={this.props.deemphasize} width={width} priority={this.props.priority} />;
       break;
     }
 

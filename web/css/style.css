@@ -80,6 +80,10 @@
   left: -7px;
 }
 
+.cd-marker.deemphasize {
+  color: rgba(134, 134, 134, 0.19);
+}
+
 .cd-square {
   border: solid 2px rgb(99, 131, 255);
   position: relative;
@@ -95,6 +99,11 @@
   left: 0px;
 }
 
+.cd-circle.deemphasize,
+.cd-square.deemphasize {
+  border-color: rgba(134, 134, 134, 0.19);
+}
+
 .cd-highlight {
   background-color: rgba(0, 255, 3, 0.33);
   position: relative;
@@ -103,22 +112,24 @@
   left: 0px;
 }
 
+.cd-highlight.deemphasize {
+  background-color: rgba(134, 134, 134, 0.19);
+}
+
+
 /*
  * Annotation bubble
  */
 
 .cd-annotation {
   position: absolute;
-  /* display: inline-block; */
 }
 
 .cd-annotation-input,
 .cd-annotation-content {
-  /* margin: 10px; */
   border-radius: 3px;
   box-shadow: 2px 3px 4px 2px grey;
   top: -12px;
-  /* left: 22px; */
   background-color: #FFF;
   position: relative;
   height: 120px;
@@ -131,7 +142,6 @@
   z-index: 1000;
   position: absolute;
   top: -14px;
-  /* float: right; */
   right: 0px;
 }
 

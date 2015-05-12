@@ -6,28 +6,35 @@
 'use strict';
 
 //External
-var React = require('react/addons');
+let React = require('react/addons');
+let ClassNames = require('classnames');
 
 
-var Square = React.createClass({
+let Circle = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
+    deemphasize: React.PropTypes.bool.isRequired,
   },
 
   render() {
-    var divStyle = {
+    let divStyle = {
       height: this.props.height,
       width: this.props.width,
       zIndex: this.props.priority,
     };
 
+    let classes = ClassNames({
+      'cd-circle': true,
+      'deemphasize': this.props.deemphasize,
+    });
+
     return (
       <div>
-        <div style={divStyle} className='cd-circle'></div>
+        <div style={divStyle} className={classes}></div>
       </div>
     );
   }
 });
 
-module.exports = Square;
+module.exports = Circle;

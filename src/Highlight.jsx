@@ -2,26 +2,34 @@
  *
  * Annotation highlight shape
  */
+
 'use strict';
 
 //External
-var React = require('react/addons');
+let React = require('react/addons');
+let ClassNames = require('classnames');
 
 
-var Highlight = React.createClass({
+let Highlight = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
+    deemphasize: React.PropTypes.bool.isRequired,
   },
 
   render() {
-    var divStyle = {
+    let divStyle = {
       width: this.props.width,
       zIndex: this.props.priority,
     };
 
+    let classes = ClassNames({
+      'cd-highlight': true,
+      'deemphasize': this.props.deemphasize,
+    });
+
     return (
       <div>
-        <div style={divStyle} className='cd-highlight'></div>
+        <div style={divStyle} className={classes}></div>
       </div>
     );
   }

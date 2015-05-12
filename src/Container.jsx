@@ -16,13 +16,15 @@ let ModeToggle = require('./ModeToggle');
 // Globals
 let DEFAULT_SCALE_FACTOR = 1;       // Default scale factor
 
+
+
+
+
 let Container = React.createClass({
   propTypes: {
     annotations: React.PropTypes.object.isRequired,
     onSave: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func.isRequired,
-    containerOffsetX: React.PropTypes.number.isRequired,
-    containerOffsetY: React.PropTypes.number.isRequired,
     // Optional
     selectedId: React.PropTypes.number.isRequired,
     onSelect: React.PropTypes.func,
@@ -31,8 +33,6 @@ let Container = React.createClass({
 
   getDefaultProps() {
     return {
-      containerOffsetX: 0,
-      containerOffsetY: 0,
       selectedId: 0,
     };
   },
@@ -51,6 +51,24 @@ let Container = React.createClass({
     this.setState({visibleViewerId: nextProps.selectedId});
   },
 
+  offset(element) {
+    let documentElem;
+    let box = { top: 0, left: 0 };
+    let doc = element && element.ownerDocument;
+
+    if (!doc) {
+      return;
+    }
+
+    documentElem = doc.documentElement;
+    box = element.getBoundingClientRect();
+
+    return {
+      top: box.top + (window.pageYOffset || documentElem.scrollTop) - (documentElem.clientTop || 0),
+      left: box.left + (window.pageXOffset || documentElem.scrollLeft) - (documentElem.clientLeft || 0)
+    };
+  },
+
   handleClick(e) {
     e.stopPropagation();
 
@@ -59,17 +77,16 @@ let Container = React.createClass({
 
     //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let offSetX = this.props.containerOffsetX;
-    let offSetY = this.props.containerOffsetY;
+    let offset = this.offset(React.findDOMNode(this));
 
     let annotation = Immutable.Map({
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
-      x1: (e.clientX - offSetX) / this.state.scale,
-      y1: (e.clientY - offSetY) / this.state.scale,
-      x2: (e.clientX + 14 - offSetX) / this.state.scale, //14 & 24 are the size of the marker
-      y2: (e.clientY + 24 - offSetY) / this.state.scale,
+      x1: (e.clientX - offset.left) / this.state.scale,
+      y1: (e.clientY - offset.top) / this.state.scale,
+      x2: (e.clientX + 14 - offset.left) / this.state.scale, //14 & 24 are the size of the marker
+      y2: (e.clientY + 24 - offset.top) / this.state.scale,
     });
 
     this.setState({
@@ -80,24 +97,21 @@ let Container = React.createClass({
   handleMouseDown(e) {
     e.stopPropagation();
 
-    if (this.state.pendingAnnotation
-      || this.state.visibleViewerId
-      || this.state.mode === 'marker') return;
+    if (this.state.pendingAnnotation || this.state.visibleViewerId || this.state.mode === 'marker') return;
 
-    console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let offSetX = this.props.containerOffsetX;
-    let offSetY = this.props.containerOffsetY;
+    let offset = this.offset(React.findDOMNode(this));
 
     let annotation = Immutable.Map({
       content: '',
       timeStamp: Date.now(),
       type: this.state.mode,
       drawing: true,
-      x1: e.clientX - offSetX / this.state.scale,
-      y1: e.clientY - offSetY / this.state.scale,
-      x2: e.clientX - offSetX / this.state.scale,
-      y2: e.clientY - offSetY / this.state.scale,
+      x1: e.clientX - offset.left / this.state.scale,
+      y1: e.clientY - offset.top / this.state.scale,
+      x2: e.clientX - offset.left / this.state.scale,
+      y2: e.clientY - offset.top / this.state.scale,
     });
 
     this.setState({
@@ -106,23 +120,19 @@ let Container = React.createClass({
   },
 
   handleMouseMove(e) {
-     e.stopPropagation();
+    e.stopPropagation();
 
-    if (this.state.visibleViewerId
-      || this.state.mode === 'marker'
-      || !this.state.pendingAnnotation) return;
+    if (this.state.visibleViewerId || this.state.mode === 'marker' || !this.state.pendingAnnotation) return;
 
     // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.get('drawing')) return;
 
-    console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
-
-    let offSetX = this.props.containerOffsetX;
-    let offSetY = this.props.containerOffsetY;
+    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    let offset = this.offset(React.findDOMNode(this));
 
     let annotation = this.state.pendingAnnotation
-      .set('x2', e.clientX - offSetX / this.state.scale)
-      .set('y2', e.clientY - offSetY / this.state.scale);
+    .set('x2', e.clientX - offset.left / this.state.scale)
+    .set('y2', e.clientY - offset.top / this.state.scale);
 
     this.setState({pendingAnnotation: annotation});
   },
@@ -130,34 +140,31 @@ let Container = React.createClass({
   handleMouseUp(e) {
     e.stopPropagation();
 
-    if (this.state.visibleViewerId
-      || this.state.mode === 'marker'
-      || !this.state.pendingAnnotation) return;
+    if (this.state.visibleViewerId || this.state.mode === 'marker' || !this.state.pendingAnnotation) return;
 
     // If drawing is false, we have already popped the input dialog
     if (!this.state.pendingAnnotation.get('drawing')) return;
 
-    console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let offSetX = this.props.containerOffsetX;
-    let offSetY = this.props.containerOffsetY;
+    let offset = this.offset(React.findDOMNode(this));
 
     let annotation = this.state.pendingAnnotation
-      .set('drawing', false)
-      .set('x2', e.clientX - offSetX / this.state.scale)
-      .set('y2', e.clientY - offSetY / this.state.scale);
+    .set('drawing', false)
+    .set('x2', e.clientX - offset.left / this.state.scale)
+    .set('y2', e.clientY - offset.top / this.state.scale);
 
     if (annotation.get('x2') < annotation.get('x1')) {
       let newAnnotation = annotation
-        .set('x1', annotation.get('x2'))
-        .set('x2', annotation.get('x1'));
+      .set('x1', annotation.get('x2'))
+      .set('x2', annotation.get('x1'));
       annotation = newAnnotation;
     }
 
     if (annotation.get('y2') < annotation.get('y1')) {
       let newAnnotation = annotation
-        .set('y1', annotation.get('y2'))
-        .set('y2', annotation.get('y1'));
+      .set('y1', annotation.get('y2'))
+      .set('y2', annotation.get('y1'));
 
       annotation = newAnnotation;
     }
@@ -165,12 +172,12 @@ let Container = React.createClass({
     // Only save the pending change if the mark is bigger than a single point
     // In this case, vertical or horizontal lines are allowed
     if (Math.abs(annotation.get('x2') - annotation.get('x1')) < 1
-      && Math.abs(annotation.get('y2') - annotation.get('y1')) < 1) {
-      this.setState({pendingAnnotation: null});
-    }
-    else {
-      this.setState({pendingAnnotation: annotation});
-    }
+        && Math.abs(annotation.get('y2') - annotation.get('y1')) < 1) {
+          this.setState({pendingAnnotation: null});
+        }
+        else {
+          this.setState({pendingAnnotation: annotation});
+        }
   },
 
   switchMode(mode) {
@@ -184,8 +191,8 @@ let Container = React.createClass({
 
   saveAnnotation(content) {
     let a = this.state.pendingAnnotation
-      .set('content', content)
-      .set('timeStamp', Date.now());
+    .set('content', content)
+    .set('timeStamp', Date.now());
 
     this.props.onSave(a);
     this.setState({pendingAnnotation: null});
@@ -295,6 +302,7 @@ let Container = React.createClass({
           timeStamp={m.timeStamp}
           pending={false}
           shouldDisplayViewer={m.Id === this.state.visibleViewerId}
+          deemphasize={this.state.visibleViewerId !== 0 && m.Id !== this.state.visibleViewerId}
           displayAnnotationViewer={this.displayAnnotationViewer}
           hideAnnotationViewer={this.hideAnnotationViewer}
           deleteAnnotation={this.deleteAnnotation}
@@ -308,7 +316,7 @@ let Container = React.createClass({
     });
 
     return (
-      <div className='cd-container'
+      <div ref='cdContainer' className='cd-container'
         onClick={this.handleClick}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}

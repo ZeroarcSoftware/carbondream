@@ -2,20 +2,31 @@
  *
  * Annotation marker shape
  */
+
 'use strict';
 
 //External
-var React = require('react/addons');
+let React = require('react/addons');
+let ClassNames = require('classnames');
 
 
-var Marker = React.createClass({
+let Marker = React.createClass({
+  propTypes: {
+    deemphasize: React.PropTypes.bool.isRequired,
+  },
+
   render() {
-    var divStyle = {
+    let divStyle = {
       zIndex: this.props.priority,
     };
 
+    let classes = ClassNames({
+      'cd-marker': true,
+      'deemphasize': this.props.deemphasize,
+    });
+
     return (
-      <div style={divStyle} className='cd-marker'>
+      <div style={divStyle} className={classes}>
         <i className='fa fa-map-marker'></i>
       </div>
     );
