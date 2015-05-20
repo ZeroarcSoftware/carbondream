@@ -13,18 +13,13 @@ let Immutable = require('immutable');
 let Annotation = require('./Annotation');
 let ModeToggle = require('./ModeToggle');
 
-// Globals
-let DEFAULT_SCALE_FACTOR = 1;       // Default scale factor
-
-
-
-
 
 let Container = React.createClass({
   propTypes: {
     annotations: React.PropTypes.object.isRequired,
     onSave: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func.isRequired,
+    scale: React.PropTypes.number.isRequired,
     // Optional
     selectedId: React.PropTypes.number.isRequired,
     onSelect: React.PropTypes.func,
@@ -34,21 +29,27 @@ let Container = React.createClass({
   getDefaultProps() {
     return {
       selectedId: 0,
+      scale: 0,
     };
   },
 
   getInitialState() {
     return {
-      scale: DEFAULT_SCALE_FACTOR,
       pendingAnnotation: null,
       visibleViewerId: this.props.selectedId || 0,
       mode: 'marker',
+      containerOffset: {top: 0, left: 0},
     };
   },
 
   // Listen for props in order to overwrite visible viewer with prop
   componentWillReceiveProps(nextProps) {
     this.setState({visibleViewerId: nextProps.selectedId});
+  },
+
+  componentDidMount() {
+    let offset = this.offset(React.findDOMNode(this));
+    this.setState({containerOffset: offset});
   },
 
   offset(element) {
@@ -77,16 +78,14 @@ let Container = React.createClass({
 
     //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let offset = this.offset(React.findDOMNode(this));
-
     let annotation = Immutable.Map({
       content: '',
-      timeStamp: Date.now(),
+      timeStamp: new Date(),
       type: this.state.mode,
-      x1: (e.clientX - offset.left) / this.state.scale,
-      y1: (e.clientY - offset.top) / this.state.scale,
-      x2: (e.clientX + 14 - offset.left) / this.state.scale, //14 & 24 are the size of the marker
-      y2: (e.clientY + 24 - offset.top) / this.state.scale,
+      x1: Math.round((e.clientX - this.state.containerOffset.left) / this.props.scale),
+      y1: Math.round((e.clientY - this.state.containerOffset.top) / this.props.scale),
+      x2: Math.round((e.clientX + 14 - this.state.containerOffset.left) / this.props.scale), //14 & 24 are the size of the marker
+      y2: Math.round((e.clientY + 24 - this.state.containerOffset.top) / this.props.scale),
     });
 
     this.setState({
@@ -101,17 +100,15 @@ let Container = React.createClass({
 
     //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let offset = this.offset(React.findDOMNode(this));
-
     let annotation = Immutable.Map({
       content: '',
-      timeStamp: Date.now(),
+      timeStamp: new Date(),
       type: this.state.mode,
       drawing: true,
-      x1: e.clientX - offset.left / this.state.scale,
-      y1: e.clientY - offset.top / this.state.scale,
-      x2: e.clientX - offset.left / this.state.scale,
-      y2: e.clientY - offset.top / this.state.scale,
+      x1: Math.round(e.clientX - this.state.containerOffset.left / this.props.scale),
+      y1: Math.round(e.clientY - this.state.containerOffset.top / this.props.scale),
+      x2: Math.round(e.clientX - this.state.containerOffset.left / this.props.scale),
+      y2: Math.round(e.clientY - this.state.containerOffset.top / this.props.scale),
     });
 
     this.setState({
@@ -128,11 +125,10 @@ let Container = React.createClass({
     if (!this.state.pendingAnnotation.get('drawing')) return;
 
     //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
-    let offset = this.offset(React.findDOMNode(this));
 
     let annotation = this.state.pendingAnnotation
-    .set('x2', e.clientX - offset.left / this.state.scale)
-    .set('y2', e.clientY - offset.top / this.state.scale);
+    .set('x2', e.clientX - this.state.containerOffset.left / this.props.scale)
+    .set('y2', e.clientY - this.state.containerOffset.top / this.props.scale);
 
     this.setState({pendingAnnotation: annotation});
   },
@@ -147,12 +143,10 @@ let Container = React.createClass({
 
     //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
-    let offset = this.offset(React.findDOMNode(this));
-
     let annotation = this.state.pendingAnnotation
     .set('drawing', false)
-    .set('x2', e.clientX - offset.left / this.state.scale)
-    .set('y2', e.clientY - offset.top / this.state.scale);
+    .set('x2', Math.round(e.clientX - this.state.containerOffset.left / this.props.scale))
+    .set('y2', Math.round(e.clientY - this.state.containerOffset.top / this.props.scale));
 
     if (annotation.get('x2') < annotation.get('x1')) {
       let newAnnotation = annotation
@@ -192,7 +186,7 @@ let Container = React.createClass({
   saveAnnotation(content) {
     let a = this.state.pendingAnnotation
     .set('content', content)
-    .set('timeStamp', Date.now());
+    .set('timeStamp', new Date());
 
     this.props.onSave(a);
     this.setState({pendingAnnotation: null});
@@ -253,18 +247,20 @@ let Container = React.createClass({
 
     let pAnnotationComponent = '';
     if (this.state.pendingAnnotation) {
-      pAnnotationComponent = <Annotation id={pA.Id}
+      pAnnotationComponent = <Annotation id={pA.id}
         content={pA.content}
         pending={true}
         drawing={pA.drawing}
         saveAnnotation={this.saveAnnotation}
         cancelAnnotation={this.cancelAnnotation}
         deleteAnnotation={this.deleteAnnotation}
+        deemphasize={false}
         type={pA.type}
-        x1={pA.x1 * this.state.scale}
-        y1={pA.y1 * this.state.scale}
-        x2={pA.x2 * this.state.scale}
-        y2={pA.y2 * this.state.scale} />;
+        containerOffset={this.state.containerOffset}
+        x1={pA.x1 * this.props.scale}
+        y1={pA.y1 * this.props.scale}
+        x2={pA.x2 * this.props.scale}
+        y2={pA.y2 * this.props.scale} />;
     }
 
     // Sorting the annotations: largest area to smallest area, then highlights, then markers
@@ -295,23 +291,24 @@ let Container = React.createClass({
     let annotations = sortedAnnotations.map((a, i) => {
       let m = a.toJS();
       return (
-        <Annotation key={m.Id}
-          id={m.Id}
+        <Annotation key={m.id}
+          id={m.id}
           priority={i + 1}
           content={m.content}
           timeStamp={m.timeStamp}
           pending={false}
-          shouldDisplayViewer={m.Id === this.state.visibleViewerId}
-          deemphasize={this.state.visibleViewerId !== 0 && m.Id !== this.state.visibleViewerId}
+          shouldDisplayViewer={m.id === this.state.visibleViewerId}
+          deemphasize={this.state.visibleViewerId !== 0 && m.id !== this.state.visibleViewerId}
           displayAnnotationViewer={this.displayAnnotationViewer}
           hideAnnotationViewer={this.hideAnnotationViewer}
           deleteAnnotation={this.deleteAnnotation}
           editAnnotation={this.editAnnotation}
           type={m.type}
-          x1={m.x1 * this.state.scale}
-          y1={m.y1 * this.state.scale}
-          x2={m.x2 * this.state.scale}
-          y2={m.y2 * this.state.scale} />
+          containerOffset={this.state.containerOffset}
+          x1={m.x1 * this.props.scale}
+          y1={m.y1 * this.props.scale}
+          x2={m.x2 * this.props.scale}
+          y2={m.y2 * this.props.scale} />
       );
     });
 

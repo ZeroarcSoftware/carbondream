@@ -16,6 +16,7 @@ let Input = require('./Input');
 let Content = React.createClass({
   propTypes: {
     id: React.PropTypes.number.isRequired,
+    author: React.PropTypes.string.isRequired,
     content: React.PropTypes.string.isRequired,
     pending: React.PropTypes.bool.isRequired,
     shouldDisplayViewer: React.PropTypes.bool.isRequired,
@@ -24,7 +25,7 @@ let Content = React.createClass({
     offset: React.PropTypes.object.isRequired,
 
     //Optional
-    timeStamp: React.PropTypes.number,
+    timeStamp: React.PropTypes.instanceOf(Date),
   },
 
   getInitialState() {
@@ -100,7 +101,7 @@ let Content = React.createClass({
             {this.props.content}
           </div>
           <div className='cd-annotation-content-info'>
-            Comment #{this.props.id} by Justin {Timeago(this.props.timeStamp)}
+            Comment #{this.props.id} by {this.props.author} {Timeago(this.props.timeStamp)}
           </div>
         </div>
       </div>

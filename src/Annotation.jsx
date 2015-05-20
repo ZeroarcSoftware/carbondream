@@ -24,17 +24,18 @@ let Annotation = React.createClass({
     content: React.PropTypes.string.isRequired,
     x1: React.PropTypes.number.isRequired,
     y1: React.PropTypes.number.isRequired,
+    x2: React.PropTypes.number.isRequired,
+    y2: React.PropTypes.number.isRequired,
     pending: React.PropTypes.bool.isRequired,
     drawing: React.PropTypes.bool.isRequired,
     deleteAnnotation: React.PropTypes.func.isRequired,
     shouldDisplayViewer: React.PropTypes.bool.isRequired,
     deemphasize: React.PropTypes.bool.isRequired,
     type: React.PropTypes.string.isRequired,
+    containerOffset: React.PropTypes.object.isRequired,
 
     //Optional
-    x2: React.PropTypes.number,
-    y2: React.PropTypes.number,
-    timeStamp: React.PropTypes.number,
+    timeStamp: React.PropTypes.instanceOf(Date),
     displayAnnotationViewer: React.PropTypes.func,
     hideAnnotationViewer: React.PropTypes.func,
   },
@@ -110,12 +111,13 @@ let Annotation = React.createClass({
     }
 
     // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
-    let invert = y1 + offset.vertical - 10 <= 0 ? true : false;
+    let invert = y1 + offset.vertical - 10 + this.props.containerOffset.top <= 0 ? true : false;
     if (invert) offset.vertical = height + 36;
 
     // Check to see if we are going to draw past the left or right side of the viewport.
-    let viewPortWidth = document.documentElement.clientWidth;
-    let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) <= 0 ? true : false;
+    let viewPortWidth = document.documentElement.clientWidth - this.props.containerOffset.left;
+
+    let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) + this.props.containerOffset <= 0 ? true : false;
     let pullHorizontal = x1 + (width/2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
 
     // If we need to push or pull the bubble, recalculate the offsets based on bubble size and
