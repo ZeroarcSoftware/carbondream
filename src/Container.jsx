@@ -105,10 +105,10 @@ let Container = React.createClass({
       timeStamp: new Date(),
       type: this.state.mode,
       drawing: true,
-      x1: Math.round(e.clientX - this.state.containerOffset.left / this.props.scale),
-      y1: Math.round(e.clientY - this.state.containerOffset.top / this.props.scale),
-      x2: Math.round(e.clientX - this.state.containerOffset.left / this.props.scale),
-      y2: Math.round(e.clientY - this.state.containerOffset.top / this.props.scale),
+      x1: Math.round((e.clientX - this.state.containerOffset.left) / this.props.scale),
+      y1: Math.round((e.clientY - this.state.containerOffset.top) / this.props.scale),
+      x2: Math.round((e.clientX - this.state.containerOffset.left) / this.props.scale),
+      y2: Math.round((e.clientY - this.state.containerOffset.top) / this.props.scale),
     });
 
     this.setState({
@@ -127,8 +127,8 @@ let Container = React.createClass({
     //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation
-    .set('x2', e.clientX - this.state.containerOffset.left / this.props.scale)
-    .set('y2', e.clientY - this.state.containerOffset.top / this.props.scale);
+    .set('x2', (e.clientX - this.state.containerOffset.left) / this.props.scale)
+    .set('y2', (e.clientY - this.state.containerOffset.top) / this.props.scale);
 
     this.setState({pendingAnnotation: annotation});
   },
@@ -145,8 +145,8 @@ let Container = React.createClass({
 
     let annotation = this.state.pendingAnnotation
     .set('drawing', false)
-    .set('x2', Math.round(e.clientX - this.state.containerOffset.left / this.props.scale))
-    .set('y2', Math.round(e.clientY - this.state.containerOffset.top / this.props.scale));
+    .set('x2', Math.round((e.clientX - this.state.containerOffset.left) / this.props.scale))
+    .set('y2', Math.round((e.clientY - this.state.containerOffset.top) / this.props.scale));
 
     if (annotation.get('x2') < annotation.get('x1')) {
       let newAnnotation = annotation
@@ -257,6 +257,7 @@ let Container = React.createClass({
         deemphasize={false}
         type={pA.type}
         containerOffset={this.state.containerOffset}
+        author={pA.author}
         x1={pA.x1 * this.props.scale}
         y1={pA.y1 * this.props.scale}
         x2={pA.x2 * this.props.scale}
@@ -304,6 +305,7 @@ let Container = React.createClass({
           deleteAnnotation={this.deleteAnnotation}
           editAnnotation={this.editAnnotation}
           type={m.type}
+          author={m.author}
           containerOffset={this.state.containerOffset}
           x1={m.x1 * this.props.scale}
           y1={m.y1 * this.props.scale}
