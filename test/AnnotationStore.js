@@ -22,7 +22,7 @@ let AnalysisStore = Reflux.createStore({
 
     let annotations = state.annotations || [];
     let annotationMaps = annotations.map((a) => {
-      a.selected = false;
+      a.timeStamp = new Date(a.timeStamp);
       return Immutable.Map(a);
     }); // Project to immutable maps
 

@@ -29,16 +29,16 @@
   },
   "homepage": "https://github.com/ZeroarcSoftware/carbondream",
   "devDependencies": {
-    "babel": "^5.1.13",
-    "babelify": "^6.0.2",
-    "browserify": "^9.0.8",
-    "watchify": "^3.2.0"
+    "babel": "^5.4.7",
+    "babelify": "^6.1.1",
+    "browserify": "^10.2.1",
+    "watchify": "^3.2.1"
   },
   "dependencies": {
-    "classnames": "^1.2.1",
+    "classnames": "^1.2.2",
     "font-awesome": "^4.3.0",
-    "immutable": "^3.7.2",
-    "react": "^0.13.2",
+    "immutable": "^3.7.3",
+    "react": "^0.13.3",
     "reflux": "^0.2.7",
     "timeago": "^0.2.0"
   }
