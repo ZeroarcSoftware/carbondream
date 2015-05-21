@@ -38,30 +38,29 @@ let AnalysisStore = Reflux.createStore({
     let index = -1;
 
     // Check to see if this is a new annotation. If so, issue UID
-    if (!annotation.get('Id')) {
-      annotation = annotation.set('Id', this.lastId + 1);
+    if (!annotation.get('id')) {
+      annotation = annotation.set('id', this.lastId + 1);
     }
     // Otherwise look for it in the existing list
     else {
       index = this.annotations.findIndex((value) => {
-        if (value.get('Id') === annotation.get('Id')) return true;
+        if (value.get('id') === annotation.get('id')) return true;
         return false;
       });
     }
 
     // Update or add annotation accordingly
-    let a = Immutable.Map(annotation);
-    a.selected = false;
+    annotation = annotation.set('author', 'Test User');
 
     if (index >= 0) {
-      this.annotations = this.annotations.set(index, a);
+      this.annotations = this.annotations.set(index, annotation);
     }
     else {
-      this.annotations = this.annotations.push(a);
+      this.annotations = this.annotations.push(annotation);
     }
 
     // Only change the Id if its higher, in case we are editing
-    this.lastId = Math.ceil(annotation.get('Id'), this.lastId);
+    this.lastId = Math.ceil(annotation.get('id'), this.lastId);
 
     localStorage['annotationState'] = JSON.stringify({
       annotations: this.annotations.toJS(),
@@ -74,7 +73,7 @@ let AnalysisStore = Reflux.createStore({
 
   annotationDelete(id) {
     let index = this.annotations.findIndex((value) => {
-      if (value.get('Id') === id) return true;
+      if (value.get('id') === id) return true;
       return false;
     });
 

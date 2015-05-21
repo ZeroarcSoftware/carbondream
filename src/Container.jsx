@@ -29,7 +29,7 @@ let Container = React.createClass({
   getDefaultProps() {
     return {
       selectedId: 0,
-      scale: 0,
+      scale: 1,
     };
   },
 
