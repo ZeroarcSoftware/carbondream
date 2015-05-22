@@ -82,7 +82,7 @@ let Annotation = React.createClass({
 
     // Default offsets based on height/width of bubble
     let offset = {
-      vertical: -BUBBLEDIM.height - 10,
+      vertical: -BUBBLEDIM.height - 20,
       horizontal: width/2 - BUBBLEDIM.width / 2,
     };
 
