@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "$(npm bin)/babel --optional es7.objectRestSpread src/ -d dist/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
-    "demo-watch": "$(npm bin)/watchify --extension=.jsx -d -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js -v",
+    "demo-watch": "$(npm bin)/watchify --extension=.jsx -d -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js -v ",
     "demo-build": "$(npm bin)/browserify --extension=.jsx -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
