@@ -92,7 +92,7 @@ let Annotation = React.createClass({
     switch(this.props.type) {
       case 'marker':
         indicator = <Marker deemphasize={this.props.deemphasize} priority={this.props.priority} />;
-        offset.vertical -= 25;
+        height = 0; // Zero height for marker since it is display is offset from its x1/y1
         offset.horizontal = -BUBBLEDIM.width / 2;
       break;
       case 'square':
@@ -117,7 +117,7 @@ let Annotation = React.createClass({
     // Check to see if we are going to draw past the left or right side of the viewport.
     let viewPortWidth = document.documentElement.clientWidth - this.props.containerOffset.left;
 
-    let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) + this.props.containerOffset <= 0 ? true : false;
+    let pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) + this.props.containerOffset.left <= 0 ? true : false;
     let pullHorizontal = x1 + (width/2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
 
     // If we need to push or pull the bubble, recalculate the offsets based on bubble size and
