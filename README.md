@@ -6,16 +6,15 @@ Carbondream is an annotation engine written purely in ReactJS. It was inspired b
 ## Using it
 
 To use Carbondream:
-* Install the component through NPM
-* Require it
-* Pass it a list of annotations, a save handler, and a delete handler
+- Install the component through NPM
+- Require it
+- Pass it a list of annotations, a save handler, and a delete handler
 
-
-    <Container
-      annotations={annotations}
-      onSave={this.handleAnnotationSave}
-      onDelete={this.handleAnnotationDelete}
-    />
+        <Container
+          annotations={annotations}
+          onSave={this.handleAnnotationSave}
+          onDelete={this.handleAnnotationDelete}
+        />
 
 Check out test/demo.jsx for a simple implementation using [RefluxJS](https://github.com/spoike/refluxjs) with local storage.
 
