@@ -92,7 +92,8 @@ let Annotation = React.createClass({
     switch(this.props.type) {
       case 'marker':
         indicator = <Marker deemphasize={this.props.deemphasize} priority={this.props.priority} />;
-        height = 0; // Zero height for marker since it is display is offset from its x1/y1
+        offset.vertical -= 25;
+        height = 0;
         offset.horizontal = -BUBBLEDIM.width / 2;
       break;
       case 'square':

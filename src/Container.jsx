@@ -20,6 +20,7 @@ let Container = React.createClass({
     onSave: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func.isRequired,
     scale: React.PropTypes.number.isRequired,
+    hidden: React.PropTypes.bool.isRequired,
     // Optional
     selectedId: React.PropTypes.number.isRequired,
     onSelect: React.PropTypes.func,
@@ -30,6 +31,7 @@ let Container = React.createClass({
     return {
       selectedId: 0,
       scale: 1,
+      hidden: false,
     };
   },
 
@@ -199,7 +201,7 @@ let Container = React.createClass({
   // If editing, pull the annotation out and put it in pending, force viewer to null
   editAnnotation(id) {
     let annotation = this.props.annotations.find((value) => {
-      if (value.get('Id') === id) return true;
+      if (value.get('id') === id) return true;
       return false;
     });
 
@@ -246,7 +248,7 @@ let Container = React.createClass({
     let pA = this.state.pendingAnnotation && this.state.pendingAnnotation.toJS();
 
     let pAnnotationComponent = '';
-    if (this.state.pendingAnnotation) {
+    if (this.state.pendingAnnotation && !this.props.hidden) {
       pAnnotationComponent = <Annotation id={pA.id}
         content={pA.content}
         pending={true}
@@ -289,30 +291,33 @@ let Container = React.createClass({
       return m2Area - m1Area;
     });
 
-    let annotations = sortedAnnotations.map((a, i) => {
-      let m = a.toJS();
-      return (
-        <Annotation key={m.id}
-          id={m.id}
-          priority={i + 1}
-          content={m.content}
-          timeStamp={m.timeStamp}
-          pending={false}
-          shouldDisplayViewer={m.id === this.state.visibleViewerId}
-          deemphasize={this.state.visibleViewerId !== 0 && m.id !== this.state.visibleViewerId}
-          displayAnnotationViewer={this.displayAnnotationViewer}
-          hideAnnotationViewer={this.hideAnnotationViewer}
-          deleteAnnotation={this.deleteAnnotation}
-          editAnnotation={this.editAnnotation}
-          type={m.type}
-          author={m.author}
-          containerOffset={this.state.containerOffset}
-          x1={m.x1 * this.props.scale}
-          y1={m.y1 * this.props.scale}
-          x2={m.x2 * this.props.scale}
-          y2={m.y2 * this.props.scale} />
-      );
-    });
+    let annotations = '';
+    if (!this.props.hidden) {
+      annotations = sortedAnnotations.map((a, i) => {
+        let m = a.toJS();
+        return (
+          <Annotation key={m.id}
+            id={m.id}
+            priority={i + 1}
+            content={m.content}
+            timeStamp={m.timeStamp}
+            pending={false}
+            shouldDisplayViewer={m.id === this.state.visibleViewerId}
+            deemphasize={this.state.visibleViewerId !== 0 && m.id !== this.state.visibleViewerId}
+            displayAnnotationViewer={this.displayAnnotationViewer}
+            hideAnnotationViewer={this.hideAnnotationViewer}
+            deleteAnnotation={this.deleteAnnotation}
+            editAnnotation={this.editAnnotation}
+            type={m.type}
+            author={m.author}
+            containerOffset={this.state.containerOffset}
+            x1={m.x1 * this.props.scale}
+            y1={m.y1 * this.props.scale}
+            x2={m.x2 * this.props.scale}
+            y2={m.y2 * this.props.scale} />
+        );
+      });
+    }
 
     return (
       <div ref='cdContainer' className='cd-container'
