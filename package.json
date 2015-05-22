@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Reactjs based web annotation engine",
   "main": "dist/entry.js",
   "directories": {
