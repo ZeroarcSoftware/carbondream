@@ -1,3 +1,11 @@
 # Don't publish jsx source
 *.jsx
 
+# Don't check in new buids of test
+test/
+
+# Don't check gh-pages related code
+stylesheets/
+index.html
+params.json
+CNAME
