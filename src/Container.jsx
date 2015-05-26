@@ -50,6 +50,15 @@ let Container = React.createClass({
   },
 
   componentDidMount() {
+    window.addEventListener("scroll", this.updateOffset);
+    this.updateOffset();
+  },
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.updateOffset);
+  },
+
+  updateOffset() {
     let offset = this.offset(React.findDOMNode(this));
     this.setState({containerOffset: offset});
   },
@@ -67,8 +76,8 @@ let Container = React.createClass({
     box = element.getBoundingClientRect();
 
     return {
-      top: box.top + (window.pageYOffset || documentElem.scrollTop) - (documentElem.clientTop || 0),
-      left: box.left + (window.pageXOffset || documentElem.scrollLeft) - (documentElem.clientLeft || 0)
+      top: box.top,
+      left: box.left,
     };
   },
 
