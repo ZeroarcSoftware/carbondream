@@ -28538,12 +28538,14 @@ var Container = React.createClass({
   },
 
   componentDidMount: function componentDidMount() {
-    window.addEventListener('scroll', this.updateOffset);
+    var component = React.findDOMNode(this);
+    component.addEventListener('scroll', this.updateOffset);
     this.updateOffset();
   },
 
   componentWillUnmount: function componentWillUnmount() {
-    window.removeEventListener('scroll', this.updateOffset);
+    var component = React.findDOMNode(this);
+    component.addEventListener('scroll', this.updateOffset);
   },
 
   updateOffset: function updateOffset() {
@@ -28571,6 +28573,8 @@ var Container = React.createClass({
   handleClick: function handleClick(e) {
     e.stopPropagation();
 
+    this.updateOffset();
+
     if (this.state.pendingAnnotation || this.state.mode !== 'marker') return;
 
     //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
@@ -28591,6 +28595,8 @@ var Container = React.createClass({
 
   handleMouseDown: function handleMouseDown(e) {
     e.stopPropagation();
+
+    this.updateOffset();
 
     if (this.state.pendingAnnotation || this.state.visibleViewerId || this.state.mode === 'marker') return;
 
@@ -28613,6 +28619,8 @@ var Container = React.createClass({
   handleMouseMove: function handleMouseMove(e) {
     e.stopPropagation();
 
+    this.updateOffset();
+
     if (this.state.visibleViewerId || this.state.mode === 'marker' || !this.state.pendingAnnotation) return;
 
     // If drawing is not true, then don't proceed
@@ -28627,6 +28635,8 @@ var Container = React.createClass({
 
   handleMouseUp: function handleMouseUp(e) {
     e.stopPropagation();
+
+    this.updateOffset();
 
     if (this.state.visibleViewerId || this.state.mode === 'marker' || !this.state.pendingAnnotation) return;
 

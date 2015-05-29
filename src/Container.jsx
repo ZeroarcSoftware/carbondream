@@ -50,12 +50,14 @@ let Container = React.createClass({
   },
 
   componentDidMount() {
-    window.addEventListener("scroll", this.updateOffset);
+    let component = React.findDOMNode(this);
+    component.addEventListener("scroll", this.updateOffset);
     this.updateOffset();
   },
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.updateOffset);
+    let component = React.findDOMNode(this);
+    component.addEventListener("scroll", this.updateOffset);
   },
 
   updateOffset() {
@@ -84,6 +86,8 @@ let Container = React.createClass({
   handleClick(e) {
     e.stopPropagation();
 
+    this.updateOffset();
+
     if (this.state.pendingAnnotation
       || this.state.mode !== 'marker') return;
 
@@ -106,6 +110,8 @@ let Container = React.createClass({
 
   handleMouseDown(e) {
     e.stopPropagation();
+
+    this.updateOffset();
 
     if (this.state.pendingAnnotation || this.state.visibleViewerId || this.state.mode === 'marker') return;
 
@@ -130,6 +136,8 @@ let Container = React.createClass({
   handleMouseMove(e) {
     e.stopPropagation();
 
+    this.updateOffset();
+
     if (this.state.visibleViewerId || this.state.mode === 'marker' || !this.state.pendingAnnotation) return;
 
     // If drawing is not true, then don't proceed
@@ -146,6 +154,8 @@ let Container = React.createClass({
 
   handleMouseUp(e) {
     e.stopPropagation();
+
+    this.updateOffset();
 
     if (this.state.visibleViewerId || this.state.mode === 'marker' || !this.state.pendingAnnotation) return;
 
