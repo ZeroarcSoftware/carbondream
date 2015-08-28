@@ -7,7 +7,7 @@
 // External
 let React = require('react/addons');
 let ClassNames = require('classnames');
-let Timeago = require('timeago');
+let Timeago = require('react-timeago');
 
 // Local
 let Input = require('./Input');
@@ -101,7 +101,7 @@ let Content = React.createClass({
             {this.props.content}
           </div>
           <div className='cd-annotation-content-info'>
-            Comment #{this.props.id} by {this.props.author} {Timeago(this.props.timeStamp)}
+            Comment #{this.props.id} by {this.props.author} <Timeago date={this.props.timeStamp} />
           </div>
         </div>
       </div>

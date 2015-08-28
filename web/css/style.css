@@ -171,6 +171,7 @@
   font-style: italic;
   z-index: 4;
   background-color: #FFF;
+  border-radius: 3px;
 }
 
 .cd-annotation-input textarea {
