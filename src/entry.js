@@ -2,10 +2,11 @@
  *
  * Entry point into carbondream
  */
+
 'use strict';
 
 // Local
-var Container = require('./Container');
+let Container = require('./Container');
 
 console.log('Weaving a new carbon dream.');
 

@@ -2,27 +2,19 @@
  *
  * Controls to toggle annotation modes
  */
+
 'use strict';
 
-var React = require('react/addons');
+// External
+let React = require('react');
+let Autobind = require('autobind-decorator');
 
-var ModeToggle = React.createClass({
-  propTypes: {
-    mode: React.PropTypes.string.isRequired,
-    switchMode: React.PropTypes.func.isRequired,
-  },
 
-  handleClick(mode) {
-    return (e) => {
-      e.stopPropagation();
-      this.props.switchMode(mode);
-    };
-  },
-
-  // This is neccessary to prevent mouseup/down from triggering actions on parents
-  blockEvent(e) {
-    e.stopPropagation();
-  },
+@Autobind
+export default class ModeToggle extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+  }
 
   render() {
     return (
@@ -34,8 +26,25 @@ var ModeToggle = React.createClass({
       </div>
     );
   }
-});
 
-module.exports = ModeToggle;
+  //
+  // Custom Methods
+  //
 
+  handleClick(mode) {
+    return (e) => {
+      e.stopPropagation();
+      this.props.switchMode(mode);
+    };
+  }
 
+  // This is neccessary to prevent mouseup/down from triggering actions on parents
+  blockEvent(e) {
+    e.stopPropagation();
+  }
+}
+
+ModeToggle.propTypes = {
+  mode: React.PropTypes.string.isRequired,
+  switchMode: React.PropTypes.func.isRequired,
+};

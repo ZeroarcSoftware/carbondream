@@ -5,16 +5,12 @@
 
 'use strict';
 
-//External
-let React = require('react/addons');
+// External
+let React = require('react');
 let ClassNames = require('classnames');
 
 
-let Marker = React.createClass({
-  propTypes: {
-    deemphasize: React.PropTypes.bool.isRequired,
-  },
-
+export default class Marker extends React.Component {
   render() {
     let divStyle = {
       zIndex: this.props.priority,
@@ -31,6 +27,8 @@ let Marker = React.createClass({
       </div>
     );
   }
-});
+}
 
-module.exports = Marker;
+Marker.propTypes = {
+  deemphasize: React.PropTypes.bool.isRequired,
+};

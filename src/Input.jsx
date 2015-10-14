@@ -2,52 +2,21 @@
  *
  * Input dialog for annotation
  */
+
 'use strict';
 
 // External
-let React = require('react/addons');
+let React = require('react');
 let ClassNames = require('classnames');
+let Autobind = require('autobind-decorator');
 
 
-let Input = React.createClass({
-  propTypes: {
-    content: React.PropTypes.string.isRequired,
-    pending: React.PropTypes.bool.isRequired,
-    saveAnnotation: React.PropTypes.func,
-    cancelAnnotation: React.PropTypes.func,
-  },
-
-  getInitialState() {
-    return {value: this.props.content};
-  },
-
-  handleChange(e) {
-    this.setState({value: event.target.value});
-  },
-
-  handleSaveClick(e) {
-    e.stopPropagation();
-    this.props.saveAnnotation(this.state.value);
-  },
-
-  handleCancelClick(e) {
-    e.stopPropagation();
-    this.props.cancelAnnotation();
-  },
-
-  handleKeyDown(e) {
-    e.stopPropagation();
-
-    // Capture escape key to cancel
-    if (e.keyCode === 27 && this.state.value.length === 0) this.props.cancelAnnotation();
-  },
-
-  handleBlur(e) {
-    e.stopPropagation();
-
-    // If the textarea blurs with no input, the user has clicked or tabbed out. Cancel.
-    if (this.state.value.length === 0) this.props.cancelAnnotation();
-  },
+@Autobind
+export default class Input extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {value: props.content};
+  }
 
   render() {
     let editorClasses = ClassNames({
@@ -100,6 +69,44 @@ let Input = React.createClass({
       </div>
     );
   }
-});
 
-module.exports = Input;
+  //
+  // Custom methods
+  //
+
+  handleChange(e) {
+    e.stopPropagation();
+    this.setState({value: e.target.value});
+  }
+
+  handleSaveClick(e) {
+    e.stopPropagation();
+    this.props.saveAnnotation(this.state.value);
+  }
+
+  handleCancelClick(e) {
+    e.stopPropagation();
+    this.props.cancelAnnotation();
+  }
+
+  handleKeyDown(e) {
+    e.stopPropagation();
+
+    // Capture escape key to cancel
+    if (e.keyCode === 27 && this.state.value.length === 0) this.props.cancelAnnotation();
+  }
+
+  handleBlur(e) {
+    e.stopPropagation();
+
+    // If the textarea blurs with no input, the user has clicked or tabbed out. Cancel.
+    if (this.state.value.length === 0) this.props.cancelAnnotation();
+  }
+}
+
+Input.propTypes = {
+  content: React.PropTypes.string.isRequired,
+  pending: React.PropTypes.bool.isRequired,
+  saveAnnotation: React.PropTypes.func,
+  cancelAnnotation: React.PropTypes.func,
+};

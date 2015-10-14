@@ -6,7 +6,8 @@
 'use strict';
 
 // External
-let React = require('react/addons');
+let React = require('react');
+let Autobind = require('autobind-decorator');
 
 // Local
 let Marker = require('./Marker');
@@ -17,53 +18,11 @@ let Content = require('./Content');
 let Input = require('./Input');
 
 // Globals
-let BUBBLEDIM = {width: 260, height: 120};     // Make the marker land at the tip of the pointer. Not sure how this varies between browsers/OSes
+let BUBBLEDIM = {width: 260, height: 120};
 
-let Annotation = React.createClass({
-  propTypes: {
-    content: React.PropTypes.string.isRequired,
-    x1: React.PropTypes.number.isRequired,
-    y1: React.PropTypes.number.isRequired,
-    x2: React.PropTypes.number.isRequired,
-    y2: React.PropTypes.number.isRequired,
-    pending: React.PropTypes.bool.isRequired,
-    drawing: React.PropTypes.bool.isRequired,
-    deleteAnnotation: React.PropTypes.func.isRequired,
-    shouldDisplayViewer: React.PropTypes.bool.isRequired,
-    deemphasize: React.PropTypes.bool.isRequired,
-    type: React.PropTypes.string.isRequired,
-    containerOffset: React.PropTypes.object.isRequired,
 
-    //Optional
-    timeStamp: React.PropTypes.instanceOf(Date),
-    displayAnnotationViewer: React.PropTypes.func,
-    hideAnnotationViewer: React.PropTypes.func,
-  },
-
-  getDefaultProps() {
-    return {
-      drawing: false,
-      shouldDisplayViewer: false
-    };
-  },
-
-  handleMouseOver(e) {
-    e.stopPropagation();
-    if (this.props.pending) return;
-    this.props.displayAnnotationViewer(this.props.id);
-  },
-
-  handleMouseOut(e) {
-    e.stopPropagation();
-    if (this.props.pending) return;
-    this.props.hideAnnotationViewer(this.props.id);
-  },
-
-  handleClick(e) {
-    // Allow markers to be placed inside shapes, but not on other markers
-    if (this.props.type === 'marker') e.stopPropagation();
-  },
-
+@Autobind
+export default class Annotation extends React.Component {
   render() {
     // Desctructing is on one line b/c vim indenting gets confused
     let {x1, y1, x2, y2, displayAnnotationViewer, hideAnnotationViewer, ...other} = this.props;
@@ -157,6 +116,50 @@ let Annotation = React.createClass({
       </div>
     );
   }
-});
 
-module.exports = Annotation;
+  //
+  // Custom Methods
+  //
+
+  handleMouseOver(e) {
+    e.stopPropagation();
+    if (this.props.pending) return;
+    this.props.displayAnnotationViewer(this.props.id);
+  }
+
+  handleMouseOut(e) {
+    e.stopPropagation();
+    if (this.props.pending) return;
+    this.props.hideAnnotationViewer(this.props.id);
+  }
+
+  handleClick(e) {
+    // Allow markers to be placed inside shapes, but not on other markers
+    if (this.props.type === 'marker') e.stopPropagation();
+  }
+}
+
+Annotation.defaultProps = {
+  drawing: false,
+  shouldDisplayViewer: false
+};
+
+Annotation.propTypes = {
+  content: React.PropTypes.string.isRequired,
+  x1: React.PropTypes.number.isRequired,
+  y1: React.PropTypes.number.isRequired,
+  x2: React.PropTypes.number.isRequired,
+  y2: React.PropTypes.number.isRequired,
+  pending: React.PropTypes.bool.isRequired,
+  drawing: React.PropTypes.bool.isRequired,
+  deleteAnnotation: React.PropTypes.func.isRequired,
+  shouldDisplayViewer: React.PropTypes.bool.isRequired,
+  deemphasize: React.PropTypes.bool.isRequired,
+  type: React.PropTypes.string.isRequired,
+  containerOffset: React.PropTypes.object.isRequired,
+
+  // Optional
+  timeStamp: React.PropTypes.instanceOf(Date),
+  displayAnnotationViewer: React.PropTypes.func,
+  hideAnnotationViewer: React.PropTypes.func,
+};

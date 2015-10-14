@@ -5,51 +5,21 @@
 'use strict';
 
 // External
-let React = require('react/addons');
+let React = require('react');
 let ClassNames = require('classnames');
 let Timeago = require('react-timeago');
+let Autobind = require('autobind-decorator');
 
 // Local
 let Input = require('./Input');
 
 
-let Content = React.createClass({
-  propTypes: {
-    id: React.PropTypes.number.isRequired,
-    author: React.PropTypes.string.isRequired,
-    content: React.PropTypes.string.isRequired,
-    pending: React.PropTypes.bool.isRequired,
-    shouldDisplayViewer: React.PropTypes.bool.isRequired,
-    deleteAnnotation: React.PropTypes.func.isRequired,
-    editAnnotation: React.PropTypes.func.isRequired,
-    offset: React.PropTypes.object.isRequired,
-
-    //Optional
-    timeStamp: React.PropTypes.instanceOf(Date),
-  },
-
-  getInitialState() {
-    return {shouldDisplayControls: false};
-  },
-
-  handleEditClick(e) {
-    e.stopPropagation();
-    this.props.editAnnotation(this.props.id);
-  },
-
-  handleDeleteClick(e) {
-    e.stopPropagation();
-    this.props.deleteAnnotation(this.props.id);
-  },
-
-  // These allow event propogation because parent needs mouse events
-  handleMouseOver(e) {
-    this.setState({shouldDisplayControls: true});
-  },
-
-  handleMouseOut(e) {
-    this.setState({shouldDisplayControls: false});
-  },
+@Autobind
+export default class Content extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {shouldDisplayControls: false};
+  }
 
   render() {
     let viewerClasses = ClassNames({
@@ -107,6 +77,41 @@ let Content = React.createClass({
       </div>
     );
   }
-});
 
-module.exports = Content;
+  //
+  // Custom Methods
+  //
+
+  handleEditClick(e) {
+    e.stopPropagation();
+    this.props.editAnnotation(this.props.id);
+  }
+
+  handleDeleteClick(e) {
+    e.stopPropagation();
+    this.props.deleteAnnotation(this.props.id);
+  }
+
+  // These allow event propogation because parent needs mouse events
+  handleMouseOver(e) {
+    this.setState({shouldDisplayControls: true});
+  }
+
+  handleMouseOut(e) {
+    this.setState({shouldDisplayControls: false});
+  }
+}
+
+Content.propTypes = {
+  id: React.PropTypes.number.isRequired,
+  author: React.PropTypes.string.isRequired,
+  content: React.PropTypes.string.isRequired,
+  pending: React.PropTypes.bool.isRequired,
+  shouldDisplayViewer: React.PropTypes.bool.isRequired,
+  deleteAnnotation: React.PropTypes.func.isRequired,
+  editAnnotation: React.PropTypes.func.isRequired,
+  offset: React.PropTypes.object.isRequired,
+
+  // Optional
+  timeStamp: React.PropTypes.instanceOf(Date),
+};

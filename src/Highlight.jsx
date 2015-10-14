@@ -5,17 +5,12 @@
 
 'use strict';
 
-//External
-let React = require('react/addons');
+// External
+let React = require('react');
 let ClassNames = require('classnames');
 
 
-let Highlight = React.createClass({
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    deemphasize: React.PropTypes.bool.isRequired,
-  },
-
+export default class Highlight extends React.Component {
   render() {
     let divStyle = {
       width: this.props.width,
@@ -33,6 +28,9 @@ let Highlight = React.createClass({
       </div>
     );
   }
-});
+}
 
-module.exports = Highlight;
+Highlight.propTypes = {
+  width: React.PropTypes.number.isRequired,
+  deemphasize: React.PropTypes.bool.isRequired,
+};

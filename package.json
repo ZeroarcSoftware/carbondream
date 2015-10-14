@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Reactjs web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/entry.js",
@@ -8,9 +8,9 @@
     "test": "test"
   },
   "scripts": {
-    "build": "$(npm bin)/babel --optional es7.objectRestSpread src/ -d dist/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
-    "demo-watch": "$(npm bin)/watchify --extension=.jsx -d -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js -v ",
-    "demo-build": "$(npm bin)/browserify --extension=.jsx -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread ] -s CarbonDream -o test/index.js && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
+    "build": "$(npm bin)/babel --optional es7.objectRestSpread --optional es7.decorators src/ -d dist/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
+    "demo-watch": "$(npm bin)/watchify --extension=.jsx -d -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread --optional es7.decorators ] -s CarbonDream -o test/index.js -v ",
+    "demo-build": "$(npm bin)/browserify --extension=.jsx -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread --optional es7.decorators ] -s CarbonDream -o test/index.js && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,17 +29,20 @@
     "url": "https://github.com/ZeroarcSoftware/carbondream/issues"
   },
   "devDependencies": {
-    "babel": "^5.8.21",
-    "babelify": "^6.2.0",
-    "browserify": "^11.0.1",
-    "watchify": "^3.3.1"
+    "autobind-decorator": "^1.3.2",
+    "babel": "^5.8.23",
+    "babelify": "^6.3.0",
+    "browserify": "^11.2.0",
+    "react-addons-shallow-compare": "^0.14.0",
+    "watchify": "^3.4.0"
   },
   "dependencies": {
-    "classnames": "^2.1.3",
+    "classnames": "^2.1.5",
     "font-awesome": "^4.4.0",
-    "immutable": "^3.7.4",
-    "react": "^0.13.3",
+    "immutable": "^3.7.5",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
     "react-timeago": "^2.2.1",
-    "reflux": "^0.2.12"
+    "reflux": "^0.3.0"
   }
 }

@@ -42,4 +42,7 @@ Or to watch for changes:
 
     npm run demo-watch
 
+To reset the demo local storage, open the console and type:
+
+    localStorage.clear()
 
