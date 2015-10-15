@@ -3,6 +3,9 @@
 
 Carbondream is an annotation engine written purely in ReactJS. It was inspired by [Annotator](http://annotatorjs.org) and heavily borrows from the UX.
 
+## Demo
+Go to http://carbondream.zeroarc.com and click on Demo.
+
 ## Using it
 
 To use Carbondream:
