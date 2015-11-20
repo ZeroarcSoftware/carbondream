@@ -8,6 +8,6 @@
 // Local
 let Container = require('./Container');
 
-console.log('Weaving a new carbon dream.');
+console.log('Weaving a new carbon dream (0.1.1).');
 
 module.exports = Container;

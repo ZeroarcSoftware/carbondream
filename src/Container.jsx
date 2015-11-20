@@ -61,6 +61,7 @@ export default class Container extends React.Component {
         type={pA.type}
         containerOffset={this.state.containerOffset}
         author={pA.author}
+        viewOnlyMode={false}
         x1={pA.x1 * this.props.scale}
         y1={pA.y1 * this.props.scale}
         x2={pA.x2 * this.props.scale}
@@ -108,6 +109,7 @@ export default class Container extends React.Component {
             hideAnnotationViewer={this.hideAnnotationViewer}
             deleteAnnotation={this.deleteAnnotation}
             editAnnotation={this.editAnnotation}
+            viewOnlyMode={this.props.viewOnlyMode}
             type={a.get('type')}
             author={a.get('author')}
             containerOffset={this.state.containerOffset}
@@ -121,7 +123,7 @@ export default class Container extends React.Component {
 
 
     return (
-      <div ref='cdContainer' className='cd-container'
+      <div ref='cdContainer' className='cd-container' style={{backgroundColor: 'rgba(0,0,0,0)' /*IE 10 click event workaround*/ }}
         onClick={this.handleClick}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
@@ -161,14 +163,14 @@ export default class Container extends React.Component {
   }
 
   handleClick(e) {
+    //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
     e.stopPropagation();
+    if (this.props.viewOnlyMode) return;
 
     this.updateOffset();
 
     if (this.state.pendingAnnotation
       || this.state.mode !== 'marker') return;
-
-    //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = Immutable.Map({
       content: '',
@@ -186,13 +188,13 @@ export default class Container extends React.Component {
   }
 
   handleMouseDown(e) {
+    //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
     e.stopPropagation();
+    if (this.props.viewOnlyMode) return;
 
     this.updateOffset();
 
     if (this.state.pendingAnnotation || this.state.visibleViewerId || this.state.mode === 'marker') return;
-
-    //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = Immutable.Map({
       content: '',
@@ -211,7 +213,9 @@ export default class Container extends React.Component {
   }
 
   handleMouseMove(e) {
+    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
     e.stopPropagation();
+    if (this.props.viewOnlyMode) return;
 
     this.updateOffset();
 
@@ -219,8 +223,6 @@ export default class Container extends React.Component {
 
     // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.get('drawing')) return;
-
-    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation
     .set('x2', (e.clientX - this.state.containerOffset.left) / this.props.scale)
@@ -230,7 +232,9 @@ export default class Container extends React.Component {
   }
 
   handleMouseUp(e) {
+    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
     e.stopPropagation();
+    if (this.props.viewOnlyMode) return;
 
     this.updateOffset();
 
@@ -238,8 +242,6 @@ export default class Container extends React.Component {
 
     // If drawing is false, we have already popped the input dialog
     if (!this.state.pendingAnnotation.get('drawing')) return;
-
-    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
 
     let annotation = this.state.pendingAnnotation
     .set('drawing', false)

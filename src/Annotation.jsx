@@ -157,6 +157,7 @@ Annotation.propTypes = {
   deemphasize: React.PropTypes.bool.isRequired,
   type: React.PropTypes.string.isRequired,
   containerOffset: React.PropTypes.object.isRequired,
+  viewOnlyMode: React.PropTypes.bool.isRequired,
 
   // Optional
   timeStamp: React.PropTypes.instanceOf(Date),

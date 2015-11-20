@@ -84,16 +84,22 @@ export default class Content extends React.Component {
 
   handleEditClick(e) {
     e.stopPropagation();
+    if (this.props.viewOnlyMode) return;
+
     this.props.editAnnotation(this.props.id);
   }
 
   handleDeleteClick(e) {
     e.stopPropagation();
+    if (this.props.viewOnlyMode) return;
+
     this.props.deleteAnnotation(this.props.id);
   }
 
   // These allow event propogation because parent needs mouse events
   handleMouseOver(e) {
+    if (this.props.viewOnlyMode) return;
+
     this.setState({shouldDisplayControls: true});
   }
 
@@ -111,6 +117,7 @@ Content.propTypes = {
   deleteAnnotation: React.PropTypes.func.isRequired,
   editAnnotation: React.PropTypes.func.isRequired,
   offset: React.PropTypes.object.isRequired,
+  viewOnlyMode: React.PropTypes.bool.isRequired,
 
   // Optional
   timeStamp: React.PropTypes.instanceOf(Date),
