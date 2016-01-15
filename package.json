@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/entry.js",
@@ -30,21 +30,21 @@
     "url": "https://github.com/ZeroarcSoftware/carbondream/issues"
   },
   "devDependencies": {
-    "autobind-decorator": "^1.3.2",
+    "autobind-decorator": "^1.3.3",
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
-    "browserify": "^12.0.1",
+    "browserify": "^13.0.0",
     "react-addons-shallow-compare": "^0.14.0",
     "reflux": "^0.3.0",
-    "watchify": "^3.6.1"
+    "watchify": "^3.7.0"
   },
   "dependencies": {
-    "classnames": "^2.1.5",
-    "font-awesome": "^4.4.0",
-    "immutable": "^3.7.5",
-    "react": "^0.14.3",
-    "react-addons-shallow-compare": "^0.14.3",
-    "react-dom": "^0.14.3",
+    "classnames": "^2.2.3",
+    "font-awesome": "^4.5.0",
+    "immutable": "^3.7.6",
+    "react": "^0.14.6",
+    "react-addons-shallow-compare": "^0.14.6",
+    "react-dom": "^0.14.6",
     "react-timeago": "^2.2.1"
   }
 }
