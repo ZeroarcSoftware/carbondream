@@ -7,8 +7,8 @@
 // External
 let React = require('react');
 let ClassNames = require('classnames');
-let Timeago = require('react-timeago');
 let Autobind = require('autobind-decorator');
+import TimeAgo from 'react-timeago'
 
 // Local
 let Input = require('./Input');
@@ -71,7 +71,7 @@ export default class Content extends React.Component {
             {this.props.content}
           </div>
           <div className='cd-annotation-content-info'>
-            Comment #{this.props.id} by {this.props.author} <Timeago date={this.props.timeStamp} />
+            Comment #{this.props.id} by {this.props.author} <TimeAgo date={this.props.timeStamp} />
           </div>
         </div>
       </div>
