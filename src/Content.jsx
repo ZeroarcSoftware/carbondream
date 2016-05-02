@@ -11,7 +11,7 @@ let Autobind = require('autobind-decorator');
 import TimeAgo from 'react-timeago'
 
 // Local
-let Input = require('./Input');
+import Input from './Input';
 
 
 @Autobind

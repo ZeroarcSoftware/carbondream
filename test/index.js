@@ -26039,43 +26039,68 @@ module.exports = function(listenables){
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _class;
+
+var _Marker = require('./Marker');
+
+var _Marker2 = _interopRequireDefault(_Marker);
+
+var _Square = require('./Square');
+
+var _Square2 = _interopRequireDefault(_Square);
+
+var _Circle = require('./Circle');
+
+var _Circle2 = _interopRequireDefault(_Circle);
+
+var _Highlight = require('./Highlight');
+
+var _Highlight2 = _interopRequireDefault(_Highlight);
+
+var _Content = require('./Content');
+
+var _Content2 = _interopRequireDefault(_Content);
+
+var _Input = require('./Input');
+
+var _Input2 = _interopRequireDefault(_Input);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var Autobind = require('autobind-decorator');
 
 // Local
-var Marker = require('./Marker');
-var Square = require('./Square');
-var Circle = require('./Circle');
-var Highlight = require('./Highlight');
-var Content = require('./Content');
-var Input = require('./Input');
+
 
 // Globals
 var BUBBLEDIM = { width: 260, height: 120 };
 
-var Annotation = (function (_React$Component) {
+var Annotation = Autobind(_class = function (_React$Component) {
   _inherits(Annotation, _React$Component);
 
   function Annotation() {
-    _classCallCheck(this, _Annotation);
+    _classCallCheck(this, Annotation);
 
-    _get(Object.getPrototypeOf(_Annotation.prototype), 'constructor', this).apply(this, arguments);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Annotation).apply(this, arguments));
   }
 
   _createClass(Annotation, [{
@@ -26114,23 +26139,23 @@ var Annotation = (function (_React$Component) {
 
       switch (this.props.type) {
         case 'marker':
-          indicator = React.createElement(Marker, { deemphasize: this.props.deemphasize, priority: this.props.priority });
+          indicator = React.createElement(_Marker2.default, { deemphasize: this.props.deemphasize, priority: this.props.priority });
           offset.vertical -= 25;
           height = 0;
           offset.horizontal = -BUBBLEDIM.width / 2;
           break;
         case 'square':
-          indicator = React.createElement(Square, { deemphasize: this.props.deemphasize, width: width, height: height, priority: this.props.priority });
+          indicator = React.createElement(_Square2.default, { deemphasize: this.props.deemphasize, width: width, height: height, priority: this.props.priority });
           break;
         case 'circle':
           // For circles, we need to use the biggest mouse value as diameter
           width = height = Math.max(width, height);
-          indicator = React.createElement(Circle, { deemphasize: this.props.deemphasize, width: width, height: height, priority: this.props.priority });
+          indicator = React.createElement(_Circle2.default, { deemphasize: this.props.deemphasize, width: width, height: height, priority: this.props.priority });
           break;
         case 'highlight':
           divStyle.top = y1; // Force back to y1, highlights must stay on same vertical height
           height = 21; // Force height of highlight to allow correct bubble placement
-          indicator = React.createElement(Highlight, { deemphasize: this.props.deemphasize, width: width, priority: this.props.priority });
+          indicator = React.createElement(_Highlight2.default, { deemphasize: this.props.deemphasize, width: width, priority: this.props.priority });
           break;
       }
 
@@ -26152,14 +26177,14 @@ var Annotation = (function (_React$Component) {
 
         if (this.props.type !== 'marker') offset.shadow = x1 + width / 2 - 14;else offset.shadow = x1 - 14;
       } else if (pullHorizontal) {
-        var additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
-        offset.horizontal = offset.horizontal + additionalOffset;
+        var _additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
+        offset.horizontal = offset.horizontal + _additionalOffset;
 
         if (this.props.type !== 'marker') offset.shadow = -offset.horizontal + width / 2 - 10;else offset.shadow = -offset.horizontal - 10;
       }
 
-      var contentComponent = !this.props.drawing && !this.props.pending ? React.createElement(Content, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
-      var inputComponent = !this.props.drawing && this.props.pending ? React.createElement(Input, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
+      var contentComponent = !this.props.drawing && !this.props.pending ? React.createElement(_Content2.default, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
+      var inputComponent = !this.props.drawing && this.props.pending ? React.createElement(_Input2.default, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
 
       return React.createElement(
         'div',
@@ -26196,12 +26221,11 @@ var Annotation = (function (_React$Component) {
     }
   }]);
 
-  var _Annotation = Annotation;
-  Annotation = Autobind(Annotation) || Annotation;
   return Annotation;
-})(React.Component);
+}(React.Component)) || _class;
 
-exports['default'] = Annotation;
+exports.default = Annotation;
+
 
 Annotation.defaultProps = {
   drawing: false,
@@ -26228,7 +26252,6 @@ Annotation.propTypes = {
   displayAnnotationViewer: React.PropTypes.func,
   hideAnnotationViewer: React.PropTypes.func
 };
-module.exports = exports['default'];
 
 },{"./Circle":192,"./Content":194,"./Highlight":195,"./Input":196,"./Marker":197,"./Square":199,"autobind-decorator":1,"react":171}],192:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -26239,28 +26262,29 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ClassNames = require('classnames');
 
-var Circle = (function (_React$Component) {
+var Circle = function (_React$Component) {
   _inherits(Circle, _React$Component);
 
   function Circle() {
     _classCallCheck(this, Circle);
 
-    _get(Object.getPrototypeOf(Circle.prototype), 'constructor', this).apply(this, arguments);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Circle).apply(this, arguments));
   }
 
   _createClass(Circle, [{
@@ -26286,16 +26310,16 @@ var Circle = (function (_React$Component) {
   }]);
 
   return Circle;
-})(React.Component);
+}(React.Component);
 
-exports['default'] = Circle;
+exports.default = Circle;
+
 
 Circle.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   deemphasize: React.PropTypes.bool.isRequired
 };
-module.exports = exports['default'];
 
 },{"classnames":3,"react":171}],193:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -26306,17 +26330,31 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _class;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _Annotation = require('./Annotation');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _Annotation2 = _interopRequireDefault(_Annotation);
+
+var _ModeToggle = require('./ModeToggle');
+
+var _ModeToggle2 = _interopRequireDefault(_ModeToggle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -26324,26 +26362,26 @@ var Immutable = require('immutable');
 var Autobind = require('autobind-decorator');
 
 // Local
-var Annotation = require('./Annotation');
-var ModeToggle = require('./ModeToggle');
 
-var Container = (function (_React$Component) {
+var Container = Autobind(_class = function (_React$Component) {
   _inherits(Container, _React$Component);
 
   function Container(props, context) {
-    _classCallCheck(this, _Container);
+    _classCallCheck(this, Container);
 
-    _get(Object.getPrototypeOf(_Container.prototype), 'constructor', this).call(this, props, context);
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, props, context));
 
-    this.state = {
+    _this.state = {
       pendingAnnotation: null,
       visibleViewerId: props.selectedId || 0,
       mode: 'marker',
       containerOffset: { top: 0, left: 0 }
     };
+    return _this;
   }
 
   // Listen for props in order to overwrite visible viewer with prop
+
 
   _createClass(Container, [{
     key: 'componentWillReceiveProps',
@@ -26366,13 +26404,13 @@ var Container = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this = this;
+      var _this2 = this;
 
       var pA = this.state.pendingAnnotation && this.state.pendingAnnotation.toJS();
 
       var pAnnotationComponent = '';
       if (this.state.pendingAnnotation && !this.props.hidden) {
-        pAnnotationComponent = React.createElement(Annotation, { id: pA.id,
+        pAnnotationComponent = React.createElement(_Annotation2.default, { id: pA.id,
           content: pA.content,
           pending: true,
           drawing: pA.drawing,
@@ -26418,26 +26456,26 @@ var Container = (function (_React$Component) {
       var annotations = '';
       if (!this.props.hidden) {
         annotations = sortedAnnotations.map(function (a, i) {
-          return React.createElement(Annotation, { key: a.get('id'),
+          return React.createElement(_Annotation2.default, { key: a.get('id'),
             id: a.get('id'),
             priority: i + 1,
             content: a.get('content'),
             timeStamp: a.get('timeStamp'),
             pending: false,
-            shouldDisplayViewer: a.get('id') === _this.state.visibleViewerId,
-            deemphasize: _this.state.visibleViewerId !== 0 && a.get('id') !== _this.state.visibleViewerId,
-            displayAnnotationViewer: _this.displayAnnotationViewer,
-            hideAnnotationViewer: _this.hideAnnotationViewer,
-            deleteAnnotation: _this.deleteAnnotation,
-            editAnnotation: _this.editAnnotation,
-            viewOnlyMode: _this.props.viewOnlyMode,
+            shouldDisplayViewer: a.get('id') === _this2.state.visibleViewerId,
+            deemphasize: _this2.state.visibleViewerId !== 0 && a.get('id') !== _this2.state.visibleViewerId,
+            displayAnnotationViewer: _this2.displayAnnotationViewer,
+            hideAnnotationViewer: _this2.hideAnnotationViewer,
+            deleteAnnotation: _this2.deleteAnnotation,
+            editAnnotation: _this2.editAnnotation,
+            viewOnlyMode: _this2.props.viewOnlyMode,
             type: a.get('type'),
             author: a.get('author'),
-            containerOffset: _this.state.containerOffset,
-            x1: a.get('x1') * _this.props.scale,
-            y1: a.get('y1') * _this.props.scale,
-            x2: a.get('x2') * _this.props.scale,
-            y2: a.get('y2') * _this.props.scale });
+            containerOffset: _this2.state.containerOffset,
+            x1: a.get('x1') * _this2.props.scale,
+            y1: a.get('y1') * _this2.props.scale,
+            x2: a.get('x2') * _this2.props.scale,
+            y2: a.get('y2') * _this2.props.scale });
         });
       }
 
@@ -26448,7 +26486,7 @@ var Container = (function (_React$Component) {
           onMouseDown: this.handleMouseDown,
           onMouseUp: this.handleMouseUp,
           onMouseMove: this.handleMouseMove },
-        this.props.viewOnlyMode || React.createElement(ModeToggle, { mode: this.state.mode, switchMode: this.switchMode }),
+        this.props.viewOnlyMode || React.createElement(_ModeToggle2.default, { mode: this.state.mode, switchMode: this.switchMode }),
         annotations,
         pAnnotationComponent
       );
@@ -26467,7 +26505,7 @@ var Container = (function (_React$Component) {
   }, {
     key: 'offset',
     value: function offset(element) {
-      var documentElem = undefined;
+      var documentElem = void 0;
       var box = { top: 0, left: 0 };
       var doc = element && element.ownerDocument;
 
@@ -26574,9 +26612,9 @@ var Container = (function (_React$Component) {
       }
 
       if (annotation.get('y2') < annotation.get('y1')) {
-        var newAnnotation = annotation.set('y1', annotation.get('y2')).set('y2', annotation.get('y1'));
+        var _newAnnotation = annotation.set('y1', annotation.get('y2')).set('y2', annotation.get('y1'));
 
-        annotation = newAnnotation;
+        annotation = _newAnnotation;
       }
 
       // Only save the pending change if the mark is bigger than a single point
@@ -26612,6 +26650,7 @@ var Container = (function (_React$Component) {
     }
 
     // If editing, pull the annotation out and put it in pending, force viewer to null
+
   }, {
     key: 'editAnnotation',
     value: function editAnnotation(id) {
@@ -26628,13 +26667,13 @@ var Container = (function (_React$Component) {
   }, {
     key: 'cancelAnnotation',
     value: function cancelAnnotation() {
-      var _this2 = this;
+      var _this3 = this;
 
       // TODO: This delays the close event by 50ms to prevent any other click events from firing
       // Is this gross? I don't even know. Think about it some more and change if it is.
       // Hard to see how to do this without timers or screwing up component isolation
       setTimeout(function () {
-        _this2.setState({ pendingAnnotation: null });
+        _this3.setState({ pendingAnnotation: null });
       }, 50);
     }
   }, {
@@ -26653,26 +26692,25 @@ var Container = (function (_React$Component) {
   }, {
     key: 'hideAnnotationViewer',
     value: function hideAnnotationViewer(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       clearTimeout(this.viewerHideTimer);
 
       this.viewerHideTimer = setTimeout(function () {
         // If a onDeselect handler has been provided, invoke it
-        if (_this3.props.onDeselect) {
-          _this3.props.onDeselect();
+        if (_this4.props.onDeselect) {
+          _this4.props.onDeselect();
         }
-        _this3.setState({ visibleViewerId: 0 });
+        _this4.setState({ visibleViewerId: 0 });
       }, 250);
     }
   }]);
 
-  var _Container = Container;
-  Container = Autobind(Container) || Container;
   return Container;
-})(React.Component);
+}(React.Component)) || _class;
 
-exports['default'] = Container;
+exports.default = Container;
+
 
 Container.defaultProps = {
   viewOnlyMode: false,
@@ -26693,7 +26731,6 @@ Container.propTypes = {
   onSelect: React.PropTypes.func,
   onDeselect: React.PropTypes.func
 };
-module.exports = exports['default'];
 
 },{"./Annotation":191,"./ModeToggle":198,"autobind-decorator":1,"immutable":4,"react":171,"react-dom":6}],194:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -26703,38 +26740,48 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _class;
 
 var _reactTimeago = require('react-timeago');
 
 var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-// Local
+var _Input = require('./Input');
+
+var _Input2 = _interopRequireDefault(_Input);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
 var ClassNames = require('classnames');
 var Autobind = require('autobind-decorator');
-var Input = require('./Input');
 
-var Content = (function (_React$Component) {
+// Local
+
+var Content = Autobind(_class = function (_React$Component) {
   _inherits(Content, _React$Component);
 
   function Content(props, context) {
-    _classCallCheck(this, _Content);
+    _classCallCheck(this, Content);
 
-    _get(Object.getPrototypeOf(_Content.prototype), 'constructor', this).call(this, props, context);
-    this.state = { shouldDisplayControls: false };
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Content).call(this, props, context));
+
+    _this.state = { shouldDisplayControls: false };
+    return _this;
   }
 
   _createClass(Content, [{
@@ -26816,7 +26863,7 @@ var Content = (function (_React$Component) {
             ' by ',
             this.props.author,
             ' ',
-            React.createElement(_reactTimeago2['default'], { date: this.props.timeStamp })
+            React.createElement(_reactTimeago2.default, { date: this.props.timeStamp })
           )
         )
       );
@@ -26844,6 +26891,7 @@ var Content = (function (_React$Component) {
     }
 
     // These allow event propogation because parent needs mouse events
+
   }, {
     key: 'handleMouseOver',
     value: function handleMouseOver(e) {
@@ -26858,12 +26906,11 @@ var Content = (function (_React$Component) {
     }
   }]);
 
-  var _Content = Content;
-  Content = Autobind(Content) || Content;
   return Content;
-})(React.Component);
+}(React.Component)) || _class;
 
-exports['default'] = Content;
+exports.default = Content;
+
 
 Content.propTypes = {
   id: React.PropTypes.number.isRequired,
@@ -26879,7 +26926,6 @@ Content.propTypes = {
   // Optional
   timeStamp: React.PropTypes.instanceOf(Date)
 };
-module.exports = exports['default'];
 
 },{"./Input":196,"autobind-decorator":1,"classnames":3,"react":171,"react-timeago":7}],195:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -26890,28 +26936,29 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ClassNames = require('classnames');
 
-var Highlight = (function (_React$Component) {
+var Highlight = function (_React$Component) {
   _inherits(Highlight, _React$Component);
 
   function Highlight() {
     _classCallCheck(this, Highlight);
 
-    _get(Object.getPrototypeOf(Highlight.prototype), 'constructor', this).apply(this, arguments);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlight).apply(this, arguments));
   }
 
   _createClass(Highlight, [{
@@ -26936,15 +26983,15 @@ var Highlight = (function (_React$Component) {
   }]);
 
   return Highlight;
-})(React.Component);
+}(React.Component);
 
-exports['default'] = Highlight;
+exports.default = Highlight;
+
 
 Highlight.propTypes = {
   width: React.PropTypes.number.isRequired,
   deemphasize: React.PropTypes.bool.isRequired
 };
-module.exports = exports['default'];
 
 },{"classnames":3,"react":171}],196:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -26955,30 +27002,35 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _class;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ClassNames = require('classnames');
 var Autobind = require('autobind-decorator');
 
-var Input = (function (_React$Component) {
+var Input = Autobind(_class = function (_React$Component) {
   _inherits(Input, _React$Component);
 
   function Input(props, context) {
-    _classCallCheck(this, _Input);
+    _classCallCheck(this, Input);
 
-    _get(Object.getPrototypeOf(_Input.prototype), 'constructor', this).call(this, props, context);
-    this.state = { value: props.content };
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, props, context));
+
+    _this.state = { value: props.content };
+    return _this;
   }
 
   _createClass(Input, [{
@@ -27092,12 +27144,11 @@ var Input = (function (_React$Component) {
     }
   }]);
 
-  var _Input = Input;
-  Input = Autobind(Input) || Input;
   return Input;
-})(React.Component);
+}(React.Component)) || _class;
 
-exports['default'] = Input;
+exports.default = Input;
+
 
 Input.propTypes = {
   content: React.PropTypes.string.isRequired,
@@ -27105,7 +27156,6 @@ Input.propTypes = {
   saveAnnotation: React.PropTypes.func,
   cancelAnnotation: React.PropTypes.func
 };
-module.exports = exports['default'];
 
 },{"autobind-decorator":1,"classnames":3,"react":171}],197:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -27116,28 +27166,29 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ClassNames = require('classnames');
 
-var Marker = (function (_React$Component) {
+var Marker = function (_React$Component) {
   _inherits(Marker, _React$Component);
 
   function Marker() {
     _classCallCheck(this, Marker);
 
-    _get(Object.getPrototypeOf(Marker.prototype), 'constructor', this).apply(this, arguments);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Marker).apply(this, arguments));
   }
 
   _createClass(Marker, [{
@@ -27161,14 +27212,14 @@ var Marker = (function (_React$Component) {
   }]);
 
   return Marker;
-})(React.Component);
+}(React.Component);
 
-exports['default'] = Marker;
+exports.default = Marker;
+
 
 Marker.propTypes = {
   deemphasize: React.PropTypes.bool.isRequired
 };
-module.exports = exports['default'];
 
 },{"classnames":3,"react":171}],198:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -27179,28 +27230,31 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _class;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var Autobind = require('autobind-decorator');
 
-var ModeToggle = (function (_React$Component) {
+var ModeToggle = Autobind(_class = function (_React$Component) {
   _inherits(ModeToggle, _React$Component);
 
   function ModeToggle(props, context) {
-    _classCallCheck(this, _ModeToggle);
+    _classCallCheck(this, ModeToggle);
 
-    _get(Object.getPrototypeOf(_ModeToggle.prototype), 'constructor', this).call(this, props, context);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ModeToggle).call(this, props, context));
   }
 
   _createClass(ModeToggle, [{
@@ -27239,15 +27293,16 @@ var ModeToggle = (function (_React$Component) {
   }, {
     key: 'handleClick',
     value: function handleClick(mode) {
-      var _this = this;
+      var _this2 = this;
 
       return function (e) {
         e.stopPropagation();
-        _this.props.switchMode(mode);
+        _this2.props.switchMode(mode);
       };
     }
 
     // This is neccessary to prevent mouseup/down from triggering actions on parents
+
   }, {
     key: 'blockEvent',
     value: function blockEvent(e) {
@@ -27255,18 +27310,16 @@ var ModeToggle = (function (_React$Component) {
     }
   }]);
 
-  var _ModeToggle = ModeToggle;
-  ModeToggle = Autobind(ModeToggle) || ModeToggle;
   return ModeToggle;
-})(React.Component);
+}(React.Component)) || _class;
 
-exports['default'] = ModeToggle;
+exports.default = ModeToggle;
+
 
 ModeToggle.propTypes = {
   mode: React.PropTypes.string.isRequired,
   switchMode: React.PropTypes.func.isRequired
 };
-module.exports = exports['default'];
 
 },{"autobind-decorator":1,"react":171}],199:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -27277,28 +27330,29 @@ module.exports = exports['default'];
 'use strict';
 
 // External
-Object.defineProperty(exports, '__esModule', {
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ClassNames = require('classnames');
 
-var Square = (function (_React$Component) {
+var Square = function (_React$Component) {
   _inherits(Square, _React$Component);
 
   function Square() {
     _classCallCheck(this, Square);
 
-    _get(Object.getPrototypeOf(Square.prototype), 'constructor', this).apply(this, arguments);
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Square).apply(this, arguments));
   }
 
   _createClass(Square, [{
@@ -27324,16 +27378,16 @@ var Square = (function (_React$Component) {
   }]);
 
   return Square;
-})(React.Component);
+}(React.Component);
 
-exports['default'] = Square;
+exports.default = Square;
+
 
 Square.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   deemphasize: React.PropTypes.bool.isRequired
 };
-module.exports = exports['default'];
 
 },{"classnames":3,"react":171}],200:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -27345,13 +27399,29 @@ module.exports = exports['default'];
 
 // External
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _class;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _Container = require('./Container');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _Container2 = _interopRequireDefault(_Container);
+
+var _AnnotationStore = require('../test/AnnotationStore.js');
+
+var _AnnotationStore2 = _interopRequireDefault(_AnnotationStore);
+
+var _AnnotationActions = require('../test/AnnotationActions.js');
+
+var _AnnotationActions2 = _interopRequireDefault(_AnnotationActions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -27361,18 +27431,18 @@ var Immutable = require('immutable');
 var Autobind = require('autobind-decorator');
 
 // Local
-var Container = require('./Container');
-var AnnotationStore = require('../test/AnnotationStore.js');
-var AnnotationActions = require('../test/AnnotationActions.js');
+//let Container = require('./Container');
 
-var Demo = (function (_React$Component) {
+var Demo = Autobind(_class = function (_React$Component) {
   _inherits(Demo, _React$Component);
 
   function Demo(props, context) {
-    _classCallCheck(this, _Demo);
+    _classCallCheck(this, Demo);
 
-    _get(Object.getPrototypeOf(_Demo.prototype), 'constructor', this).call(this, props, context);
-    this.state = { annotations: AnnotationStore.getInitialState() };
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Demo).call(this, props, context));
+
+    _this.state = { annotations: _AnnotationStore2.default.getInitialState() };
+    return _this;
   }
 
   _createClass(Demo, [{
@@ -27383,7 +27453,7 @@ var Demo = (function (_React$Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.unsubscribe = AnnotationStore.listen(this.onStoreChange);
+      this.unsubscribe = _AnnotationStore2.default.listen(this.onStoreChange);
     }
   }, {
     key: 'componentWillUnmount',
@@ -27393,7 +27463,7 @@ var Demo = (function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement(Container, { annotations: this.state.annotations,
+      return React.createElement(_Container2.default, { annotations: this.state.annotations,
         onSave: this.handleAnnotationSave,
         onDelete: this.handleAnnotationDelete
       });
@@ -27413,12 +27483,12 @@ var Demo = (function (_React$Component) {
   }, {
     key: 'handleAnnotationSave',
     value: function handleAnnotationSave(annotation) {
-      AnnotationActions.annotationSave(annotation);
+      _AnnotationActions2.default.annotationSave(annotation);
     }
   }, {
     key: 'handleAnnotationDelete',
     value: function handleAnnotationDelete(id) {
-      AnnotationActions.annotationDelete(id);
+      _AnnotationActions2.default.annotationDelete(id);
     }
   }, {
     key: 'handleClick',
@@ -27428,10 +27498,8 @@ var Demo = (function (_React$Component) {
     }
   }]);
 
-  var _Demo = Demo;
-  Demo = Autobind(Demo) || Demo;
   return Demo;
-})(React.Component);
+}(React.Component)) || _class;
 
 console.log('Weaving a new carbon dream.');
 document.addEventListener('DOMContentLoaded', function () {
@@ -27447,6 +27515,7 @@ document.addEventListener('DOMContentLoaded', function () {
 'use strict';
 
 //External
+
 var Reflux = require('reflux');
 
 var AnnotationActions = Reflux.createActions(['annotationSave', 'annotationDelete']);
@@ -27462,6 +27531,7 @@ module.exports = AnnotationActions;
 'use strict';
 
 //External
+
 var Reflux = require('reflux');
 var Immutable = require('immutable');
 
@@ -27487,7 +27557,6 @@ var AnalysisStore = Reflux.createStore({
 
     return this.annotations;
   },
-
   annotationSave: function annotationSave(annotation) {
     console.log('annotationSave');
     var index = -1;
@@ -27523,14 +27592,13 @@ var AnalysisStore = Reflux.createStore({
 
     this.trigger(this.annotations);
   },
-
   annotationDelete: function annotationDelete(id) {
     var index = this.annotations.findIndex(function (value) {
       if (value.get('id') === id) return true;
       return false;
     });
 
-    this.annotations = this.annotations['delete'](index);
+    this.annotations = this.annotations.delete(index);
 
     localStorage['annotationState'] = JSON.stringify({
       annotations: this.annotations.toJS(),

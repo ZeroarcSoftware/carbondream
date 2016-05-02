@@ -12,8 +12,8 @@ let Immutable = require('immutable');
 let Autobind = require('autobind-decorator');
 
 // Local
-let Annotation = require('./Annotation');
-let ModeToggle = require('./ModeToggle');
+import Annotation from './Annotation';
+import ModeToggle from './ModeToggle';
 
 
 @Autobind

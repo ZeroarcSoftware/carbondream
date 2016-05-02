@@ -10,12 +10,12 @@ let React = require('react');
 let Autobind = require('autobind-decorator');
 
 // Local
-let Marker = require('./Marker');
-let Square = require('./Square');
-let Circle = require('./Circle');
-let Highlight = require('./Highlight');
-let Content = require('./Content');
-let Input = require('./Input');
+import Marker from './Marker';
+import Square from './Square';
+import Circle from './Circle';
+import Highlight from './Highlight';
+import Content from './Content';
+import Input from './Input';
 
 // Globals
 let BUBBLEDIM = {width: 260, height: 120};

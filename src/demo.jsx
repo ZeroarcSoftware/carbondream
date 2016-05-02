@@ -14,9 +14,10 @@ let Immutable = require('immutable');
 let Autobind = require('autobind-decorator');
 
 // Local
-let Container = require('./Container');
-let AnnotationStore = require('../test/AnnotationStore.js');
-let AnnotationActions = require('../test/AnnotationActions.js');
+//let Container = require('./Container');
+import Container from './Container';
+import AnnotationStore from '../test/AnnotationStore.js';
+import AnnotationActions from '../test/AnnotationActions.js';
 
 
 @Autobind
