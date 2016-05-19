@@ -228,17 +228,12 @@
 .cd-annotation-content-controls button,
 .cd-annotation-input-controls button {
   text-align: center;
-  padding: 4px;
   border-radius: 3px;
   border: 1px solid transparent;
   color: #FFF;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-right: 5px;
-}
-
-.cd-annotation-input-controls button {
-  padding: 4px;
 }
 
 .cd-annotation-input-controls button.save {

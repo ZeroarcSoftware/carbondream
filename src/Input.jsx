@@ -51,6 +51,12 @@ export default class Input extends React.Component {
         shadowStyle.left = 234;
     }
 
+    const saveClasses = ClassNames('btn btn-xs save', {
+      disabled: !this.state.value.length
+    });
+
+    const cancelClasses = ClassNames('btn btn-xs cancel');
+
     return (
       <div style={divStyle} className={editorClasses}>
         <div style={shadowStyle} className={shadowClasses}></div>
@@ -62,8 +68,8 @@ export default class Input extends React.Component {
             onBlur={this.handleBlur}
           />
           <div className='cd-annotation-input-controls'>
-            <button className='save' onClick={this.handleSaveClick}><i className='fa fa-check'> Save</i></button>
-            <button className='cancel' onClick={this.handleCancelClick}><i className='fa fa-times'> Cancel</i></button>
+            <button className={cancelClasses} onClick={this.handleCancelClick}><i className='fa fa-times'></i> Cancel</button>
+            <button className={saveClasses} onClick={this.handleSaveClick}><i className='fa fa-check'></i> Save</button>
           </div>
         </div>
       </div>

@@ -26043,13 +26043,12 @@ module.exports = function(listenables){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = require('react');
 
-var _class;
+var _react2 = _interopRequireDefault(_react);
 
 var _Marker = require('./Marker');
 
@@ -26079,153 +26078,118 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var React = require('react');
-var Autobind = require('autobind-decorator');
-
 // Local
 
 
 // Globals
 var BUBBLEDIM = { width: 260, height: 120 };
 
-var Annotation = Autobind(_class = function (_React$Component) {
-  _inherits(Annotation, _React$Component);
+var Annotation = function Annotation(props) {
+  var handleMouseOver = function handleMouseOver(e) {
+    e.stopPropagation();
+    if (props.pending) return;
+    props.displayAnnotationViewer(props.id);
+  };
 
-  function Annotation() {
-    _classCallCheck(this, Annotation);
+  var handleMouseOut = function handleMouseOut(e) {
+    e.stopPropagation();
+    if (props.pending) return;
+    props.hideAnnotationViewer(props.id);
+  };
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Annotation).apply(this, arguments));
+  var handleClick = function handleClick(e) {
+    // Allow markers to be placed inside shapes, but not on other markers
+    if (props.type === 'marker') e.stopPropagation();
+  };
+
+  // Desctructing is on one line b/c vim indenting gets confused
+  var x1 = props.x1;
+  var y1 = props.y1;
+  var x2 = props.x2;
+  var y2 = props.y2;
+  var displayAnnotationViewer = props.displayAnnotationViewer;
+  var hideAnnotationViewer = props.hideAnnotationViewer;
+
+  var other = _objectWithoutProperties(props, ['x1', 'y1', 'x2', 'y2', 'displayAnnotationViewer', 'hideAnnotationViewer']);
+
+  var width = Math.abs(x1 - x2);
+  var height = Math.abs(y1 - y2);
+
+  // Figure out what direction the mouse is dragging. 1 === left to right, up to down
+  var xDir = x2 - x1 >= 0 ? 1 : -1;
+  var yDir = y2 - y1 >= 0 ? 1 : -1;
+
+  var divStyle = {
+    left: xDir === 1 ? x1 : x2,
+    top: yDir === 1 ? y1 : y2
+  };
+
+  // Default offsets based on height/width of bubble
+  var offset = {
+    vertical: -BUBBLEDIM.height - 10,
+    horizontal: width / 2 - BUBBLEDIM.width / 2
+  };
+
+  var indicator = '';
+
+  switch (props.type) {
+    case 'marker':
+      indicator = _react2.default.createElement(_Marker2.default, { deemphasize: props.deemphasize, priority: props.priority });
+      offset.vertical -= 25;
+      height = 0;
+      offset.horizontal = -BUBBLEDIM.width / 2;
+      break;
+    case 'square':
+      indicator = _react2.default.createElement(_Square2.default, { deemphasize: props.deemphasize, width: width, height: height, priority: props.priority });
+      break;
+    case 'circle':
+      // For circles, we need to use the biggest mouse value as diameter
+      width = height = Math.max(width, height);
+      indicator = _react2.default.createElement(_Circle2.default, { deemphasize: props.deemphasize, width: width, height: height, priority: props.priority });
+      break;
+    case 'highlight':
+      divStyle.top = y1; // Force back to y1, highlights must stay on same vertical height
+      height = 21; // Force height of highlight to allow correct bubble placement
+      indicator = _react2.default.createElement(_Highlight2.default, { deemphasize: props.deemphasize, width: width, priority: props.priority });
+      break;
   }
 
-  _createClass(Annotation, [{
-    key: 'render',
-    value: function render() {
-      // Desctructing is on one line b/c vim indenting gets confused
-      var _props = this.props;
-      var x1 = _props.x1;
-      var y1 = _props.y1;
-      var x2 = _props.x2;
-      var y2 = _props.y2;
-      var displayAnnotationViewer = _props.displayAnnotationViewer;
-      var hideAnnotationViewer = _props.hideAnnotationViewer;
+  // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
+  var invert = y1 + offset.vertical - 10 + props.containerOffset.top <= 0 ? true : false;
+  if (invert) offset.vertical = height + 36;
 
-      var other = _objectWithoutProperties(_props, ['x1', 'y1', 'x2', 'y2', 'displayAnnotationViewer', 'hideAnnotationViewer']);
+  // Check to see if we are going to draw past the left or right side of the viewport.
+  var viewPortWidth = document.documentElement.clientWidth - props.containerOffset.left;
 
-      var width = Math.abs(x1 - x2);
-      var height = Math.abs(y1 - y2);
+  var pushHorizontal = x1 + (width / 2 - BUBBLEDIM.width / 2) + props.containerOffset.left <= 0 ? true : false;
+  var pullHorizontal = x1 + (width / 2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
 
-      // Figure out what direction the mouse is dragging. 1 === left to right, up to down
-      var xDir = x2 - x1 >= 0 ? 1 : -1;
-      var yDir = y2 - y1 >= 0 ? 1 : -1;
+  // If we need to push or pull the bubble, recalculate the offsets based on bubble size and
+  // marker position. This was fun to figure out. The 5 is just there for additional padding.
+  if (pushHorizontal) {
+    var additionalOffset = offset.horizontal + x1 - 5;
+    offset.horizontal = offset.horizontal - additionalOffset;
 
-      var divStyle = {
-        left: xDir === 1 ? x1 : x2,
-        top: yDir === 1 ? y1 : y2
-      };
+    if (props.type !== 'marker') offset.shadow = x1 + width / 2 - 14;else offset.shadow = x1 - 14;
+  } else if (pullHorizontal) {
+    var _additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
+    offset.horizontal = offset.horizontal + _additionalOffset;
 
-      // Default offsets based on height/width of bubble
-      var offset = {
-        vertical: -BUBBLEDIM.height - 10,
-        horizontal: width / 2 - BUBBLEDIM.width / 2
-      };
+    if (props.type !== 'marker') offset.shadow = -offset.horizontal + width / 2 - 10;else offset.shadow = -offset.horizontal - 10;
+  }
 
-      var indicator = '';
+  var contentComponent = !props.drawing && !props.pending ? _react2.default.createElement(_Content2.default, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
+  var inputComponent = !props.drawing && props.pending ? _react2.default.createElement(_Input2.default, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
 
-      switch (this.props.type) {
-        case 'marker':
-          indicator = React.createElement(_Marker2.default, { deemphasize: this.props.deemphasize, priority: this.props.priority });
-          offset.vertical -= 25;
-          height = 0;
-          offset.horizontal = -BUBBLEDIM.width / 2;
-          break;
-        case 'square':
-          indicator = React.createElement(_Square2.default, { deemphasize: this.props.deemphasize, width: width, height: height, priority: this.props.priority });
-          break;
-        case 'circle':
-          // For circles, we need to use the biggest mouse value as diameter
-          width = height = Math.max(width, height);
-          indicator = React.createElement(_Circle2.default, { deemphasize: this.props.deemphasize, width: width, height: height, priority: this.props.priority });
-          break;
-        case 'highlight':
-          divStyle.top = y1; // Force back to y1, highlights must stay on same vertical height
-          height = 21; // Force height of highlight to allow correct bubble placement
-          indicator = React.createElement(_Highlight2.default, { deemphasize: this.props.deemphasize, width: width, priority: this.props.priority });
-          break;
-      }
-
-      // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
-      var invert = y1 + offset.vertical - 10 + this.props.containerOffset.top <= 0 ? true : false;
-      if (invert) offset.vertical = height + 36;
-
-      // Check to see if we are going to draw past the left or right side of the viewport.
-      var viewPortWidth = document.documentElement.clientWidth - this.props.containerOffset.left;
-
-      var pushHorizontal = x1 + (width / 2 - BUBBLEDIM.width / 2) + this.props.containerOffset.left <= 0 ? true : false;
-      var pullHorizontal = x1 + (width / 2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
-
-      // If we need to push or pull the bubble, recalculate the offsets based on bubble size and
-      // marker position. This was fun to figure out. The 5 is just there for additional padding.
-      if (pushHorizontal) {
-        var additionalOffset = offset.horizontal + x1 - 5;
-        offset.horizontal = offset.horizontal - additionalOffset;
-
-        if (this.props.type !== 'marker') offset.shadow = x1 + width / 2 - 14;else offset.shadow = x1 - 14;
-      } else if (pullHorizontal) {
-        var _additionalOffset = viewPortWidth - (BUBBLEDIM.width + 5) - offset.horizontal - x1;
-        offset.horizontal = offset.horizontal + _additionalOffset;
-
-        if (this.props.type !== 'marker') offset.shadow = -offset.horizontal + width / 2 - 10;else offset.shadow = -offset.horizontal - 10;
-      }
-
-      var contentComponent = !this.props.drawing && !this.props.pending ? React.createElement(_Content2.default, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
-      var inputComponent = !this.props.drawing && this.props.pending ? React.createElement(_Input2.default, _extends({ invert: invert, pushHorizontal: pushHorizontal, pullHorizontal: pullHorizontal, offset: offset }, other)) : '';
-
-      return React.createElement(
-        'div',
-        { style: divStyle, className: 'cd-annotation ' + this.props.type, onMouseOver: this.handleMouseOver, onMouseOut: this.handleMouseOut, onClick: this.handleClick },
-        contentComponent,
-        inputComponent,
-        indicator
-      );
-    }
-
-    //
-    // Custom Methods
-    //
-
-  }, {
-    key: 'handleMouseOver',
-    value: function handleMouseOver(e) {
-      e.stopPropagation();
-      if (this.props.pending) return;
-      this.props.displayAnnotationViewer(this.props.id);
-    }
-  }, {
-    key: 'handleMouseOut',
-    value: function handleMouseOut(e) {
-      e.stopPropagation();
-      if (this.props.pending) return;
-      this.props.hideAnnotationViewer(this.props.id);
-    }
-  }, {
-    key: 'handleClick',
-    value: function handleClick(e) {
-      // Allow markers to be placed inside shapes, but not on other markers
-      if (this.props.type === 'marker') e.stopPropagation();
-    }
-  }]);
-
-  return Annotation;
-}(React.Component)) || _class;
-
-exports.default = Annotation;
-
+  console.log('drawing indicator at left: ' + divStyle.left + ', top: ' + divStyle.top);
+  return _react2.default.createElement(
+    'div',
+    { style: divStyle, className: 'cd-annotation ' + props.type, onMouseOver: handleMouseOver, onMouseOut: handleMouseOut, onClick: handleClick },
+    contentComponent,
+    inputComponent,
+    indicator
+  );
+};
 
 Annotation.defaultProps = {
   drawing: false,
@@ -26233,27 +26197,29 @@ Annotation.defaultProps = {
 };
 
 Annotation.propTypes = {
-  content: React.PropTypes.string.isRequired,
-  x1: React.PropTypes.number.isRequired,
-  y1: React.PropTypes.number.isRequired,
-  x2: React.PropTypes.number.isRequired,
-  y2: React.PropTypes.number.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  drawing: React.PropTypes.bool.isRequired,
-  deleteAnnotation: React.PropTypes.func.isRequired,
-  shouldDisplayViewer: React.PropTypes.bool.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired,
-  type: React.PropTypes.string.isRequired,
-  containerOffset: React.PropTypes.object.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
+  content: _react2.default.PropTypes.string.isRequired,
+  x1: _react2.default.PropTypes.number.isRequired,
+  y1: _react2.default.PropTypes.number.isRequired,
+  x2: _react2.default.PropTypes.number.isRequired,
+  y2: _react2.default.PropTypes.number.isRequired,
+  pending: _react2.default.PropTypes.bool.isRequired,
+  drawing: _react2.default.PropTypes.bool.isRequired,
+  deleteAnnotation: _react2.default.PropTypes.func.isRequired,
+  shouldDisplayViewer: _react2.default.PropTypes.bool.isRequired,
+  deemphasize: _react2.default.PropTypes.bool.isRequired,
+  type: _react2.default.PropTypes.string.isRequired,
+  containerOffset: _react2.default.PropTypes.object.isRequired,
+  viewOnlyMode: _react2.default.PropTypes.bool.isRequired,
 
   // Optional
-  timeStamp: React.PropTypes.instanceOf(Date),
-  displayAnnotationViewer: React.PropTypes.func,
-  hideAnnotationViewer: React.PropTypes.func
+  timeStamp: _react2.default.PropTypes.instanceOf(Date),
+  displayAnnotationViewer: _react2.default.PropTypes.func,
+  hideAnnotationViewer: _react2.default.PropTypes.func
 };
 
-},{"./Circle":192,"./Content":194,"./Highlight":195,"./Input":196,"./Marker":197,"./Square":199,"autobind-decorator":1,"react":171}],192:[function(require,module,exports){
+exports.default = Annotation;
+
+},{"./Circle":192,"./Content":194,"./Highlight":195,"./Input":196,"./Marker":197,"./Square":199,"react":171}],192:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
  *
  * Annotation circle shape
@@ -26267,59 +26233,42 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = require('react');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _react2 = _interopRequireDefault(_react);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _classnames = require('classnames');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _classnames2 = _interopRequireDefault(_classnames);
 
-var React = require('react');
-var ClassNames = require('classnames');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Circle = function (_React$Component) {
-  _inherits(Circle, _React$Component);
+var Circle = function Circle(props) {
+  var divStyle = {
+    height: props.height,
+    width: props.width,
+    zIndex: props.priority
+  };
 
-  function Circle() {
-    _classCallCheck(this, Circle);
+  var classes = (0, _classnames2.default)({
+    'cd-circle': true,
+    'deemphasize': props.deemphasize
+  });
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Circle).apply(this, arguments));
-  }
-
-  _createClass(Circle, [{
-    key: 'render',
-    value: function render() {
-      var divStyle = {
-        height: this.props.height,
-        width: this.props.width,
-        zIndex: this.props.priority
-      };
-
-      var classes = ClassNames({
-        'cd-circle': true,
-        'deemphasize': this.props.deemphasize
-      });
-
-      return React.createElement(
-        'div',
-        null,
-        React.createElement('div', { style: divStyle, className: classes })
-      );
-    }
-  }]);
-
-  return Circle;
-}(React.Component);
-
-exports.default = Circle;
-
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement('div', { style: divStyle, className: classes })
+  );
+};
 
 Circle.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired
+  width: _react2.default.PropTypes.number.isRequired,
+  height: _react2.default.PropTypes.number.isRequired,
+  deemphasize: _react2.default.PropTypes.bool.isRequired
 };
+
+exports.default = Circle;
 
 },{"classnames":3,"react":171}],193:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -26340,6 +26289,25 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _class;
 
+// Local
+
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _autobindDecorator = require('autobind-decorator');
+
+var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
+
 var _Annotation = require('./Annotation');
 
 var _Annotation2 = _interopRequireDefault(_Annotation);
@@ -26356,14 +26324,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Immutable = require('immutable');
-var Autobind = require('autobind-decorator');
-
-// Local
-
-var Container = Autobind(_class = function (_React$Component) {
+var Container = (0, _autobindDecorator2.default)(_class = function (_React$Component) {
   _inherits(Container, _React$Component);
 
   function Container(props, context) {
@@ -26391,14 +26352,14 @@ var Container = Autobind(_class = function (_React$Component) {
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var component = ReactDOM.findDOMNode(this);
+      var component = _reactDom2.default.findDOMNode(this);
       component.addEventListener("scroll", this.updateOffset);
       this.updateOffset();
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      var component = ReactDOM.findDOMNode(this);
+      var component = _reactDom2.default.findDOMNode(this);
       component.addEventListener("scroll", this.updateOffset);
     }
   }, {
@@ -26410,7 +26371,7 @@ var Container = Autobind(_class = function (_React$Component) {
 
       var pAnnotationComponent = '';
       if (this.state.pendingAnnotation && !this.props.hidden) {
-        pAnnotationComponent = React.createElement(_Annotation2.default, { id: pA.id,
+        pAnnotationComponent = _react2.default.createElement(_Annotation2.default, { id: pA.id,
           content: pA.content,
           pending: true,
           drawing: pA.drawing,
@@ -26456,7 +26417,7 @@ var Container = Autobind(_class = function (_React$Component) {
       var annotations = '';
       if (!this.props.hidden) {
         annotations = sortedAnnotations.map(function (a, i) {
-          return React.createElement(_Annotation2.default, { key: a.get('id'),
+          return _react2.default.createElement(_Annotation2.default, { key: a.get('id'),
             id: a.get('id'),
             priority: i + 1,
             content: a.get('content'),
@@ -26479,14 +26440,14 @@ var Container = Autobind(_class = function (_React$Component) {
         });
       }
 
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         { ref: 'cdContainer', className: 'cd-container', style: { backgroundColor: 'rgba(0,0,0,0)' /*IE 10 click event workaround*/ },
           onClick: this.handleClick,
           onMouseDown: this.handleMouseDown,
           onMouseUp: this.handleMouseUp,
           onMouseMove: this.handleMouseMove },
-        this.props.viewOnlyMode || React.createElement(_ModeToggle2.default, { mode: this.state.mode, switchMode: this.switchMode }),
+        this.props.viewOnlyMode || _react2.default.createElement(_ModeToggle2.default, { mode: this.state.mode, switchMode: this.switchMode }),
         annotations,
         pAnnotationComponent
       );
@@ -26499,22 +26460,19 @@ var Container = Autobind(_class = function (_React$Component) {
   }, {
     key: 'updateOffset',
     value: function updateOffset() {
-      var offset = this.offset(ReactDOM.findDOMNode(this));
+      var offset = this.offset(_reactDom2.default.findDOMNode(this));
       this.setState({ containerOffset: offset });
     }
   }, {
     key: 'offset',
     value: function offset(element) {
-      var documentElem = void 0;
-      var box = { top: 0, left: 0 };
       var doc = element && element.ownerDocument;
 
       if (!doc) {
         return;
       }
 
-      documentElem = doc.documentElement;
-      box = element.getBoundingClientRect();
+      var box = element.getBoundingClientRect();
 
       return {
         top: box.top,
@@ -26524,7 +26482,7 @@ var Container = Autobind(_class = function (_React$Component) {
   }, {
     key: 'handleClick',
     value: function handleClick(e) {
-      //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      console.log('click fired. scale: ' + this.props.scale + ', offset(top/left): ' + this.state.containerOffset.top + '/' + this.state.containerOffset.left + ', clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
       e.stopPropagation();
       if (this.props.viewOnlyMode) return;
 
@@ -26532,7 +26490,7 @@ var Container = Autobind(_class = function (_React$Component) {
 
       if (this.state.pendingAnnotation || this.state.mode !== 'marker') return;
 
-      var annotation = Immutable.Map({
+      var annotation = _immutable2.default.Map({
         content: '',
         timeStamp: new Date(),
         type: this.state.mode,
@@ -26542,6 +26500,8 @@ var Container = Autobind(_class = function (_React$Component) {
         y2: Math.round((e.clientY + 24 - this.state.containerOffset.top) / this.props.scale)
       });
 
+      console.log('annotation: scale: ' + this.props.scale + ', offset(top/left): ' + this.state.containerOffset.top + '/' + this.state.containerOffset.left + ', x1: ' + annotation.get('x1') + ', y1: ' + annotation.get('y1') + ', x2: ' + annotation.get('x2') + ', y2: ' + annotation.get('y2'));
+
       this.setState({
         pendingAnnotation: annotation
       });
@@ -26549,7 +26509,7 @@ var Container = Autobind(_class = function (_React$Component) {
   }, {
     key: 'handleMouseDown',
     value: function handleMouseDown(e) {
-      //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      //console.log(`mousedown fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
       e.stopPropagation();
       if (this.props.viewOnlyMode) return;
 
@@ -26557,7 +26517,7 @@ var Container = Autobind(_class = function (_React$Component) {
 
       if (this.state.pendingAnnotation || this.state.visibleViewerId || this.state.mode === 'marker') return;
 
-      var annotation = Immutable.Map({
+      var annotation = _immutable2.default.Map({
         content: '',
         timeStamp: new Date(),
         type: this.state.mode,
@@ -26575,7 +26535,7 @@ var Container = Autobind(_class = function (_React$Component) {
   }, {
     key: 'handleMouseMove',
     value: function handleMouseMove(e) {
-      //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      //console.log(`mousemove fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
       e.stopPropagation();
       if (this.props.viewOnlyMode) return;
 
@@ -26593,7 +26553,7 @@ var Container = Autobind(_class = function (_React$Component) {
   }, {
     key: 'handleMouseUp',
     value: function handleMouseUp(e) {
-      //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+      console.log('mouseup fired. scale: ' + this.props.scale + ', clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
       e.stopPropagation();
       if (this.props.viewOnlyMode) return;
 
@@ -26707,7 +26667,7 @@ var Container = Autobind(_class = function (_React$Component) {
   }]);
 
   return Container;
-}(React.Component)) || _class;
+}(_react2.default.Component)) || _class;
 
 exports.default = Container;
 
@@ -26720,16 +26680,16 @@ Container.defaultProps = {
 };
 
 Container.propTypes = {
-  annotations: React.PropTypes.object.isRequired,
-  onSave: React.PropTypes.func.isRequired,
-  onDelete: React.PropTypes.func.isRequired,
-  scale: React.PropTypes.number.isRequired,
-  hidden: React.PropTypes.bool.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
+  annotations: _react2.default.PropTypes.object.isRequired,
+  onSave: _react2.default.PropTypes.func.isRequired,
+  onDelete: _react2.default.PropTypes.func.isRequired,
+  scale: _react2.default.PropTypes.number.isRequired,
+  hidden: _react2.default.PropTypes.bool.isRequired,
+  viewOnlyMode: _react2.default.PropTypes.bool.isRequired,
   // Optional
-  selectedId: React.PropTypes.number.isRequired,
-  onSelect: React.PropTypes.func,
-  onDeselect: React.PropTypes.func
+  selectedId: _react2.default.PropTypes.number.isRequired,
+  onSelect: _react2.default.PropTypes.func,
+  onDeselect: _react2.default.PropTypes.func
 };
 
 },{"./Annotation":191,"./ModeToggle":198,"autobind-decorator":1,"immutable":4,"react":171,"react-dom":6}],194:[function(require,module,exports){
@@ -26750,6 +26710,21 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _class;
 
+// Local
+
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _autobindDecorator = require('autobind-decorator');
+
+var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
+
 var _reactTimeago = require('react-timeago');
 
 var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
@@ -26766,13 +26741,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var React = require('react');
-var ClassNames = require('classnames');
-var Autobind = require('autobind-decorator');
-
-// Local
-
-var Content = Autobind(_class = function (_React$Component) {
+var Content = (0, _autobindDecorator2.default)(_class = function (_React$Component) {
   _inherits(Content, _React$Component);
 
   function Content(props, context) {
@@ -26787,21 +26756,21 @@ var Content = Autobind(_class = function (_React$Component) {
   _createClass(Content, [{
     key: 'render',
     value: function render() {
-      var viewerClasses = ClassNames({
+      var viewerClasses = (0, _classnames2.default)({
         'cd-annotation-viewer': true,
         'hidden': this.props.pending || !this.props.shouldDisplayViewer });
 
       //Hide if we are NOT pending and we SHOULD NOT display
-      var contentClasses = ClassNames({
+      var contentClasses = (0, _classnames2.default)({
         'cd-annotation-content': true
       });
 
-      var controlClasses = ClassNames({
+      var controlClasses = (0, _classnames2.default)({
         'cd-annotation-content-controls': true,
         'fade-in': this.state.shouldDisplayControls
       });
 
-      var shadowClasses = ClassNames({
+      var shadowClasses = (0, _classnames2.default)({
         'cd-shadow-bubble': true,
         'invert': this.props.invert
       });
@@ -26821,41 +26790,41 @@ var Content = Autobind(_class = function (_React$Component) {
         if (shadowStyle.left < 6) shadowStyle.left = 6;else if (shadowStyle.left > 234) shadowStyle.left = 234;
       }
 
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         { style: divStyle, className: viewerClasses },
-        React.createElement('div', { style: shadowStyle, className: shadowClasses }),
-        React.createElement(
+        _react2.default.createElement('div', { style: shadowStyle, className: shadowClasses }),
+        _react2.default.createElement(
           'div',
           { className: contentClasses, onMouseOver: this.handleMouseOver, onMouseOut: this.handleMouseOut },
-          React.createElement(
+          _react2.default.createElement(
             'div',
             { className: controlClasses },
-            React.createElement(
+            _react2.default.createElement(
               'button',
               { className: 'delete', onClick: this.handleDeleteClick },
-              React.createElement(
+              _react2.default.createElement(
                 'i',
                 { className: 'fa fa-times' },
                 ' Delete'
               )
             ),
-            React.createElement(
+            _react2.default.createElement(
               'button',
               { className: 'edit', onClick: this.handleEditClick },
-              React.createElement(
+              _react2.default.createElement(
                 'i',
                 { className: 'fa fa-pencil' },
                 ' Edit'
               )
             )
           ),
-          React.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'cd-annotation-content-text' },
             this.props.content
           ),
-          React.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'cd-annotation-content-info' },
             'Comment #',
@@ -26863,7 +26832,7 @@ var Content = Autobind(_class = function (_React$Component) {
             ' by ',
             this.props.author,
             ' ',
-            React.createElement(_reactTimeago2.default, { date: this.props.timeStamp })
+            _react2.default.createElement(_reactTimeago2.default, { date: this.props.timeStamp })
           )
         )
       );
@@ -26907,24 +26876,24 @@ var Content = Autobind(_class = function (_React$Component) {
   }]);
 
   return Content;
-}(React.Component)) || _class;
+}(_react2.default.Component)) || _class;
 
 exports.default = Content;
 
 
 Content.propTypes = {
-  id: React.PropTypes.number.isRequired,
-  author: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  shouldDisplayViewer: React.PropTypes.bool.isRequired,
-  deleteAnnotation: React.PropTypes.func.isRequired,
-  editAnnotation: React.PropTypes.func.isRequired,
-  offset: React.PropTypes.object.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
+  id: _react2.default.PropTypes.number.isRequired,
+  author: _react2.default.PropTypes.string.isRequired,
+  content: _react2.default.PropTypes.string.isRequired,
+  pending: _react2.default.PropTypes.bool.isRequired,
+  shouldDisplayViewer: _react2.default.PropTypes.bool.isRequired,
+  deleteAnnotation: _react2.default.PropTypes.func.isRequired,
+  editAnnotation: _react2.default.PropTypes.func.isRequired,
+  offset: _react2.default.PropTypes.object.isRequired,
+  viewOnlyMode: _react2.default.PropTypes.bool.isRequired,
 
   // Optional
-  timeStamp: React.PropTypes.instanceOf(Date)
+  timeStamp: _react2.default.PropTypes.instanceOf(Date)
 };
 
 },{"./Input":196,"autobind-decorator":1,"classnames":3,"react":171,"react-timeago":7}],195:[function(require,module,exports){
@@ -26941,57 +26910,40 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = require('react');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _react2 = _interopRequireDefault(_react);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _classnames = require('classnames');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _classnames2 = _interopRequireDefault(_classnames);
 
-var React = require('react');
-var ClassNames = require('classnames');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Highlight = function (_React$Component) {
-  _inherits(Highlight, _React$Component);
+var Highlight = function Highlight(props) {
+  var divStyle = {
+    width: props.width,
+    zIndex: props.priority
+  };
 
-  function Highlight() {
-    _classCallCheck(this, Highlight);
+  var classes = (0, _classnames2.default)({
+    'cd-highlight': true,
+    'deemphasize': props.deemphasize
+  });
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Highlight).apply(this, arguments));
-  }
-
-  _createClass(Highlight, [{
-    key: 'render',
-    value: function render() {
-      var divStyle = {
-        width: this.props.width,
-        zIndex: this.props.priority
-      };
-
-      var classes = ClassNames({
-        'cd-highlight': true,
-        'deemphasize': this.props.deemphasize
-      });
-
-      return React.createElement(
-        'div',
-        null,
-        React.createElement('div', { style: divStyle, className: classes })
-      );
-    }
-  }]);
-
-  return Highlight;
-}(React.Component);
-
-exports.default = Highlight;
-
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement('div', { style: divStyle, className: classes })
+  );
+};
 
 Highlight.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired
+  width: _react2.default.PropTypes.number.isRequired,
+  deemphasize: _react2.default.PropTypes.bool.isRequired
 };
+
+exports.default = Highlight;
 
 },{"classnames":3,"react":171}],196:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -27006,10 +26958,25 @@ Highlight.propTypes = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _class;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _autobindDecorator = require('autobind-decorator');
+
+var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -27017,11 +26984,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var React = require('react');
-var ClassNames = require('classnames');
-var Autobind = require('autobind-decorator');
-
-var Input = Autobind(_class = function (_React$Component) {
+var Input = (0, _autobindDecorator2.default)(_class = function (_React$Component) {
   _inherits(Input, _React$Component);
 
   function Input(props, context) {
@@ -27036,16 +26999,16 @@ var Input = Autobind(_class = function (_React$Component) {
   _createClass(Input, [{
     key: 'render',
     value: function render() {
-      var editorClasses = ClassNames({
+      var editorClasses = (0, _classnames2.default)({
         'cd-annotation-editor': true,
         'hidden': !this.props.pending
       });
 
-      var inputClasses = ClassNames({
+      var inputClasses = (0, _classnames2.default)({
         'cd-annotation-input': true
       });
 
-      var shadowClasses = ClassNames({
+      var shadowClasses = (0, _classnames2.default)({
         'cd-shadow-bubble': true,
         'invert': this.props.invert
       });
@@ -27065,39 +27028,39 @@ var Input = Autobind(_class = function (_React$Component) {
         if (shadowStyle.left < 6) shadowStyle.left = 6;else if (shadowStyle.left > 234) shadowStyle.left = 234;
       }
 
-      return React.createElement(
+      var saveClasses = (0, _classnames2.default)('btn btn-xs save', {
+        disabled: !this.state.value.length
+      });
+
+      var cancelClasses = (0, _classnames2.default)('btn btn-xs cancel');
+
+      return _react2.default.createElement(
         'div',
         { style: divStyle, className: editorClasses },
-        React.createElement('div', { style: shadowStyle, className: shadowClasses }),
-        React.createElement(
+        _react2.default.createElement('div', { style: shadowStyle, className: shadowClasses }),
+        _react2.default.createElement(
           'div',
           { className: inputClasses },
-          React.createElement('textarea', { autoFocus: true,
+          _react2.default.createElement('textarea', { autoFocus: true,
             value: this.state.value,
             onChange: this.handleChange,
             onKeyDown: this.handleKeyDown,
             onBlur: this.handleBlur
           }),
-          React.createElement(
+          _react2.default.createElement(
             'div',
             { className: 'cd-annotation-input-controls' },
-            React.createElement(
+            _react2.default.createElement(
               'button',
-              { className: 'save', onClick: this.handleSaveClick },
-              React.createElement(
-                'i',
-                { className: 'fa fa-check' },
-                ' Save'
-              )
+              { className: cancelClasses, onClick: this.handleCancelClick },
+              _react2.default.createElement('i', { className: 'fa fa-times' }),
+              ' Cancel'
             ),
-            React.createElement(
+            _react2.default.createElement(
               'button',
-              { className: 'cancel', onClick: this.handleCancelClick },
-              React.createElement(
-                'i',
-                { className: 'fa fa-times' },
-                ' Cancel'
-              )
+              { className: saveClasses, onClick: this.handleSaveClick },
+              _react2.default.createElement('i', { className: 'fa fa-check' }),
+              ' Save'
             )
           )
         )
@@ -27145,20 +27108,20 @@ var Input = Autobind(_class = function (_React$Component) {
   }]);
 
   return Input;
-}(React.Component)) || _class;
+}(_react2.default.Component)) || _class;
 
 exports.default = Input;
 
 
 Input.propTypes = {
-  content: React.PropTypes.string.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  saveAnnotation: React.PropTypes.func,
-  cancelAnnotation: React.PropTypes.func
+  content: _react2.default.PropTypes.string.isRequired,
+  pending: _react2.default.PropTypes.bool.isRequired,
+  saveAnnotation: _react2.default.PropTypes.func,
+  cancelAnnotation: _react2.default.PropTypes.func
 };
 
 },{"autobind-decorator":1,"classnames":3,"react":171}],197:[function(require,module,exports){
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
+/* carbondream - Copyright 2016 Zeroarc Software, LLC
  *
  * Annotation marker shape
  */
@@ -27171,55 +27134,38 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = require('react');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _react2 = _interopRequireDefault(_react);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _classnames = require('classnames');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _classnames2 = _interopRequireDefault(_classnames);
 
-var React = require('react');
-var ClassNames = require('classnames');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Marker = function (_React$Component) {
-  _inherits(Marker, _React$Component);
+var Marker = function Marker(props) {
+  var divStyle = {
+    zIndex: props.priority
+  };
 
-  function Marker() {
-    _classCallCheck(this, Marker);
+  var classes = (0, _classnames2.default)({
+    'cd-marker': true,
+    'deemphasize': props.deemphasize
+  });
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Marker).apply(this, arguments));
-  }
-
-  _createClass(Marker, [{
-    key: 'render',
-    value: function render() {
-      var divStyle = {
-        zIndex: this.props.priority
-      };
-
-      var classes = ClassNames({
-        'cd-marker': true,
-        'deemphasize': this.props.deemphasize
-      });
-
-      return React.createElement(
-        'div',
-        { style: divStyle, className: classes },
-        React.createElement('i', { className: 'fa fa-map-marker' })
-      );
-    }
-  }]);
-
-  return Marker;
-}(React.Component);
-
-exports.default = Marker;
-
+  return _react2.default.createElement(
+    'div',
+    { style: divStyle, className: classes },
+    _react2.default.createElement('i', { className: 'fa fa-map-marker' })
+  );
+};
 
 Marker.propTypes = {
-  deemphasize: React.PropTypes.bool.isRequired
+  deemphasize: _react2.default.PropTypes.bool.isRequired
 };
+
+exports.default = Marker;
 
 },{"classnames":3,"react":171}],198:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC
@@ -27335,59 +27281,42 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _react = require('react');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _react2 = _interopRequireDefault(_react);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _classnames = require('classnames');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _classnames2 = _interopRequireDefault(_classnames);
 
-var React = require('react');
-var ClassNames = require('classnames');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Square = function (_React$Component) {
-  _inherits(Square, _React$Component);
+var Square = function Square(props) {
+  var divStyle = {
+    height: props.height,
+    width: props.width,
+    zIndex: props.priority
+  };
 
-  function Square() {
-    _classCallCheck(this, Square);
+  var classes = (0, _classnames2.default)({
+    'cd-square': true,
+    'deemphasize': props.deemphasize
+  });
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Square).apply(this, arguments));
-  }
-
-  _createClass(Square, [{
-    key: 'render',
-    value: function render() {
-      var divStyle = {
-        height: this.props.height,
-        width: this.props.width,
-        zIndex: this.props.priority
-      };
-
-      var classes = ClassNames({
-        'cd-square': true,
-        'deemphasize': this.props.deemphasize
-      });
-
-      return React.createElement(
-        'div',
-        null,
-        React.createElement('div', { style: divStyle, className: classes })
-      );
-    }
-  }]);
-
-  return Square;
-}(React.Component);
-
-exports.default = Square;
-
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement('div', { style: divStyle, className: classes })
+  );
+};
 
 Square.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired
+  width: _react2.default.PropTypes.number.isRequired,
+  height: _react2.default.PropTypes.number.isRequired,
+  deemphasize: _react2.default.PropTypes.bool.isRequired
 };
+
+exports.default = Square;
 
 },{"classnames":3,"react":171}],200:[function(require,module,exports){
 /* carbondream - Copyright 2015 Zeroarc Software, LLC

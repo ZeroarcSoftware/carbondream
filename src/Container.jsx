@@ -160,7 +160,7 @@ export default class Container extends React.Component {
   }
 
   handleClick(e) {
-    console.log(`click fired. scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.top}/${this.state.containerOffset.left}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.log(`click fired. scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.top}/${this.state.containerOffset.left}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -179,7 +179,7 @@ export default class Container extends React.Component {
       y2: Math.round((e.clientY + 24 - this.state.containerOffset.top) / this.props.scale),
     });
 
-    console.log(`annotation: scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.top}/${this.state.containerOffset.left}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
+    //console.log(`annotation: scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.top}/${this.state.containerOffset.left}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
 
     this.setState({
       pendingAnnotation: annotation
@@ -231,7 +231,7 @@ export default class Container extends React.Component {
   }
 
   handleMouseUp(e) {
-    console.log(`mouseup fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.log(`mouseup fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 

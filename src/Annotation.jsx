@@ -121,6 +121,7 @@ const Annotation = (props) => {
     ? <Input invert={invert} pushHorizontal={pushHorizontal} pullHorizontal={pullHorizontal} offset={offset} {...other} />
     : '';
 
+  //console.log(`drawing indicator at left: ${divStyle.left}, top: ${divStyle.top}`);
   return (
     <div style={divStyle} className={'cd-annotation ' + props.type} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} onClick={handleClick}>
       {contentComponent}

@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/entry.js",
@@ -34,6 +34,7 @@
       [
         "babelify",
         {
+          "sourceMaps": "inline",
           "presets": [
             "es2015",
             "react"
@@ -47,6 +48,7 @@
     ]
   },
   "babel": {
+    "sourceMaps": "inline",
     "presets": [
       "es2015",
       "react"
