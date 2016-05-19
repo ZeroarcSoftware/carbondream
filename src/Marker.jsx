@@ -1,4 +1,4 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
+/* carbondream - Copyright 2016 Zeroarc Software, LLC
  *
  * Annotation marker shape
  */
@@ -6,29 +6,29 @@
 'use strict';
 
 // External
-let React = require('react');
-let ClassNames = require('classnames');
+import React from 'react';
+import ClassNames from 'classnames';
 
 
-export default class Marker extends React.Component {
-  render() {
-    let divStyle = {
-      zIndex: this.props.priority,
-    };
+const Marker = (props) => {
+  const divStyle = {
+    zIndex: props.priority,
+  };
 
-    let classes = ClassNames({
-      'cd-marker': true,
-      'deemphasize': this.props.deemphasize,
-    });
+  const classes = ClassNames({
+    'cd-marker': true,
+    'deemphasize': props.deemphasize,
+  });
 
-    return (
-      <div style={divStyle} className={classes}>
-        <i className='fa fa-map-marker'></i>
-      </div>
-    );
-  }
-}
+  return (
+    <div style={divStyle} className={classes}>
+      <i className='fa fa-map-marker'></i>
+    </div>
+  );
+};
 
 Marker.propTypes = {
   deemphasize: React.PropTypes.bool.isRequired,
 };
+
+export default Marker;

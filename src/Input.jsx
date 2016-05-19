@@ -6,9 +6,9 @@
 'use strict';
 
 // External
-let React = require('react');
-let ClassNames = require('classnames');
-let Autobind = require('autobind-decorator');
+import React from 'react';
+import ClassNames from 'classnames';
+import Autobind from 'autobind-decorator';
 
 
 @Autobind
@@ -19,22 +19,22 @@ export default class Input extends React.Component {
   }
 
   render() {
-    let editorClasses = ClassNames({
+    const editorClasses = ClassNames({
       'cd-annotation-editor': true,
       'hidden': !this.props.pending,
     });
 
-    let inputClasses = ClassNames({
+    const inputClasses = ClassNames({
       'cd-annotation-input': true,
     });
 
-    let shadowClasses = ClassNames({
+    const shadowClasses = ClassNames({
       'cd-shadow-bubble': true,
       'invert': this.props.invert,
     });
 
     // Apply offsets for outer div
-    let divStyle = {
+    const divStyle = {
       left: this.props.offset.horizontal,
       top: this.props.offset.vertical,
     };

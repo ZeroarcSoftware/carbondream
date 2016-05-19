@@ -6,10 +6,10 @@
 'use strict';
 
 // External
-let React = require('react');
-let ReactDOM = require('react-dom');
-let Immutable = require('immutable');
-let Autobind = require('autobind-decorator');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Immutable from 'immutable';
+import Autobind from 'autobind-decorator';
 
 // Local
 import Annotation from './Annotation';
@@ -35,18 +35,18 @@ export default class Container extends React.Component {
   }
 
   componentDidMount() {
-    let component = ReactDOM.findDOMNode(this);
+    const component = ReactDOM.findDOMNode(this);
     component.addEventListener("scroll", this.updateOffset);
     this.updateOffset();
   }
 
   componentWillUnmount() {
-    let component = ReactDOM.findDOMNode(this);
+    const component = ReactDOM.findDOMNode(this);
     component.addEventListener("scroll", this.updateOffset);
   }
 
   render() {
-    let pA = this.state.pendingAnnotation && this.state.pendingAnnotation.toJS();
+    const pA = this.state.pendingAnnotation && this.state.pendingAnnotation.toJS();
 
     let pAnnotationComponent = '';
     if (this.state.pendingAnnotation && !this.props.hidden) {
@@ -71,9 +71,9 @@ export default class Container extends React.Component {
     // Sorting the annotations: largest area to smallest area, then highlights, then markers
     // This allows us to assign a priority with biggest shapes being lowest in order to
     // calculate a z-index that stacks them accordingly
-    let sortedAnnotations = this.props.annotations.sort((a1, a2) => {
-      let m1 = a1.toJS();
-      let m2 = a2.toJS();
+    const sortedAnnotations = this.props.annotations.sort((a1, a2) => {
+      const m1 = a1.toJS();
+      const m2 = a2.toJS();
 
       if (m1.type === 'marker' || m2.type === 'marker') {
         if (m1.type === m2.type) return 0;
@@ -87,8 +87,8 @@ export default class Container extends React.Component {
         return -1;
       }
 
-      let m1Area = Math.abs((m1.x1 - m1.x2) * (m1.y1 - m1.y2));
-      let m2Area = Math.abs((m2.x1 - m2.x2) * (m2.y1 - m2.y2));
+      const m1Area = Math.abs((m1.x1 - m1.x2) * (m1.y1 - m1.y2));
+      const m2Area = Math.abs((m2.x1 - m2.x2) * (m2.y1 - m2.y2));
 
       return m2Area - m1Area;
     });
@@ -140,21 +140,18 @@ export default class Container extends React.Component {
   //
 
   updateOffset() {
-    let offset = this.offset(ReactDOM.findDOMNode(this));
+    const offset = this.offset(ReactDOM.findDOMNode(this));
     this.setState({containerOffset: offset});
   }
 
   offset(element) {
-    let documentElem;
-    let box = { top: 0, left: 0 };
-    let doc = element && element.ownerDocument;
+    const doc = element && element.ownerDocument;
 
     if (!doc) {
       return;
     }
 
-    documentElem = doc.documentElement;
-    box = element.getBoundingClientRect();
+    const box = element.getBoundingClientRect();
 
     return {
       top: box.top,
@@ -163,7 +160,7 @@ export default class Container extends React.Component {
   }
 
   handleClick(e) {
-    //console.log('click fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    console.log(`click fired. scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.top}/${this.state.containerOffset.left}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -172,7 +169,7 @@ export default class Container extends React.Component {
     if (this.state.pendingAnnotation
       || this.state.mode !== 'marker') return;
 
-    let annotation = Immutable.Map({
+    const annotation = Immutable.Map({
       content: '',
       timeStamp: new Date(),
       type: this.state.mode,
@@ -182,13 +179,15 @@ export default class Container extends React.Component {
       y2: Math.round((e.clientY + 24 - this.state.containerOffset.top) / this.props.scale),
     });
 
+    console.log(`annotation: scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.top}/${this.state.containerOffset.left}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
+
     this.setState({
       pendingAnnotation: annotation
     });
   }
 
   handleMouseDown(e) {
-    //console.log('mousedown fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log(`mousedown fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -196,7 +195,7 @@ export default class Container extends React.Component {
 
     if (this.state.pendingAnnotation || this.state.visibleViewerId || this.state.mode === 'marker') return;
 
-    let annotation = Immutable.Map({
+    const annotation = Immutable.Map({
       content: '',
       timeStamp: new Date(),
       type: this.state.mode,
@@ -213,7 +212,7 @@ export default class Container extends React.Component {
   }
 
   handleMouseMove(e) {
-    //console.log('mousemove fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    //console.log(`mousemove fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -224,7 +223,7 @@ export default class Container extends React.Component {
     // If drawing is not true, then don't proceed
     if (!this.state.pendingAnnotation.get('drawing')) return;
 
-    let annotation = this.state.pendingAnnotation
+    const annotation = this.state.pendingAnnotation
     .set('x2', (e.clientX - this.state.containerOffset.left) / this.props.scale)
     .set('y2', (e.clientY - this.state.containerOffset.top) / this.props.scale);
 
@@ -232,7 +231,7 @@ export default class Container extends React.Component {
   }
 
   handleMouseUp(e) {
-    //console.log('mouseup fired. clientX: ' + e.clientX + ', clientY: ' + e.clientY + ', screenX: ' + e.screenX + ', screenY: ' + e.screenY);
+    console.log(`mouseup fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -244,21 +243,21 @@ export default class Container extends React.Component {
     if (!this.state.pendingAnnotation.get('drawing')) return;
 
     let annotation = this.state.pendingAnnotation
-    .set('drawing', false)
-    .set('x2', Math.round((e.clientX - this.state.containerOffset.left) / this.props.scale))
-    .set('y2', Math.round((e.clientY - this.state.containerOffset.top) / this.props.scale));
+      .set('drawing', false)
+      .set('x2', Math.round((e.clientX - this.state.containerOffset.left) / this.props.scale))
+      .set('y2', Math.round((e.clientY - this.state.containerOffset.top) / this.props.scale));
 
     if (annotation.get('x2') < annotation.get('x1')) {
-      let newAnnotation = annotation
-      .set('x1', annotation.get('x2'))
-      .set('x2', annotation.get('x1'));
+      const newAnnotation = annotation
+        .set('x1', annotation.get('x2'))
+        .set('x2', annotation.get('x1'));
       annotation = newAnnotation;
     }
 
     if (annotation.get('y2') < annotation.get('y1')) {
-      let newAnnotation = annotation
-      .set('y1', annotation.get('y2'))
-      .set('y2', annotation.get('y1'));
+      const newAnnotation = annotation
+        .set('y1', annotation.get('y2'))
+        .set('y2', annotation.get('y1'));
 
       annotation = newAnnotation;
     }
@@ -266,12 +265,12 @@ export default class Container extends React.Component {
     // Only save the pending change if the mark is bigger than a single point
     // In this case, vertical or horizontal lines are allowed
     if (Math.abs(annotation.get('x2') - annotation.get('x1')) < 1
-        && Math.abs(annotation.get('y2') - annotation.get('y1')) < 1) {
-          this.setState({pendingAnnotation: null});
-        }
-        else {
-          this.setState({pendingAnnotation: annotation});
-        }
+      && Math.abs(annotation.get('y2') - annotation.get('y1')) < 1) {
+        this.setState({pendingAnnotation: null});
+    }
+    else {
+      this.setState({pendingAnnotation: annotation});
+    }
   }
 
   switchMode(mode) {
@@ -284,7 +283,7 @@ export default class Container extends React.Component {
   }
 
   saveAnnotation(content) {
-    let a = this.state.pendingAnnotation
+    const a = this.state.pendingAnnotation
     .set('content', content)
     .set('timeStamp', new Date());
 
@@ -298,7 +297,7 @@ export default class Container extends React.Component {
 
   // If editing, pull the annotation out and put it in pending, force viewer to null
   editAnnotation(id) {
-    let annotation = this.props.annotations.find((value) => {
+    const annotation = this.props.annotations.find((value) => {
       if (value.get('id') === id) return true;
       return false;
     });

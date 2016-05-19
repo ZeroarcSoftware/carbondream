@@ -6,33 +6,33 @@
 'use strict';
 
 // External
-let React = require('react');
-let ClassNames = require('classnames');
+import React from 'react';
+import ClassNames from 'classnames';
 
 
-export default class Square extends React.Component {
-  render() {
-    let divStyle = {
-      height: this.props.height,
-      width: this.props.width,
-      zIndex: this.props.priority,
-    };
+const Square = (props) => {
+  const divStyle = {
+    height: props.height,
+    width: props.width,
+    zIndex: props.priority,
+  };
 
-    let classes = ClassNames({
-      'cd-square': true,
-      'deemphasize': this.props.deemphasize,
-    });
+  const classes = ClassNames({
+    'cd-square': true,
+    'deemphasize': props.deemphasize,
+  });
 
-    return (
-      <div>
-        <div style={divStyle} className={classes}></div>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <div style={divStyle} className={classes}></div>
+    </div>
+  );
+};
 
 Square.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   deemphasize: React.PropTypes.bool.isRequired,
 };
+
+export default Square;

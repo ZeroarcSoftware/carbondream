@@ -5,9 +5,9 @@
 'use strict';
 
 // External
-let React = require('react');
-let ClassNames = require('classnames');
-let Autobind = require('autobind-decorator');
+import React from 'react';
+import ClassNames from 'classnames';
+import Autobind from 'autobind-decorator';
 import TimeAgo from 'react-timeago'
 
 // Local
@@ -22,27 +22,27 @@ export default class Content extends React.Component {
   }
 
   render() {
-    let viewerClasses = ClassNames({
+    const viewerClasses = ClassNames({
       'cd-annotation-viewer': true,
       'hidden': this.props.pending || !this.props.shouldDisplayViewer,   //Hide if we are NOT pending and we SHOULD NOT display
     });
 
-    let contentClasses = ClassNames({
+    const contentClasses = ClassNames({
       'cd-annotation-content': true,
     });
 
-    let controlClasses = ClassNames({
+    const controlClasses = ClassNames({
       'cd-annotation-content-controls': true,
       'fade-in': this.state.shouldDisplayControls,
     });
 
-    let shadowClasses = ClassNames({
+    const shadowClasses = ClassNames({
       'cd-shadow-bubble': true,
       'invert': this.props.invert,
     });
 
     // Apply offsets for outer div
-    let divStyle = {
+    const divStyle = {
       left: this.props.offset.horizontal,
       top: this.props.offset.vertical,
     };
