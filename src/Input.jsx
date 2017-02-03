@@ -68,8 +68,8 @@ export default class Input extends React.Component {
             onBlur={this.handleBlur}
           />
           <div className='cd-annotation-input-controls'>
-            <button className={cancelClasses} onClick={this.handleCancelClick}><i className='fa fa-times'></i> Cancel</button>
-            <button className={saveClasses} onClick={this.handleSaveClick}><i className='fa fa-check'></i> Save</button>
+            <button className={cancelClasses} onClick={this.handleCancelClick}><i className='fa fa-fw fa-times'></i> Cancel</button>
+            <button className={saveClasses} onClick={this.handleSaveClick}><i className='fa fa-fw fa-check'></i> Save</button>
           </div>
         </div>
       </div>

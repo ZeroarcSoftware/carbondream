@@ -64,8 +64,8 @@ export default class Content extends React.Component {
         <div style={shadowStyle} className={shadowClasses}></div>
         <div className={contentClasses} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <div className={controlClasses}>
-            <button className='delete' onClick={this.handleDeleteClick}><i className='fa fa-times'> Delete</i></button>
-            <button className='edit' onClick={this.handleEditClick}><i className='fa fa-pencil'> Edit</i></button>
+            <button className='delete' onClick={this.handleDeleteClick}><i className='fa fa-fw fa-times'></i> Delete</button>
+            <button className='edit' onClick={this.handleEditClick}><i className='fa fa-fw fa-pencil'></i> Edit</button>
           </div>
           <div className='cd-annotation-content-text'>
             {this.props.content}
