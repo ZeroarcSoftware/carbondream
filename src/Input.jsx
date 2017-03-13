@@ -57,13 +57,14 @@ export default class Input extends React.Component {
 
     const cancelClasses = ClassNames('btn btn-xs cancel');
 
+    //HACK: Using onInput instead of onChange see: https://github.com/facebook/react/issues/7027
     return (
       <div style={divStyle} className={editorClasses}>
         <div style={shadowStyle} className={shadowClasses}></div>
         <div className={inputClasses}>
           <textarea autoFocus
             value={this.state.value}
-            onChange={this.handleChange}
+            onInput={this.handleChange}
             onKeyDown={this.handleKeyDown}
             onBlur={this.handleBlur}
           />
