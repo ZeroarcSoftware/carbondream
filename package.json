@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "0.4.1",
+  "version": "0.4.0-iehotfix",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/entry.js",

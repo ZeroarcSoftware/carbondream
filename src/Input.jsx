@@ -58,6 +58,7 @@ export default class Input extends React.Component {
     const cancelClasses = ClassNames('btn btn-xs cancel');
 
     //HACK: Using onInput instead of onChange see: https://github.com/facebook/react/issues/7027
+    //DISABLED: onKeyDown={this.handleKeyDown}
     return (
       <div style={divStyle} className={editorClasses}>
         <div style={shadowStyle} className={shadowClasses}></div>
@@ -65,7 +66,6 @@ export default class Input extends React.Component {
           <textarea autoFocus
             value={this.state.value}
             onInput={this.handleChange}
-            onKeyDown={this.handleKeyDown}
             onBlur={this.handleBlur}
           />
           <div className='cd-annotation-input-controls'>
@@ -96,12 +96,14 @@ export default class Input extends React.Component {
     this.props.cancelAnnotation();
   }
 
+  /*
   handleKeyDown(e) {
     e.stopPropagation();
 
     // Capture escape key to cancel
     if (e.keyCode === 27 && this.state.value.length === 0) this.props.cancelAnnotation();
   }
+  */
 
   handleBlur(e) {
     e.stopPropagation();
