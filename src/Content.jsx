@@ -4,6 +4,8 @@
  */
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 import ClassNames from 'classnames';
@@ -109,16 +111,16 @@ export default class Content extends React.Component {
 }
 
 Content.propTypes = {
-  id: React.PropTypes.number.isRequired,
-  author: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  shouldDisplayViewer: React.PropTypes.bool.isRequired,
-  deleteAnnotation: React.PropTypes.func.isRequired,
-  editAnnotation: React.PropTypes.func.isRequired,
-  offset: React.PropTypes.object.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
+  author: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  pending: PropTypes.bool.isRequired,
+  shouldDisplayViewer: PropTypes.bool.isRequired,
+  deleteAnnotation: PropTypes.func.isRequired,
+  editAnnotation: PropTypes.func.isRequired,
+  offset: PropTypes.object.isRequired,
+  viewOnlyMode: PropTypes.bool.isRequired,
 
   // Optional
-  timeStamp: React.PropTypes.instanceOf(Date),
+  timeStamp: PropTypes.instanceOf(Date),
 };

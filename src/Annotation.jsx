@@ -5,6 +5,8 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 
@@ -137,24 +139,24 @@ Annotation.defaultProps = {
 };
 
 Annotation.propTypes = {
-  content: React.PropTypes.string.isRequired,
-  x1: React.PropTypes.number.isRequired,
-  y1: React.PropTypes.number.isRequired,
-  x2: React.PropTypes.number.isRequired,
-  y2: React.PropTypes.number.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  drawing: React.PropTypes.bool.isRequired,
-  deleteAnnotation: React.PropTypes.func.isRequired,
-  shouldDisplayViewer: React.PropTypes.bool.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired,
-  type: React.PropTypes.string.isRequired,
-  containerOffset: React.PropTypes.object.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
+  content: PropTypes.string.isRequired,
+  x1: PropTypes.number.isRequired,
+  y1: PropTypes.number.isRequired,
+  x2: PropTypes.number.isRequired,
+  y2: PropTypes.number.isRequired,
+  pending: PropTypes.bool.isRequired,
+  drawing: PropTypes.bool.isRequired,
+  deleteAnnotation: PropTypes.func.isRequired,
+  shouldDisplayViewer: PropTypes.bool.isRequired,
+  deemphasize: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
+  containerOffset: PropTypes.object.isRequired,
+  viewOnlyMode: PropTypes.bool.isRequired,
 
   // Optional
-  timeStamp: React.PropTypes.instanceOf(Date),
-  displayAnnotationViewer: React.PropTypes.func,
-  hideAnnotationViewer: React.PropTypes.func,
+  timeStamp: PropTypes.instanceOf(Date),
+  displayAnnotationViewer: PropTypes.func,
+  hideAnnotationViewer: PropTypes.func,
 };
 
 export default Annotation;

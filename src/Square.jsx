@@ -5,6 +5,8 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 import ClassNames from 'classnames';
@@ -30,9 +32,9 @@ const Square = (props) => {
 };
 
 Square.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  deemphasize: PropTypes.bool.isRequired,
 };
 
 export default Square;

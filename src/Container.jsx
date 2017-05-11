@@ -5,6 +5,8 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -350,14 +352,14 @@ Container.defaultProps = {
 };
 
 Container.propTypes = {
-  annotations: React.PropTypes.object.isRequired,
-  onSave: React.PropTypes.func.isRequired,
-  onDelete: React.PropTypes.func.isRequired,
-  scale: React.PropTypes.number.isRequired,
-  hidden: React.PropTypes.bool.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
+  annotations: PropTypes.object.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  scale: PropTypes.number.isRequired,
+  hidden: PropTypes.bool.isRequired,
+  viewOnlyMode: PropTypes.bool.isRequired,
   // Optional
-  selectedId: React.PropTypes.number.isRequired,
-  onSelect: React.PropTypes.func,
-  onDeselect: React.PropTypes.func,
+  selectedId: PropTypes.number.isRequired,
+  onSelect: PropTypes.func,
+  onDeselect: PropTypes.func,
 };

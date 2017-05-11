@@ -5,6 +5,8 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 import ClassNames from 'classnames';
@@ -114,8 +116,8 @@ export default class Input extends React.Component {
 }
 
 Input.propTypes = {
-  content: React.PropTypes.string.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  saveAnnotation: React.PropTypes.func,
-  cancelAnnotation: React.PropTypes.func,
+  content: PropTypes.string.isRequired,
+  pending: PropTypes.bool.isRequired,
+  saveAnnotation: PropTypes.func,
+  cancelAnnotation: PropTypes.func,
 };

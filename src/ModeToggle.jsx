@@ -5,6 +5,8 @@
 
 'use strict';
 
+var PropTypes = require('prop-types');
+
 // External
 let React = require('react');
 let Autobind = require('autobind-decorator');
@@ -45,6 +47,6 @@ export default class ModeToggle extends React.Component {
 }
 
 ModeToggle.propTypes = {
-  mode: React.PropTypes.string.isRequired,
-  switchMode: React.PropTypes.func.isRequired,
+  mode: PropTypes.string.isRequired,
+  switchMode: PropTypes.func.isRequired,
 };

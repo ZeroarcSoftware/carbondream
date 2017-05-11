@@ -5,6 +5,8 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 import ClassNames from 'classnames';
@@ -28,7 +30,7 @@ const Marker = (props) => {
 };
 
 Marker.propTypes = {
-  deemphasize: React.PropTypes.bool.isRequired,
+  deemphasize: PropTypes.bool.isRequired,
 };
 
 export default Marker;

@@ -5,6 +5,8 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 // External
 import React from 'react';
 import ClassNames from 'classnames';
@@ -29,8 +31,8 @@ const Highlight = (props) => {
 };
 
 Highlight.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired,
+  width: PropTypes.number.isRequired,
+  deemphasize: PropTypes.bool.isRequired,
 };
 
 export default Highlight;
