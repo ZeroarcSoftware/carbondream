@@ -1,4 +1,6 @@
 [ignore]
+<PROJECT_ROOT>/lib/.*
+.*/node_modules/react-timeago/lib/index.js.flow
 
 [include]
 

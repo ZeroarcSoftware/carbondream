@@ -36,12 +36,10 @@ type State = {
 
 
 @Autobind
-export default class Content extends React.Component {
-  props: Props;
-  state: State;
-
+export default class Content extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
     this.state = {shouldDisplayControls: false};
   }
 
@@ -106,14 +104,14 @@ export default class Content extends React.Component {
   // Custom Methods
   //
 
-  handleEditClick(e: SyntheticInputEvent) {
+  handleEditClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
     this.props.editAnnotation(this.props.id);
   }
 
-  handleDeleteClick(e: SyntheticInputEvent) {
+  handleDeleteClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -121,13 +119,13 @@ export default class Content extends React.Component {
   }
 
   // These allow event propogation because parent needs mouse events
-  handleMouseOver(e: SyntheticInputEvent) {
+  handleMouseOver(e: SyntheticInputEvent<*>) {
     if (this.props.viewOnlyMode) return;
 
     this.setState({shouldDisplayControls: true});
   }
 
-  handleMouseOut(e: SyntheticInputEvent) {
+  handleMouseOut(e: SyntheticInputEvent<*>) {
     this.setState({shouldDisplayControls: false});
   }
 }

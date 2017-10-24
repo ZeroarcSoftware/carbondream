@@ -51,21 +51,21 @@ type Props = {
 
 
 const Annotation = (props: Props) => {
-  const handleMouseOver = (e: SyntheticInputEvent) => {
+  const handleMouseOver = (e: SyntheticInputEvent<*>) => {
     e.stopPropagation();
     if (props.pending) return;
     if (!props.displayAnnotationViewer) return;
     props.displayAnnotationViewer(props.id);
   };
 
-  const handleMouseOut = (e: SyntheticInputEvent) => {
+  const handleMouseOut = (e: SyntheticInputEvent<*>) => {
     e.stopPropagation();
     if (props.pending) return;
     if (!props.hideAnnotationViewer) return;
     props.hideAnnotationViewer(props.id);
   };
 
-  const handleClick = (e: SyntheticInputEvent) => {
+  const handleClick = (e: SyntheticInputEvent<*>) => {
     // Allow markers to be placed inside shapes, but not on other markers
     if (props.type === 'marker') e.stopPropagation();
   };

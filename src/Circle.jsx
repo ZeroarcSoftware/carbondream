@@ -4,6 +4,7 @@
 'use strict';
 
 import ClassNames from 'classnames';
+import React from 'react';
 
 type Props = {
   width: number,

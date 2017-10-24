@@ -23,15 +23,15 @@ type Props = {
   allowDelete: bool,
   annotations: *,
   hidden: bool,
-  onSave: () => void,
-  onDelete: () => void,
+  onSave: (AnnotationType) => void,
+  onDelete: (number) => void,
   scale: number,
   selectedId: number,
   viewOnlyMode: bool,
 
   // Optional
   onDeselect?: () => void,
-  onSelect?: () => void,
+  onSelect?: (id: number) => void,
 };
 
 type State = {
@@ -42,9 +42,7 @@ type State = {
 };
 
 @Autobind
-export class Container extends React.Component {
-  props: Props;
-  state: State;
+export class Container extends React.Component<Props, State> {
   viewerHideTimer: number;
 
   static defaultProps: {
@@ -204,7 +202,7 @@ export class Container extends React.Component {
     };
   }
 
-  handleClick(e: SyntheticMouseEvent) {
+  handleClick(e: SyntheticMouseEvent<*>) {
     //console.log(`click fired. scale: ${this.props.scale}, offset(top/left): ${this.state.containerOffset.vertical}/${this.state.containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
@@ -231,7 +229,7 @@ export class Container extends React.Component {
     });
   }
 
-  handleMouseDown(e: SyntheticMouseEvent) {
+  handleMouseDown(e: SyntheticMouseEvent<*>) {
     //console.log(`mousedown fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
@@ -256,7 +254,7 @@ export class Container extends React.Component {
     });
   }
 
-  handleMouseMove(e: SyntheticMouseEvent) {
+  handleMouseMove(e: SyntheticMouseEvent<*>) {
     //console.log(`mousemove fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
@@ -277,7 +275,7 @@ export class Container extends React.Component {
     this.setState({pendingAnnotation: annotation});
   }
 
-  handleMouseUp(e: SyntheticMouseEvent) {
+  handleMouseUp(e: SyntheticMouseEvent<*>) {
     //console.log(`mouseup fired. scale: ${this.props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;

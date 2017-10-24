@@ -3,6 +3,7 @@
 // Controls to toggle annotation modes
 'use strict';
 
+import React from 'react';
 import type { Mode } from './flowTypes';
 
 type Props = {
@@ -11,7 +12,7 @@ type Props = {
 };
 
   // This is neccessary to prevent mouseup/down from triggering actions on parents
-const blockEvent = (e: SyntheticInputEvent) => {
+const blockEvent = (e: SyntheticInputEvent<*>) => {
   e.stopPropagation();
 };
 

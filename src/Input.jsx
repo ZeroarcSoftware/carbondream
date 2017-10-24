@@ -23,10 +23,7 @@ type State = {
 };
 
 @Autobind
-export default class Input extends React.Component {
-  props: Props;
-  state: State;
-
+export default class Input extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {value: props.content};
@@ -95,22 +92,22 @@ export default class Input extends React.Component {
   // Custom methods
   //
 
-  handleChange(e: SyntheticInputEvent) {
+  handleChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.setState({value: e.target.value});
   }
 
-  handleSaveClick(e: SyntheticInputEvent) {
+  handleSaveClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.props.saveAnnotation(this.state.value);
   }
 
-  handleCancelClick(e: SyntheticInputEvent) {
+  handleCancelClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.props.cancelAnnotation();
   }
 
-  handleBlur(e: SyntheticInputEvent) {
+  handleBlur(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
 
     // If the textarea blurs with no input, the user has clicked or tabbed out. Cancel.
