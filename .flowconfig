@@ -1,0 +1,9 @@
+[ignore]
+
+[include]
+
+[libs]
+node_modules/immutable/dist/immutable.js.flow
+
+[options]
+esproposal.decorators=ignore

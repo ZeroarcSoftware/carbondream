@@ -1,18 +1,17 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
- *
- * Annotation highlight shape
- */
-
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Annotation highlight shape
 'use strict';
 
-import PropTypes from 'prop-types';
-
-// External
-import React from 'react';
 import ClassNames from 'classnames';
 
+type Props = {
+  width: number,
+  deemphasize: bool,
+  priority: number,
+};
 
-const Highlight = (props) => {
+export const Highlight = (props: Props) => {
   const divStyle = {
     width: props.width,
     zIndex: props.priority,
@@ -29,10 +28,4 @@ const Highlight = (props) => {
     </div>
   );
 };
-
-Highlight.propTypes = {
-  width: PropTypes.number.isRequired,
-  deemphasize: PropTypes.bool.isRequired,
-};
-
 export default Highlight;

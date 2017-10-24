@@ -1,16 +1,10 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
- *
- * Annotation component
- */
-
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Annotation component
 'use strict';
 
-import PropTypes from 'prop-types';
-
-// External
 import React from 'react';
 
-// Local
 import Marker from './Marker';
 import Square from './Square';
 import Circle from './Circle';
@@ -18,24 +12,60 @@ import Highlight from './Highlight';
 import Content from './Content';
 import Input from './Input';
 
+import type { 
+  Offset
+} from './flowTypes';
+
 // Globals
 const BUBBLEDIM = {width: 260, height: 120};
 
 
-const Annotation = (props) => {
-  const handleMouseOver = (e) => {
+type Props = {
+  allowEdit: bool,
+  allowDelete: bool,
+  author: string,
+  content: string,
+  containerOffset: Offset,
+  deemphasize: bool,
+  id: number,
+  pending: bool,
+  priority: number,
+  type: string,
+  viewOnlyMode: bool,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+
+  // Optional
+  cancelAnnotation?: () => void,
+  deleteAnnotation?: (number) => void,
+  displayAnnotationViewer?: (id: number) => void,
+  drawing?: bool,
+  editAnnotation?: (number) => void,
+  hideAnnotationViewer?: (id: number) => void,
+  saveAnnotation?: (string) => void,
+  shouldDisplayViewer?: bool,
+  timeStamp?: Date,
+};
+
+
+const Annotation = (props: Props) => {
+  const handleMouseOver = (e: SyntheticInputEvent) => {
     e.stopPropagation();
     if (props.pending) return;
+    if (!props.displayAnnotationViewer) return;
     props.displayAnnotationViewer(props.id);
   };
 
-  const handleMouseOut = (e) => {
+  const handleMouseOut = (e: SyntheticInputEvent) => {
     e.stopPropagation();
     if (props.pending) return;
+    if (!props.hideAnnotationViewer) return;
     props.hideAnnotationViewer(props.id);
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: SyntheticInputEvent) => {
     // Allow markers to be placed inside shapes, but not on other markers
     if (props.type === 'marker') e.stopPropagation();
   };
@@ -56,9 +86,10 @@ const Annotation = (props) => {
   };
 
   // Default offsets based on height/width of bubble
-  const offset = {
+  const offset: Offset = {
     vertical: -BUBBLEDIM.height - 10,
     horizontal: width/2 - BUBBLEDIM.width / 2,
+    shadow: null,
   };
 
   let indicator = '';
@@ -86,13 +117,14 @@ const Annotation = (props) => {
   }
 
   // If we are going to push above the viewport, invert the bubble and modify the offset to draw below
-  const invert = y1 + offset.vertical - 10 + props.containerOffset.top <= 0 ? true : false;
+  const invert = y1 + offset.vertical - 10 + props.containerOffset.vertical <= 0 ? true : false;
   if (invert) offset.vertical = height + 36;
 
   // Check to see if we are going to draw past the left or right side of the viewport.
-  const viewPortWidth = document.documentElement.clientWidth - props.containerOffset.left;
+  if (!document || !document.documentElement) return;
+  const viewPortWidth = document.documentElement.clientWidth - props.containerOffset.horizontal;
 
-  const pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) + props.containerOffset.left <= 0 ? true : false;
+  const pushHorizontal = x1 + (width/2 - BUBBLEDIM.width / 2) + props.containerOffset.horizontal <= 0 ? true : false;
   const pullHorizontal = x1 + (width/2 + BUBBLEDIM.width / 2) >= viewPortWidth ? true : false;
 
   // If we need to push or pull the bubble, recalculate the offsets based on bubble size and
@@ -136,27 +168,6 @@ const Annotation = (props) => {
 Annotation.defaultProps = {
   drawing: false,
   shouldDisplayViewer: false
-};
-
-Annotation.propTypes = {
-  content: PropTypes.string.isRequired,
-  x1: PropTypes.number.isRequired,
-  y1: PropTypes.number.isRequired,
-  x2: PropTypes.number.isRequired,
-  y2: PropTypes.number.isRequired,
-  pending: PropTypes.bool.isRequired,
-  drawing: PropTypes.bool.isRequired,
-  deleteAnnotation: PropTypes.func.isRequired,
-  shouldDisplayViewer: PropTypes.bool.isRequired,
-  deemphasize: PropTypes.bool.isRequired,
-  type: PropTypes.string.isRequired,
-  containerOffset: PropTypes.object.isRequired,
-  viewOnlyMode: PropTypes.bool.isRequired,
-
-  // Optional
-  timeStamp: PropTypes.instanceOf(Date),
-  displayAnnotationViewer: PropTypes.func,
-  hideAnnotationViewer: PropTypes.func,
 };
 
 export default Annotation;

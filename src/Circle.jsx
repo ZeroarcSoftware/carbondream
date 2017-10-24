@@ -1,18 +1,18 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
- *
- * Annotation circle shape
- */
-
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Annotation circle shape
 'use strict';
 
-import PropTypes from 'prop-types';
-
-// External
-import React from 'react';
 import ClassNames from 'classnames';
 
+type Props = {
+  width: number,
+  height: number,
+  priority: number,
+  deemphasize: bool,
+};
 
-const Circle = (props) => {
+export const Circle = (props: Props) => {
   const divStyle = {
     height: props.height,
     width: props.width,
@@ -29,12 +29,6 @@ const Circle = (props) => {
       <div style={divStyle} className={classes}></div>
     </div>
   );
-};
-
-Circle.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  deemphasize: PropTypes.bool.isRequired,
 };
 
 export default Circle;

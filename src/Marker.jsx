@@ -1,18 +1,16 @@
-/* carbondream - Copyright 2016 Zeroarc Software, LLC
- *
- * Annotation marker shape
- */
-
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Annotation marker shape
 'use strict';
 
-import PropTypes from 'prop-types';
-
-// External
-import React from 'react';
 import ClassNames from 'classnames';
 
+type Props = {
+  deemphasize: bool,
+  priority: number,
+};
 
-const Marker = (props) => {
+export const Marker = (props: Props) => {
   const divStyle = {
     zIndex: props.priority,
   };
@@ -27,10 +25,6 @@ const Marker = (props) => {
       <i className='fa fa-map-marker'></i>
     </div>
   );
-};
-
-Marker.propTypes = {
-  deemphasize: PropTypes.bool.isRequired,
 };
 
 export default Marker;
