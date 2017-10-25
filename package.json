@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "0.5.3-iehotfix",
+  "version": "0.5.4-iehotfix",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "lib/entry.js",
@@ -12,7 +12,7 @@
     "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d lib/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web && flow-copy-source -v src lib",
     "demo-watch": "$(npm bin)/webpack -w",
     "demo-build": "$(npm bin)/webpack && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -55,16 +55,20 @@
     "flow-typed": "^2.1.2",
     "json-loader": "^0.5.4",
     "reflux": "^6.0.0",
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "dependencies": {
     "autobind-decorator": "^2.1.0",
     "classnames": "^2.2.3",
     "font-awesome": "^4.5.0",
     "immutable": "^4.0.0-rc.2",
-    "react": "^16.0.0",
     "react-addons-shallow-compare": "^15.6.2",
-    "react-dom": "^16.0.0",
     "react-timeago": "^3.4.3"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   }
 }
