@@ -9,6 +9,7 @@ const config = {
   },
   //cache: true,
   devtool: 'source-map',
+  mode: 'production',
   module: {
     rules: [
       {
