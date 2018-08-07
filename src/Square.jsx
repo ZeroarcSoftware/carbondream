@@ -1,16 +1,19 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
- *
- * Annotation square shape
- */
-
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Annotation square shape
 'use strict';
 
-// External
-import React from 'react';
 import ClassNames from 'classnames';
+import React from 'react';
 
+type Props = {
+  width: number,
+  height: number,
+  priority: number,
+  deemphasize: bool,
+};
 
-const Square = (props) => {
+export const Square = (props: Props) => {
   const divStyle = {
     height: props.height,
     width: props.width,
@@ -27,12 +30,6 @@ const Square = (props) => {
       <div style={divStyle} className={classes}></div>
     </div>
   );
-};
-
-Square.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  deemphasize: React.PropTypes.bool.isRequired,
 };
 
 export default Square;

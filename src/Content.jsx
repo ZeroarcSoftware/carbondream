@@ -1,23 +1,45 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
- *
- * Pop-up annotation Content
- */
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Pop-up annotation Content
 'use strict';
 
-// External
 import React from 'react';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
 import TimeAgo from 'react-timeago'
 
-// Local
 import Input from './Input';
+
+import type { Offset } from './flowTypes';
+
+type Props = {
+  allowEdit: bool,
+  allowDelete: bool,
+  author: string,
+  content: string,
+  deleteAnnotation: (number) => void,
+  editAnnotation: (number) => void,
+  id: number,
+  invert: bool,
+  pending: bool,
+  shouldDisplayViewer: bool,
+  offset: Offset,
+  viewOnlyMode: bool,
+
+  // Optional
+  timeStamp?: Date,
+};
+
+type State = {
+  shouldDisplayControls: bool,
+};
 
 
 @Autobind
-export default class Content extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+export default class Content extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
     this.state = {shouldDisplayControls: false};
   }
 
@@ -64,8 +86,8 @@ export default class Content extends React.Component {
         <div style={shadowStyle} className={shadowClasses}></div>
         <div className={contentClasses} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <div className={controlClasses}>
-            <button className='delete' onClick={this.handleDeleteClick}><i className='fa fa-fw fa-times'></i> Delete</button>
-            <button className='edit' onClick={this.handleEditClick}><i className='fa fa-fw fa-pencil'></i> Edit</button>
+            <button className='delete' onClick={this.handleDeleteClick} hidden={!this.props.allowDelete}><i className='fa fa-fw fa-times'></i> Delete</button>
+            <button className='edit' onClick={this.handleEditClick} hidden={!this.props.allowEdit}><i className='fa fa-fw fa-pencil'></i> Edit</button>
           </div>
           <div className='cd-annotation-content-text'>
             {this.props.content}
@@ -82,14 +104,14 @@ export default class Content extends React.Component {
   // Custom Methods
   //
 
-  handleEditClick(e) {
+  handleEditClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
     this.props.editAnnotation(this.props.id);
   }
 
-  handleDeleteClick(e) {
+  handleDeleteClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     if (this.props.viewOnlyMode) return;
 
@@ -97,28 +119,13 @@ export default class Content extends React.Component {
   }
 
   // These allow event propogation because parent needs mouse events
-  handleMouseOver(e) {
+  handleMouseOver(e: SyntheticInputEvent<*>) {
     if (this.props.viewOnlyMode) return;
 
     this.setState({shouldDisplayControls: true});
   }
 
-  handleMouseOut(e) {
+  handleMouseOut(e: SyntheticInputEvent<*>) {
     this.setState({shouldDisplayControls: false});
   }
 }
-
-Content.propTypes = {
-  id: React.PropTypes.number.isRequired,
-  author: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  shouldDisplayViewer: React.PropTypes.bool.isRequired,
-  deleteAnnotation: React.PropTypes.func.isRequired,
-  editAnnotation: React.PropTypes.func.isRequired,
-  offset: React.PropTypes.object.isRequired,
-  viewOnlyMode: React.PropTypes.bool.isRequired,
-
-  // Optional
-  timeStamp: React.PropTypes.instanceOf(Date),
-};

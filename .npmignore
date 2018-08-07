@@ -1,5 +1,5 @@
 # Don't publish jsx source
-*.jsx
+/src/
 
 # Don't check in new buids of test
 test/

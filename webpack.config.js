@@ -1,14 +1,15 @@
-const path = require('path');
+const { resolve } = require('path');
 
 const config = {
   entry: './src/demo.jsx',
   output: {
-    path: './dist/',
+    path: resolve(__dirname,'./dist/'),
     filename: 'index.js',
     sourceMapFilename: 'index.js.map'
   },
   //cache: true,
   devtool: 'source-map',
+  mode: 'production',
   module: {
     rules: [
       {

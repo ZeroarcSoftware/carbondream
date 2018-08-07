@@ -1,20 +1,31 @@
-/* carbondream - Copyright 2015 Zeroarc Software, LLC
- *
- * Input dialog for annotation
- */
-
+// @flow
+// carbondream - Copyright 2017 Zeroarc Software, LLC
+// Input dialog for annotation
 'use strict';
 
-// External
 import React from 'react';
 import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
 
+import type { Offset } from './flowTypes';
+
+type Props = {
+  content: string,
+  invert: bool,
+  offset: Offset,
+  pending: bool,
+  saveAnnotation: (string) => void,
+  cancelAnnotation: () => void,
+};
+
+type State = {
+  value: string,
+};
 
 @Autobind
-export default class Input extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+export default class Input extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
     this.state = {value: props.content};
   }
 
@@ -57,14 +68,15 @@ export default class Input extends React.Component {
 
     const cancelClasses = ClassNames('btn btn-xs cancel');
 
+    //HACK: Using onInput instead of onChange see: https://github.com/facebook/react/issues/7027
+    //DISABLED: onKeyDown={this.handleKeyDown}
     return (
       <div style={divStyle} className={editorClasses}>
         <div style={shadowStyle} className={shadowClasses}></div>
         <div className={inputClasses}>
           <textarea autoFocus
             value={this.state.value}
-            onChange={this.handleChange}
-            onKeyDown={this.handleKeyDown}
+            onInput={this.handleChange}
             onBlur={this.handleBlur}
           />
           <div className='cd-annotation-input-controls'>
@@ -80,39 +92,25 @@ export default class Input extends React.Component {
   // Custom methods
   //
 
-  handleChange(e) {
+  handleChange(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.setState({value: e.target.value});
   }
 
-  handleSaveClick(e) {
+  handleSaveClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.props.saveAnnotation(this.state.value);
   }
 
-  handleCancelClick(e) {
+  handleCancelClick(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
     this.props.cancelAnnotation();
   }
 
-  handleKeyDown(e) {
-    e.stopPropagation();
-
-    // Capture escape key to cancel
-    if (e.keyCode === 27 && this.state.value.length === 0) this.props.cancelAnnotation();
-  }
-
-  handleBlur(e) {
+  handleBlur(e: SyntheticInputEvent<*>) {
     e.stopPropagation();
 
     // If the textarea blurs with no input, the user has clicked or tabbed out. Cancel.
     if (this.state.value.length === 0) this.props.cancelAnnotation();
   }
 }
-
-Input.propTypes = {
-  content: React.PropTypes.string.isRequired,
-  pending: React.PropTypes.bool.isRequired,
-  saveAnnotation: React.PropTypes.func,
-  cancelAnnotation: React.PropTypes.func,
-};

@@ -1,0 +1,11 @@
+[ignore]
+<PROJECT_ROOT>/lib/.*
+.*/node_modules/react-timeago/lib/index.js.flow
+
+[include]
+
+[libs]
+node_modules/immutable/dist/immutable.js.flow
+
+[options]
+esproposal.decorators=ignore
