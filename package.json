@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "lib/entry.js",
@@ -8,10 +8,10 @@
     "test": "test"
   },
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d lib/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web && flow-copy-source -v src lib",
-    "watch": "NODE_ENV=production $(npm bin)/babel --watch src/ -d lib/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web && flow-copy-source -v src lib",
-    "demo-watch": "$(npm bin)/webpack -w",
-    "demo-build": "$(npm bin)/webpack && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
+    "build": "NODE_ENV=production npx babel src/ -d lib/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web && flow-copy-source -v src lib",
+    "watch": "NODE_ENV=production npx babel --watch src/ -d lib/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web && flow-copy-source -v src lib",
+    "demo-watch": "npx webpack -w",
+    "demo-build": "npx webpack && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
