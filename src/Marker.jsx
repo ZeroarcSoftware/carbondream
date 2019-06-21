@@ -1,9 +1,10 @@
 // @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
+// carbondream - Copyright 2019 Zeroarc Software, LLC
 // Annotation marker shape
 'use strict';
 
 import ClassNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 type Props = {
@@ -23,7 +24,7 @@ export const Marker = (props: Props) => {
 
   return (
     <div style={divStyle} className={classes}>
-      <i className='fa fa-map-marker'></i>
+      <FontAwesomeIcon icon={['far', 'map-marker']} /> 
     </div>
   );
 };
