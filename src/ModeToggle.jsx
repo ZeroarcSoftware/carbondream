@@ -1,9 +1,10 @@
 // @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
+// carbondream - Copyright 2019 Zeroarc Software, LLC
 // Controls to toggle annotation modes
 'use strict';
 
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Mode } from './flowTypes';
 
 type Props = {
@@ -33,22 +34,22 @@ export const ModeToggle = ({
       <button className={mode === 'marker' ? 'selected' : ''}
         onClick={handleClick('marker')}
         title='Switch to marker'>
-        <i className='fa fa-map-marker'></i>
+        <FontAwesomeIcon icon={['far', 'map-marker']} /> 
       </button>
       <button className={mode === 'square' ? 'selected' : ''}
         onClick={handleClick('square')}
         title='Switch to square'>
-        <i className='fa fa-square-o'></i>
+        <FontAwesomeIcon icon={['far', 'square']} /> 
       </button>
       <button className={mode === 'circle' ? 'selected' : ''}
         onClick={handleClick('circle')}
         title='Switch to circle'>
-        <i className='fa fa-circle-o'></i>
+        <FontAwesomeIcon icon={['far', 'circle']} /> 
       </button>
       <button className={mode === 'highlight' ? 'selected' : ''}
         onClick={handleClick('highlight')}
         title='Switch to highlight'>
-        <i className='fa fa-font'></i>
+        <FontAwesomeIcon icon={['far', 'font']} /> 
       </button>
     </div>
   );

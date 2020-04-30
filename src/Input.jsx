@@ -1,11 +1,12 @@
 // @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
+// carbondream - Copyright 2019 Zeroarc Software, LLC
 // Input dialog for annotation
 'use strict';
 
-import React from 'react';
-import ClassNames from 'classnames';
 import Autobind from 'autobind-decorator';
+import ClassNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 
 import type { Offset } from './flowTypes';
 
@@ -62,26 +63,28 @@ export default class Input extends React.Component<Props, State> {
         shadowStyle.left = 234;
     }
 
-    const saveClasses = ClassNames('btn btn-xs save', {
+    const saveClasses = ClassNames('btn btn-sm btn-outline-primary', {
       disabled: !this.state.value.length
     });
 
-    const cancelClasses = ClassNames('btn btn-xs cancel');
+    const cancelClasses = ClassNames('btn btn-sm btn-outline-danger');
 
-    //HACK: Using onInput instead of onChange see: https://github.com/facebook/react/issues/7027
-    //DISABLED: onKeyDown={this.handleKeyDown}
     return (
       <div style={divStyle} className={editorClasses}>
         <div style={shadowStyle} className={shadowClasses}></div>
         <div className={inputClasses}>
           <textarea autoFocus
             value={this.state.value}
-            onInput={this.handleChange}
+            onChange={this.handleChange}
             onBlur={this.handleBlur}
           />
           <div className='cd-annotation-input-controls'>
-            <button className={cancelClasses} onClick={this.handleCancelClick}><i className='fa fa-fw fa-times'></i> Cancel</button>
-            <button className={saveClasses} onClick={this.handleSaveClick}><i className='fa fa-fw fa-check'></i> Save</button>
+            <button className={cancelClasses} onClick={this.handleCancelClick}>
+              <FontAwesomeIcon icon={['far', 'times']} /> Cancel
+            </button>
+            <button className={saveClasses} onClick={this.handleSaveClick}>
+              <FontAwesomeIcon icon={['far', 'check']} /> Save
+            </button>
           </div>
         </div>
       </div>

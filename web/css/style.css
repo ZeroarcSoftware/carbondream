@@ -176,7 +176,7 @@
 }
 
 .cd-annotation-input textarea {
-  height: 85px;
+  height: 82px;
   width: 100%;
   position: relative;
   border: 0px;
@@ -208,7 +208,6 @@
 .cd-annotation-content-controls,
 .cd-annotation-input-controls {
   text-align: right;
-  height: 35px;
 }
 
 .cd-annotation-content-controls {
@@ -225,8 +224,7 @@
 }
 
 .cd-mode-toggle button,
-.cd-annotation-content-controls button,
-.cd-annotation-input-controls button {
+.cd-annotation-content-controls button {
   text-align: center;
   border-radius: 3px;
   border: 1px solid transparent;
@@ -236,13 +234,10 @@
   margin-right: 5px;
 }
 
-.cd-annotation-input-controls button.save {
-  background-color: #5cb85c;
-}
-
-.cd-annotation-content-controls button.delete,
-.cd-annotation-input-controls button.cancel {
-  background-color: #d9534f;
+.cd-annotation-input-controls button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .fade-in {
