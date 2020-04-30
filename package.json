@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "lib/entry.js",
