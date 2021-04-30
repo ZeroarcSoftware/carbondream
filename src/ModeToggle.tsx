@@ -1,19 +1,18 @@
-// @flow
-// carbondream - Copyright 2019 Zeroarc Software, LLC
+// carbondream - Copyright 2021 Zeroarc Software, LLC
 // Controls to toggle annotation modes
 'use strict';
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { Mode } from './flowTypes';
+import type { Mode } from './types';
 
 type Props = {
   mode: string,
   switchMode: (mode: Mode) => void
 };
 
-  // This is neccessary to prevent mouseup/down from triggering actions on parents
-const blockEvent = (e: SyntheticInputEvent<*>) => {
+// This is neccessary to prevent mouseup/down from triggering actions on parents
+const blockEvent = (e: React.MouseEvent<Element, MouseEvent>) => {
   e.stopPropagation();
 };
 

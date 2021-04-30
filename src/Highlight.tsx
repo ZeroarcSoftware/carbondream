@@ -1,6 +1,5 @@
-// @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
-// Annotation circle shape
+// carbondream - Copyright 2021 Zeroarc Software, LLC
+// Annotation highlight shape
 'use strict';
 
 import ClassNames from 'classnames';
@@ -8,20 +7,18 @@ import React from 'react';
 
 type Props = {
   width: number,
-  height: number,
+  deemphasize: boolean,
   priority: number,
-  deemphasize: bool,
 };
 
-export const Circle = (props: Props) => {
+export const Highlight = (props: Props) => {
   const divStyle = {
-    height: props.height,
     width: props.width,
     zIndex: props.priority,
   };
 
   const classes = ClassNames({
-    'cd-circle': true,
+    'cd-highlight': true,
     'deemphasize': props.deemphasize,
   });
 
@@ -31,5 +28,4 @@ export const Circle = (props: Props) => {
     </div>
   );
 };
-
-export default Circle;
+export default Highlight;

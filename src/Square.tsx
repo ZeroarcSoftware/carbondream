@@ -1,5 +1,4 @@
-// @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
+// carbondream - Copyright 2021 Zeroarc Software, LLC
 // Annotation square shape
 'use strict';
 
@@ -10,7 +9,7 @@ type Props = {
   width: number,
   height: number,
   priority: number,
-  deemphasize: bool,
+  deemphasize: boolean,
 };
 
 export const Square = (props: Props) => {

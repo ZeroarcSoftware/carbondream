@@ -1,5 +1,4 @@
-// @flow
-// carbondream - Copyright 2019 Zeroarc Software, LLC
+// carbondream - Copyright 2021 Zeroarc Software, LLC
 // Annotation marker shape
 'use strict';
 
@@ -8,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 type Props = {
-  deemphasize: bool,
+  deemphasize: boolean,
   priority: number,
 };
 

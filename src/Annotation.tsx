@@ -1,5 +1,4 @@
-// @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
+// carbondream - Copyright 2021 Zeroarc Software, LLC
 // Annotation component
 'use strict';
 
@@ -14,58 +13,62 @@ import Input from './Input';
 
 import type { 
   Offset
-} from './flowTypes';
+} from './types';
 
 // Globals
 const BUBBLEDIM = {width: 260, height: 120};
 
 
 type Props = {
-  allowEdit: bool,
-  allowDelete: bool,
+  allowEdit: boolean,
+  allowDelete: boolean,
   author: string,
   content: string,
   containerOffset: Offset,
-  deemphasize: bool,
+  deemphasize: boolean,
   id: number,
-  pending: bool,
+  pending: boolean,
   priority: number,
   type: string,
-  viewOnlyMode: bool,
+  viewOnlyMode: boolean,
   x1: number,
   y1: number,
   x2: number,
   y2: number,
 
   // Optional
-  cancelAnnotation?: () => void,
-  deleteAnnotation?: (number) => void,
+  cancelAnnotation: () => void,
+  deleteAnnotation: (id: number) => void,
   displayAnnotationViewer?: (id: number) => void,
-  drawing?: bool,
-  editAnnotation?: (number) => void,
+  editAnnotation: (id: number) => void,
   hideAnnotationViewer?: (id: number) => void,
-  saveAnnotation?: (string) => void,
-  shouldDisplayViewer?: bool,
+  saveAnnotation: (value: string) => void,
   timeStamp?: Date,
+} & typeof defaultProps;
+
+const defaultProps = {
+  drawing: false,
+  shouldDisplayViewer: false
 };
 
+export const Annotation = (props: Props) => {
+  props = {...defaultProps, ...props}
 
-const Annotation = (props: Props) => {
-  const handleMouseOver = (e: SyntheticInputEvent<*>) => {
+  const handleMouseOver = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
     if (props.pending) return;
     if (!props.displayAnnotationViewer) return;
     props.displayAnnotationViewer(props.id);
   };
 
-  const handleMouseOut = (e: SyntheticInputEvent<*>) => {
+  const handleMouseOut = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
     if (props.pending) return;
     if (!props.hideAnnotationViewer) return;
     props.hideAnnotationViewer(props.id);
   };
 
-  const handleClick = (e: SyntheticInputEvent<*>) => {
+  const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
     // Allow markers to be placed inside shapes, but not on other markers
     if (props.type === 'marker') e.stopPropagation();
   };
@@ -92,7 +95,7 @@ const Annotation = (props: Props) => {
     shadow: null,
   };
 
-  let indicator = '';
+  let indicator: JSX.Element | null = null;
 
   switch(props.type) {
     case 'marker':
@@ -165,9 +168,6 @@ const Annotation = (props: Props) => {
   );
 };
 
-Annotation.defaultProps = {
-  drawing: false,
-  shouldDisplayViewer: false
-};
+Annotation.defaultProps = defaultProps;
 
 export default Annotation;

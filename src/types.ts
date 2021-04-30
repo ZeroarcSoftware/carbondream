@@ -1,6 +1,4 @@
-// @flow
-// carbondream - Copyright 2017 Zeroarc Software, LLC
-// Flow types for carbondream
+// carbondream - Copyright 2021 Zeroarc Software, LLC
 
 import { Map } from 'immutable';
 

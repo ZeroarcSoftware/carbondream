@@ -1,28 +1,15 @@
-  {
-    "env": {
-      "development": {
-        "plugins": [
-          "flow-react-proptypes"
-        ]
+{
+  "presets": [
+    "@babel/react",
+    "@babel/typescript",
+    [
+      "@babel/env",
+      {
+        "modules": "commonjs"
       }
-    },
-    "presets": [
-      "@babel/react",
-      [
-        "@babel/env",
-        {
-          "modules": "commonjs"
-        }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-object-rest-spread",
-      "@babel/plugin-transform-flow-strip-types",
-      [
-        "@babel/plugin-proposal-decorators",
-        {
-          "legacy": true
-        }
-      ],
     ]
-  }
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
+}
