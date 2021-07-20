@@ -9,9 +9,9 @@ import Immutable from 'immutable';
 import Annotation from './Annotation';
 import ModeToggle from './ModeToggle';
 
-import type { 
+import type {
   Annotation as AnnotationType,
-  Mode, 
+  Mode,
   Offset
 } from './types';
 
@@ -34,7 +34,7 @@ const defaultProps = {
 
 export const Container = (props: Props) => {
   props = {...defaultProps, ...props}
-  
+
   //#region Hooks
 
   const [pendingAnnotation, setPendingAnnotation] = useState(null);
@@ -58,7 +58,7 @@ export const Container = (props: Props) => {
   useEffect(() => {
     setVisibleViewerId(props.selectedId);
   }, [props.selectedId]);
-    
+
   //#endregion
 
   const getOffset = (element: Element): Offset => {
@@ -83,7 +83,7 @@ export const Container = (props: Props) => {
   };
 
   const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
-    console.log(`click fired. scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    console.debug(`click fired. scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -101,13 +101,13 @@ export const Container = (props: Props) => {
       y2: Math.round((e.clientY + 24 - containerOffset.vertical) / props.scale),
     });
 
-    //console.log(`annotation: scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
+    //console.debug(`annotation: scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
 
     setPendingAnnotation(annotation);
   };
 
   const handleMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
-    //console.log(`mousedown fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mousedown fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -130,7 +130,7 @@ export const Container = (props: Props) => {
   };
 
   const handleMouseMove = (e: React.MouseEvent<Element, MouseEvent>) => {
-    //console.log(`mousemove fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mousemove fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -151,7 +151,7 @@ export const Container = (props: Props) => {
   };
 
   const handleMouseUp = (e: React.MouseEvent<Element, MouseEvent>) => {
-    //console.log(`mouseup fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mouseup fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -196,7 +196,7 @@ export const Container = (props: Props) => {
   };
 
   const switchMode = (mode: Mode) => {
-    //console.log('mode is now: ' + mode);
+    //console.debug('mode is now: ' + mode);
     setMode(mode);
 
     if (pendingAnnotation) {
@@ -318,7 +318,7 @@ export const Container = (props: Props) => {
   if (!props.hidden) {
     annotations = sortedAnnotations.map((a, i) => {
       return (
-        <Annotation 
+        <Annotation
           allowDelete={props.allowDelete}
           allowEdit={props.allowEdit}
           key={a.get('id')}
