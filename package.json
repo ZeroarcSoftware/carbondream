@@ -48,7 +48,7 @@
     "classnames": "^2.2.6",
     "font-awesome": "^4.5.0",
     "immutable": "^4.0.0-rc.14",
-    "react-timeago": "^5.3.0"
+    "react-timeago": "^6.2.1"
   },
   "peerDependencies": {
     "react": "^16.0.0",
