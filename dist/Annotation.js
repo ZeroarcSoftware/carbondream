@@ -21,6 +21,8 @@ var _Content = _interopRequireDefault(require("./Content"));
 
 var _Input = _interopRequireDefault(require("./Input"));
 
+var _excluded = ["x1", "y1", "x2", "y2", "displayAnnotationViewer", "hideAnnotationViewer"];
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -75,7 +77,7 @@ var Annotation = function Annotation(props) {
       y2 = _props.y2,
       displayAnnotationViewer = _props.displayAnnotationViewer,
       hideAnnotationViewer = _props.hideAnnotationViewer,
-      other = _objectWithoutProperties(_props, ["x1", "y1", "x2", "y2", "displayAnnotationViewer", "hideAnnotationViewer"]);
+      other = _objectWithoutProperties(_props, _excluded);
 
   var width = Math.abs(x1 - x2);
   var height = Math.abs(y1 - y2); // Figure out what direction the mouse is dragging. 1 === left to right, up to down

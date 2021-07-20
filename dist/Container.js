@@ -35,7 +35,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -120,7 +120,7 @@ var Container = function Container(props) {
   };
 
   var handleClick = function handleClick(e) {
-    console.log("click fired. scale: ".concat(props.scale, ", offset(top/left): ").concat(containerOffset.vertical, "/").concat(containerOffset.horizontal, ", clientX: ").concat(e.clientX, ", clientY: ").concat(e.clientY, ", screenX: ").concat(e.screenX, ", screenY: ").concat(e.screenY));
+    console.debug("click fired. scale: ".concat(props.scale, ", offset(top/left): ").concat(containerOffset.vertical, "/").concat(containerOffset.horizontal, ", clientX: ").concat(e.clientX, ", clientY: ").concat(e.clientY, ", screenX: ").concat(e.screenX, ", screenY: ").concat(e.screenY));
     e.stopPropagation();
     if (props.viewOnlyMode) return;
     updateOffset();
@@ -135,14 +135,14 @@ var Container = function Container(props) {
       x2: Math.round((e.clientX + 14 - containerOffset.horizontal) / props.scale),
       //14 & 24 are the size of the marker
       y2: Math.round((e.clientY + 24 - containerOffset.vertical) / props.scale)
-    }); //console.log(`annotation: scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
+    }); //console.debug(`annotation: scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
 
 
     setPendingAnnotation(annotation);
   };
 
   var handleMouseDown = function handleMouseDown(e) {
-    //console.log(`mousedown fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mousedown fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
     updateOffset();
@@ -163,7 +163,7 @@ var Container = function Container(props) {
   };
 
   var handleMouseMove = function handleMouseMove(e) {
-    //console.log(`mousemove fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mousemove fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
     updateOffset();
@@ -177,7 +177,7 @@ var Container = function Container(props) {
   };
 
   var handleMouseUp = function handleMouseUp(e) {
-    //console.log(`mouseup fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mouseup fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
     updateOffset();
@@ -209,7 +209,7 @@ var Container = function Container(props) {
   };
 
   var switchMode = function switchMode(mode) {
-    //console.log('mode is now: ' + mode);
+    //console.debug('mode is now: ' + mode);
     setMode(mode);
 
     if (pendingAnnotation) {
