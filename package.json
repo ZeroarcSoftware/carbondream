@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/Container.js",
@@ -51,7 +51,7 @@
     "react-timeago": "^6.2.1"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
