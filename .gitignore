@@ -3,5 +3,6 @@ node_modules
 
 # Don't check in build artifacts, this is only published to npm
 lib/
+dist/
 
 .DS_Store
