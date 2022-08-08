@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/Container.js",
@@ -44,11 +44,11 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
-    "@fortawesome/react-fontawesome": "^0.1.18",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "classnames": "^2.2.6",
     "font-awesome": "^4.5.0",
     "immutable": "^4.0.0-rc.14",
-    "react-timeago": "^6.2.1"
+    "react-timeago": "^7.1.0"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",
