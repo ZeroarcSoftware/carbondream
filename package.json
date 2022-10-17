@@ -1,17 +1,15 @@
 {
   "name": "carbondream",
-  "version": "0.1.0",
-  "description": "Reactjs web annotation engine",
+  "version": "4.1.0",
+  "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
-  "main": "dist/entry.js",
+  "main": "dist/Container.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "$(npm bin)/babel --optional es7.objectRestSpread --optional es7.decorators src/ -d dist/ && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
-    "demo-watch": "$(npm bin)/watchify --extension=.jsx -d -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread --optional es7.decorators ] -s CarbonDream -o test/index.js -v ",
-    "demo-build": "$(npm bin)/browserify --extension=.jsx -e src/demo.jsx -t [ babelify --optional es7.objectRestSpread --optional es7.decorators ] -s CarbonDream -o test/index.js && cp -r node_modules/font-awesome/css web && cp -r node_modules/font-awesome/fonts web",
-    "prepublish": "npm run build",
+    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx'",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,7 +17,7 @@
     "url": "https://github.com/ZeroarcSoftware/carbondream.git"
   },
   "keywords": [
-    "reactjs",
+    "react",
     "react-component",
     "annotation"
   ],
@@ -29,20 +27,31 @@
     "url": "https://github.com/ZeroarcSoftware/carbondream/issues"
   },
   "devDependencies": {
-    "autobind-decorator": "^1.3.2",
-    "babel": "^5.8.23",
-    "babelify": "^6.3.0",
-    "browserify": "^11.2.0",
-    "react-addons-shallow-compare": "^0.14.0",
-    "watchify": "^3.4.0"
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/react": "^18.0.1",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-timeago": "^4.1.3",
+    "babel-loader": "^8.0.6",
+    "json-loader": "^0.5.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
-    "classnames": "^2.1.5",
-    "font-awesome": "^4.4.0",
-    "immutable": "^3.7.5",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "react-timeago": "^2.2.1",
-    "reflux": "^0.3.0"
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "classnames": "^2.2.6",
+    "font-awesome": "^4.5.0",
+    "immutable": "^4.0.0-rc.14",
+    "react-timeago": "^7.1.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   }
 }

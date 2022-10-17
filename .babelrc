@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "@babel/react",
+    "@babel/typescript",
+    [
+      "@babel/env",
+      {
+        "modules": "commonjs"
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
+}
