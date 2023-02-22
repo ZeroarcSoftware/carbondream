@@ -9,14 +9,16 @@ import React, { useState } from 'react';
 import type { Offset } from './types';
 
 type Props = {
-  cancelAnnotation: () => void,
-  content: string,
-  invert: boolean,
-  offset: Offset,
-  pending: boolean,
-  pullHorizontal: boolean,
-  pushHorizontal: boolean,
-  saveAnnotation: (value: string) => void,
+  cancelAnnotation: () => void;
+  content: string;
+  invert: boolean;
+  offset: Offset;
+  top: number;
+  left: number;
+  pending: boolean;
+  pullHorizontal: boolean;
+  pushHorizontal: boolean;
+  saveAnnotation: (value: string) => void;
 };
 
 export const Input = (props: Props) => {
@@ -46,7 +48,7 @@ export const Input = (props: Props) => {
 
   const editorClasses = ClassNames({
     'cd-annotation-editor': true,
-    'hidden': !props.pending,
+    hidden: !props.pending,
   });
 
   const inputClasses = ClassNames({
@@ -55,14 +57,8 @@ export const Input = (props: Props) => {
 
   const shadowClasses = ClassNames({
     'cd-shadow-bubble': true,
-    'invert': props.invert,
+    invert: props.invert,
   });
-
-  // Apply offsets for outer div
-  const divStyle = {
-    left: props.offset.horizontal,
-    top: props.offset.vertical,
-  };
 
   // Apply offsets for shadow bubble. Trial and error to figure
   // out the maximums
@@ -70,23 +66,29 @@ export const Input = (props: Props) => {
   if (props.pushHorizontal || props.pullHorizontal) {
     shadowStyle.left = props.offset.shadow || -props.offset.horizontal - 4;
 
-    if (shadowStyle.left < 6)
-      shadowStyle.left = 6;
-    else if (shadowStyle.left > 234)
-      shadowStyle.left = 234;
+    if (shadowStyle.left < 6) shadowStyle.left = 6;
+    else if (shadowStyle.left > 234) shadowStyle.left = 234;
   }
 
   const saveClasses = ClassNames('btn btn-sm btn-outline-primary', {
-    disabled: !value.length
+    disabled: !value.length,
   });
 
   const cancelClasses = ClassNames('btn btn-sm btn-outline-danger');
 
   return (
-    <div style={divStyle} className={editorClasses}>
+    <div
+      style={{
+        left: props.left + props.offset.horizontal,
+        top: props.top + props.offset.vertical,
+        position: 'fixed',
+      }}
+      className={editorClasses}
+    >
       <div style={shadowStyle} className={shadowClasses}></div>
       <div className={inputClasses}>
-        <textarea autoFocus
+        <textarea
+          autoFocus
           value={value}
           onChange={handleChange}
           onBlur={handleBlur}

@@ -2,7 +2,7 @@
 // Top level container component
 'use strict';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, WheelEventHandler } from 'react';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 
@@ -12,17 +12,22 @@ import ModeToggle from './ModeToggle';
 import type {
   Annotation as AnnotationType,
   Mode,
-  Offset
+  Offset,
+  AnnotationPoint,
 } from './types';
 
 type Props = {
-  allowDelete: boolean,
-  allowEdit: boolean,
-  annotations: any,
-  onDelete: (id: number) => void,
-  onDeselect?: () => void,
-  onSave: (type: AnnotationType) => void,
-  onSelect?: (id: number) => void,
+  allowDelete: boolean;
+  allowEdit: boolean;
+  annotations: Immutable.List<AnnotationType>;
+  height: number;
+  onDelete: (id: number) => void;
+  onDeselect?: () => void;
+  onSave: (type: AnnotationType) => void;
+  onSelect?: (id: number) => void;
+  offsetLeft: number;
+  offsetTop: number;
+  scrollPosition: number;
 } & typeof defaultProps;
 
 const defaultProps = {
@@ -33,26 +38,32 @@ const defaultProps = {
 };
 
 export const Container = (props: Props) => {
-  props = {...defaultProps, ...props}
+  props = { ...defaultProps, ...props };
 
   //#region Hooks
 
-  const [pendingAnnotation, setPendingAnnotation] = useState(null);
+  const [pendingAnnotation, setPendingAnnotation] =
+    useState<AnnotationType | null>(null);
   const [visibleViewerId, setVisibleViewerId] = useState(props.selectedId || 0);
   const [mode, setMode] = useState('marker');
-  const [containerOffset, setContainerOffset] = useState({vertical: 0, horizontal: 0, shadow: null});
+  const [containerOffset, setContainerOffset] = useState<Offset>({
+    vertical: 0,
+    horizontal: 0,
+    shadow: null,
+  });
 
-  const viewerHideTimer = useRef(null);
+  const viewerHideTimer = useRef<number>();
   const cdContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log('Loading CarbonDream Dev');
     const component = ReactDOM.findDOMNode(this);
 
     if (!component) return;
-    component.addEventListener("scroll", updateOffset);
+    component.addEventListener('scroll', updateOffset);
     updateOffset();
 
-    return () => component.removeEventListener("scroll", updateOffset);
+    return () => component.removeEventListener('scroll', updateOffset);
   }, []);
 
   useEffect(() => {
@@ -64,8 +75,12 @@ export const Container = (props: Props) => {
   const getOffset = (element: Element): Offset => {
     const doc = element && element.ownerDocument;
 
-    if (!doc || !element || typeof element.getBoundingClientRect !== 'function') {
-      return { vertical: 0, horizontal: 0, shadow: null};
+    if (
+      !doc ||
+      !element ||
+      typeof element.getBoundingClientRect !== 'function'
+    ) {
+      return { vertical: 0, horizontal: 0, shadow: null };
     }
 
     const box = element.getBoundingClientRect();
@@ -78,12 +93,15 @@ export const Container = (props: Props) => {
   };
 
   const updateOffset = () => {
-    const offset = getOffset(cdContainer.current)
+    if (!cdContainer.current) return;
+    const offset = getOffset(cdContainer.current);
     setContainerOffset(offset);
   };
 
   const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
-    console.debug(`click fired. scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    console.debug(
+      `click fired. scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`
+    );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -91,15 +109,19 @@ export const Container = (props: Props) => {
 
     if (pendingAnnotation || mode !== 'marker') return;
 
-    const annotation = Immutable.Map({
+    const a: AnnotationPoint = {
       content: '',
+      author: '',
       timeStamp: new Date(),
       type: mode,
-      x1: Math.round((e.clientX - containerOffset.horizontal) / props.scale),
-      y1: Math.round((e.clientY - containerOffset.vertical) / props.scale),
-      x2: Math.round((e.clientX + 14 - containerOffset.horizontal) / props.scale), //14 & 24 are the size of the marker
-      y2: Math.round((e.clientY + 24 - containerOffset.vertical) / props.scale),
-    });
+      x1: Math.round(e.clientX - containerOffset.horizontal),
+      y1: Math.round(e.clientY - containerOffset.vertical),
+      x2: Math.round(e.clientX + 14 - containerOffset.horizontal), //14 & 24 are the size of the marker
+      y2: Math.round(e.clientY + 24 - containerOffset.vertical),
+      drawing: false,
+    };
+
+    const annotation = Immutable.Map(a);
 
     //console.debug(`annotation: scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, x1: ${annotation.get('x1')}, y1: ${annotation.get('y1')}, x2: ${annotation.get('x2')}, y2: ${annotation.get('y2')}`);
 
@@ -120,10 +142,10 @@ export const Container = (props: Props) => {
       timeStamp: new Date(),
       type: mode,
       drawing: true,
-      x1: Math.round((e.clientX - containerOffset.horizontal) / props.scale),
-      y1: Math.round((e.clientY - containerOffset.vertical) / props.scale),
-      x2: Math.round((e.clientX - containerOffset.horizontal) / props.scale),
-      y2: Math.round((e.clientY - containerOffset.vertical) / props.scale),
+      x1: Math.round(e.clientX - containerOffset.horizontal),
+      y1: Math.round(e.clientY - containerOffset.vertical),
+      x2: Math.round(e.clientX - containerOffset.horizontal),
+      y2: Math.round(e.clientY - containerOffset.vertical),
     });
 
     setPendingAnnotation(annotation);
@@ -144,8 +166,8 @@ export const Container = (props: Props) => {
     if (!annotation.get('drawing')) return;
 
     annotation = annotation
-      .set('x2', (e.clientX - containerOffset.horizontal) / props.scale)
-      .set('y2', (e.clientY - containerOffset.vertical) / props.scale);
+      .set('x2', e.clientX - containerOffset.horizontal)
+      .set('y2', e.clientY - containerOffset.vertical);
 
     setPendingAnnotation(annotation);
   };
@@ -166,8 +188,8 @@ export const Container = (props: Props) => {
 
     annotation = annotation
       .set('drawing', false)
-      .set('x2', Math.round((e.clientX - containerOffset.horizontal) / props.scale))
-      .set('y2', Math.round((e.clientY - containerOffset.vertical) / props.scale));
+      .set('x2', Math.round(e.clientX - containerOffset.horizontal))
+      .set('y2', Math.round(e.clientY - containerOffset.vertical));
 
     if (annotation.get('x2') < annotation.get('x1')) {
       const newAnnotation = annotation
@@ -186,11 +208,12 @@ export const Container = (props: Props) => {
 
     // Only save the pending change if the mark is bigger than a single point
     // In this case, vertical or horizontal lines are allowed
-    if (Math.abs(annotation.get('x2') - annotation.get('x1')) < 1
-      && Math.abs(annotation.get('y2') - annotation.get('y1')) < 1) {
-        setPendingAnnotation(null);
-    }
-    else {
+    if (
+      Math.abs(annotation.get('x2') - annotation.get('x1')) < 1 &&
+      Math.abs(annotation.get('y2') - annotation.get('y1')) < 1
+    ) {
+      setPendingAnnotation(null);
+    } else {
       setPendingAnnotation(annotation);
     }
   };
@@ -221,13 +244,14 @@ export const Container = (props: Props) => {
 
   // If editing, pull the annotation out and put it in pending, force viewer to null
   const editAnnotation = (id: number) => {
-    const annotation = props.annotations.find((value) => {
+    const annotation = props.annotations.find((value: AnnotationType) => {
       if (value.get('id') === id) return true;
       return false;
     });
-
-    setPendingAnnotation(annotation);
-    setVisibleViewerId(0);
+    if (annotation) {
+      setPendingAnnotation(annotation);
+      setVisibleViewerId(0);
+    }
   };
 
   const cancelAnnotation = () => {
@@ -267,56 +291,63 @@ export const Container = (props: Props) => {
 
   let pAnnotationComponent: JSX.Element | null = null;
   if (pA && !props.hidden) {
-    pAnnotationComponent = <Annotation id={pA.get('id')}
-      allowDelete={false}
-      allowEdit={false}
-      content={pA.get('content')}
-      pending={true}
-      priority={0}
-      drawing={pA.get('drawing')}
-      saveAnnotation={saveAnnotation}
-      cancelAnnotation={cancelAnnotation}
-      deleteAnnotation={deleteAnnotation}
-      editAnnotation={editAnnotation}
-      deemphasize={false}
-      type={pA.get('type')}
-      containerOffset={containerOffset}
-      author={pA.get('author')}
-      viewOnlyMode={false}
-      x1={pA.get('x1') * props.scale}
-      y1={pA.get('y1') * props.scale}
-      x2={pA.get('x2') * props.scale}
-      y2={pA.get('y2') * props.scale} />;
+    pAnnotationComponent = (
+      <Annotation
+        id={pA.get('id')}
+        allowDelete={false}
+        allowEdit={false}
+        content={pA.get('content')}
+        pending={true}
+        priority={0}
+        drawing={pA.get('drawing')}
+        saveAnnotation={saveAnnotation}
+        cancelAnnotation={cancelAnnotation}
+        deleteAnnotation={deleteAnnotation}
+        editAnnotation={editAnnotation}
+        deemphasize={false}
+        type={pA.get('type')}
+        containerOffset={containerOffset}
+        author={pA.get('author')}
+        viewOnlyMode={false}
+        x1={pA.get('x1')}
+        y1={pA.get('y1')}
+        x2={pA.get('x2')}
+        y2={pA.get('y2')}
+      />
+    );
   }
 
   // Sorting the annotations: largest area to smallest area, then highlights, then markers
   // This allows us to assign a priority with biggest shapes being lowest in order to
   // calculate a z-index that stacks them accordingly
-  const sortedAnnotations = props.annotations.sort((a1, a2) => {
-    const m1 = a1.toJS();
-    const m2 = a2.toJS();
 
-    if (m1.type === 'marker' || m2.type === 'marker') {
-      if (m1.type === m2.type) return 0;
-      if (m1.type === 'marker') return 1;
-      return -1;
+  const sortedAnnotations = props.annotations.sort(
+    (a1: AnnotationType, a2: AnnotationType) => {
+      const m1 = a1.toJS() as AnnotationPoint;
+      const m2 = a2.toJS() as AnnotationPoint;
+
+      if (m1.type === 'marker' || m2.type === 'marker') {
+        if (m1.type === m2.type) return 0;
+        if (m1.type === 'marker') return 1;
+        return -1;
+      }
+
+      if (m1.type === 'highlight' || m2.type === 'highlight') {
+        if (m1.type === m2.type) return 0;
+        if (m1.type === 'highlight') return 1;
+        return -1;
+      }
+
+      const m1Area = Math.abs((m1.x1 - m1.x2) * (m1.y1 - m1.y2));
+      const m2Area = Math.abs((m2.x1 - m2.x2) * (m2.y1 - m2.y2));
+
+      return m2Area - m1Area;
     }
+  );
 
-    if (m1.type === 'highlight' || m2.type === 'highlight') {
-      if (m1.type === m2.type) return 0;
-      if (m1.type === 'highlight') return 1;
-      return -1;
-    }
-
-    const m1Area = Math.abs((m1.x1 - m1.x2) * (m1.y1 - m1.y2));
-    const m2Area = Math.abs((m2.x1 - m2.x2) * (m2.y1 - m2.y2));
-
-    return m2Area - m1Area;
-  });
-
-  let annotations = '';
+  let annotations = null;
   if (!props.hidden) {
-    annotations = sortedAnnotations.map((a, i) => {
+    annotations = sortedAnnotations.map((a: AnnotationType, i: number) => {
       return (
         <Annotation
           allowDelete={props.allowDelete}
@@ -339,21 +370,28 @@ export const Container = (props: Props) => {
           type={a.get('type')}
           author={a.get('author')}
           containerOffset={containerOffset}
-          x1={a.get('x1') * props.scale}
-          y1={a.get('y1') * props.scale}
-          x2={a.get('x2') * props.scale}
-          y2={a.get('y2') * props.scale} />
+          x1={a.get('x1')}
+          y1={a.get('y1')}
+          x2={a.get('x2')}
+          y2={a.get('y2')}
+        />
       );
     });
   }
 
-
   return (
-    <div ref={cdContainer} className='cd-container' style={{backgroundColor: 'rgba(0,0,0,0)' /*IE 10 click event workaround*/ }}
+    <div
+      ref={cdContainer}
+      className='cd-container'
+      style={{
+        height: `${props.height}px`,
+        // backgroundColor: 'rgb(1 19 180 / 10%)',
+      }}
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove} >
+      onMouseMove={handleMouseMove}
+    >
       {props.viewOnlyMode || <ModeToggle mode={mode} switchMode={switchMode} />}
       {annotations}
       {pAnnotationComponent}

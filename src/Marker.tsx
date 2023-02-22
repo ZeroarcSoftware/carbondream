@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 type Props = {
-  deemphasize: boolean,
-  priority: number,
+  deemphasize: boolean;
+  priority: number;
 };
 
 export const Marker = (props: Props) => {
@@ -18,12 +18,12 @@ export const Marker = (props: Props) => {
 
   const classes = ClassNames({
     'cd-marker': true,
-    'deemphasize': props.deemphasize,
+    deemphasize: props.deemphasize,
   });
 
   return (
     <div style={divStyle} className={classes}>
-      <FontAwesomeIcon icon={['far', 'map-marker']} /> 
+      <FontAwesomeIcon icon={['far', 'map-marker']} />
     </div>
   );
 };

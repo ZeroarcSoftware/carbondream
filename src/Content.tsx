@@ -4,26 +4,28 @@
 
 import React, { useState } from 'react';
 import ClassNames from 'classnames';
-import TimeAgo from 'react-timeago'
+import TimeAgo from 'react-timeago';
 
 import type { Offset } from './types';
 
 type Props = {
-  allowDelete: boolean,
-  allowEdit: boolean,
-  author: string,
-  content: string,
-  deleteAnnotation: (id: number) => void,
-  editAnnotation: (id: number) => void,
-  id: number,
-  invert: boolean,
-  offset: Offset,
-  pending: boolean,
-  pullHorizontal: boolean,
-  pushHorizontal: boolean,
-  shouldDisplayViewer: boolean,
-  timeStamp?: Date,
-  viewOnlyMode: boolean,
+  allowDelete: boolean;
+  allowEdit: boolean;
+  author: string;
+  content: string;
+  deleteAnnotation: (id: number) => void;
+  editAnnotation: (id: number) => void;
+  id: number;
+  invert: boolean;
+  offset: Offset;
+  top: number;
+  left: number;
+  pending: boolean;
+  pullHorizontal: boolean;
+  pushHorizontal: boolean;
+  shouldDisplayViewer: boolean;
+  timeStamp?: Date;
+  viewOnlyMode: boolean;
 };
 
 export const Content = (props: Props) => {
@@ -56,7 +58,7 @@ export const Content = (props: Props) => {
 
   const viewerClasses = ClassNames({
     'cd-annotation-viewer': true,
-    'hidden': props.pending || !props.shouldDisplayViewer,   //Hide if we are NOT pending and we SHOULD NOT display
+    hidden: props.pending || !props.shouldDisplayViewer, //Hide if we are NOT pending and we SHOULD NOT display
   });
 
   const contentClasses = ClassNames({
@@ -70,14 +72,8 @@ export const Content = (props: Props) => {
 
   const shadowClasses = ClassNames({
     'cd-shadow-bubble': true,
-    'invert': props.invert,
+    invert: props.invert,
   });
-
-  // Apply offsets for outer div
-  const divStyle = {
-    left: props.offset.horizontal,
-    top: props.offset.vertical,
-  };
 
   // Apply offsets for shadow bubble. Trial and error to figure
   // out the maximums
@@ -85,25 +81,45 @@ export const Content = (props: Props) => {
   if (props.pushHorizontal || props.pullHorizontal) {
     shadowStyle.left = props.offset.shadow || -props.offset.horizontal - 4;
 
-    if (shadowStyle.left < 6)
-      shadowStyle.left = 6;
-    else if (shadowStyle.left > 234)
-      shadowStyle.left = 234;
+    if (shadowStyle.left < 6) shadowStyle.left = 6;
+    else if (shadowStyle.left > 234) shadowStyle.left = 234;
   }
 
   return (
-    <div style={divStyle} className={viewerClasses}>
+    <div
+      style={{
+        left: props.left + props.offset.horizontal,
+        top: props.top + props.offset.vertical,
+        position: 'fixed',
+      }}
+      className={viewerClasses}
+    >
       <div style={shadowStyle} className={shadowClasses}></div>
-      <div className={contentClasses} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+      <div
+        className={contentClasses}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+      >
         <div className={controlClasses}>
-          <button className='delete' onClick={handleDeleteClick} hidden={!props.allowDelete}><i className='fa fa-fw fa-times'></i> Delete</button>
-          <button className='edit' onClick={handleEditClick} hidden={!props.allowEdit}><i className='fa fa-fw fa-pencil'></i> Edit</button>
+          <button
+            className='delete'
+            onClick={handleDeleteClick}
+            hidden={!props.allowDelete}
+          >
+            <i className='fa fa-fw fa-times'></i> Delete
+          </button>
+          <button
+            className='edit'
+            onClick={handleEditClick}
+            hidden={!props.allowEdit}
+          >
+            <i className='fa fa-fw fa-pencil'></i> Edit
+          </button>
         </div>
-        <div className='cd-annotation-content-text'>
-          {props.content}
-        </div>
+        <div className='cd-annotation-content-text'>{props.content}</div>
         <div className='cd-annotation-content-info'>
-          Comment #{props.id} by {props.author} <TimeAgo date={props.timeStamp} />
+          Comment #{props.id} by {props.author}{' '}
+          {props.timeStamp ? <TimeAgo date={props.timeStamp} /> : null}
         </div>
       </div>
     </div>

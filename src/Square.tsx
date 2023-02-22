@@ -6,10 +6,10 @@ import ClassNames from 'classnames';
 import React from 'react';
 
 type Props = {
-  width: number,
-  height: number,
-  priority: number,
-  deemphasize: boolean,
+  width: number;
+  height: number;
+  priority: number;
+  deemphasize: boolean;
 };
 
 export const Square = (props: Props) => {
@@ -21,8 +21,11 @@ export const Square = (props: Props) => {
 
   const classes = ClassNames({
     'cd-square': true,
-    'deemphasize': props.deemphasize,
+    deemphasize: props.deemphasize,
   });
+
+  // Not possible to have a 0 width or height unless the object is off the page entirely.
+  if (props.height <= 0 || props.width <= 0) return null;
 
   return (
     <div>

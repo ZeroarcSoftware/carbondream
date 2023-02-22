@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/Container.js",
@@ -36,7 +36,7 @@
     "@types/react": "^18.0.1",
     "@types/react-dom": "^18.0.0",
     "@types/react-timeago": "^4.1.3",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^9.1.2",
     "json-loader": "^0.5.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
