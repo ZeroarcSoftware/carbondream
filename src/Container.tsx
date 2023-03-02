@@ -2,7 +2,7 @@
 // Top level container component
 'use strict';
 
-import React, { useRef, useState, useEffect, WheelEventHandler } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 

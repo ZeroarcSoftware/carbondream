@@ -2,7 +2,7 @@
 // Annotation component
 'use strict';
 
-import React, { ReactElement, useRef } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 
 import Marker from './Marker';
 import Square from './Square';
@@ -51,6 +51,21 @@ const defaultProps = {
 export const Annotation = (props: Props): ReactElement => {
   props = { ...defaultProps, ...props };
   const annotationWrapper = useRef<HTMLDivElement>(null);
+
+  // This isn't actually used anywhere, but causes react to re-render the
+  // Input component after the annotationWrapper has been rendered and has coordinates
+  // This addresses the Input not showing issue #2042
+  const [annotationWrapperLoc, setAnnotationWrapperLoc] = useState({
+    top: 0,
+    left: 0,
+  });
+
+  // This effect is the second part of the work around described above.
+  // This addresses the Input not showing issue #2042
+  useEffect(() => {
+    const rect = annotationWrapper.current?.getBoundingClientRect();
+    if (rect) setAnnotationWrapperLoc({ top: rect.top, left: rect.left });
+  }, []);
 
   const handleMouseOver = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
