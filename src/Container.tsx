@@ -52,11 +52,10 @@ export const Container = (props: Props) => {
     shadow: null,
   });
 
-  const viewerHideTimer = useRef<number>();
+  const viewerHideTimer = useRef<NodeJS.Timeout>();
   const cdContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('Loading CarbonDream Dev');
     const component = ReactDOM.findDOMNode(this);
 
     if (!component) return;
@@ -99,9 +98,9 @@ export const Container = (props: Props) => {
   };
 
   const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
-    console.debug(
-      `click fired. scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`
-    );
+    // console.debug(
+    //   `click fired. scale: ${props.scale}, offset(top/left): ${containerOffset.vertical}/${containerOffset.horizontal}, clientX: ${e.clientX}, clientY: ${e.clientY}, container.ScrollTop: ${cdContainer.current?.parentElement?.scrollTop}`
+    // );
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -129,7 +128,7 @@ export const Container = (props: Props) => {
   };
 
   const handleMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
-    //console.debug(`mousedown fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mousedown fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}`);
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -152,7 +151,7 @@ export const Container = (props: Props) => {
   };
 
   const handleMouseMove = (e: React.MouseEvent<Element, MouseEvent>) => {
-    //console.debug(`mousemove fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mousemove fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}`);
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -173,7 +172,7 @@ export const Container = (props: Props) => {
   };
 
   const handleMouseUp = (e: React.MouseEvent<Element, MouseEvent>) => {
-    //console.debug(`mouseup fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}, screenX: ${e.screenX}, screenY: ${e.screenY}`  );
+    //console.debug(`mouseup fired. scale: ${props.scale}, clientX: ${e.clientX}, clientY: ${e.clientY}`);
     e.stopPropagation();
     if (props.viewOnlyMode) return;
 
@@ -392,7 +391,13 @@ export const Container = (props: Props) => {
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      {props.viewOnlyMode || <ModeToggle mode={mode} switchMode={switchMode} />}
+      {props.viewOnlyMode || (
+        <ModeToggle
+          mode={mode}
+          switchMode={switchMode}
+          scrollPosition={props.scrollPosition}
+        />
+      )}
       {annotations}
       {pAnnotationComponent}
     </div>
