@@ -22,6 +22,7 @@ type Props = {
 };
 
 export const Input = (props: Props) => {
+  console.debug('INPUT DISPLAYED');
   const [value, setValue] = useState(props.content);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

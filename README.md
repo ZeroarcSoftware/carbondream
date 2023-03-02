@@ -1,26 +1,32 @@
 # carbondream
+
 ## Reactjs Annotation Engine
 
 Carbondream is an annotation engine written purely in ReactJS. It was inspired by [Annotator](http://annotatorjs.org) and heavily borrows from the UX.
 
-## Demo
-Go to http://carbondream.zeroarc.com and click on Demo.
-
 ## Using it
 
 To use Carbondream:
+
 - Install the component through NPM
 - Require it
-- Pass it a list of annotations, a save handler, and a delete handler
+- Pass it a list of annotations and the following props:
 
-        <Container
-          annotations={annotations}
-          onSave={this.handleAnnotationSave}
-          onDelete={this.handleAnnotationDelete}
-        />
-
-Check out test/demo.jsx for a simple implementation using [RefluxJS](https://github.com/spoike/refluxjs) with local storage.
-
+  <CarbonDream
+      allowEdit={true}
+      allowDelete={true}
+      scale={scale.current}
+      annotations={carbonDreamAnnotations}
+      selectedId={props.selectedAnnotationId}
+      onSave={handleAnnotationSave}
+      onDelete={props.deleteAnnotation}
+      onSelect={props.selectAnnotation}
+      onDeselect={props.deselectAnnotation}
+      viewOnlyMode={!props.canReviewOutputs}
+      height={viewerClientHeight}
+      pageNumber={props.pageNumber}
+      scrollPosition={scrollPosition}
+  />
 
 ## Contributing
 
@@ -30,19 +36,14 @@ First, setup your local environment:
     cd carbondream
     npm install
 
-Next, build the project (for use in a npm link scenario):
+Link the project to your local target environment:
+
+    sudo npm link
+
+Next, build the project:
 
     npm run build
 
-To run the demo (uses browserify):
+Or, alternatively, use babel watch to continously watch for changes:
 
-    npm run demo-build
-
-Or to watch for changes:
-
-    npm run demo-watch
-
-To reset the demo local storage, open the console and type:
-
-    localStorage.clear()
-
+    NODE_ENV=production npx babel src/ -d dist/ --extensions '.ts,.tsx' -w
