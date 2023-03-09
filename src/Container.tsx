@@ -27,6 +27,7 @@ type Props = {
   onSelect?: (id: number) => void;
   offsetLeft: number;
   offsetTop: number;
+  scale: number;
   scrollPosition: number;
 } & typeof defaultProps;
 
@@ -312,6 +313,7 @@ export const Container = (props: Props) => {
         y1={pA.get('y1')}
         x2={pA.get('x2')}
         y2={pA.get('y2')}
+        scale={props.scale}
       />
     );
   }
@@ -373,6 +375,7 @@ export const Container = (props: Props) => {
           y1={a.get('y1')}
           x2={a.get('x2')}
           y2={a.get('y2')}
+          scale={props.scale}
         />
       );
     });

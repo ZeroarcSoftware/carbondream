@@ -32,6 +32,7 @@ type Props = {
   y1: number;
   x2: number;
   y2: number;
+  scale: number;
 
   // Optional
   cancelAnnotation: () => void;
@@ -151,11 +152,12 @@ export const Annotation = (props: Props): ReactElement => {
       break;
     case 'highlight':
       divStyle.top = y1; // Force back to y1, highlights must stay on same vertical height
-      height = 21; // Force height of highlight to allow correct bubble placement
+      height = 21 * props.scale; // Force height of highlight to allow correct bubble placement
       indicator = (
         <Highlight
           deemphasize={props.deemphasize}
           width={width}
+          height={height}
           priority={props.priority}
         />
       );

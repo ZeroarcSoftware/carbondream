@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/Container.js",
