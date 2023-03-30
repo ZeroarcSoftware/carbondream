@@ -28,7 +28,7 @@ type Props = {
   offsetLeft: number;
   offsetTop: number;
   scale: number;
-  scrollPosition: number;
+  verticalOffset: number;
 } & typeof defaultProps;
 
 const defaultProps = {
@@ -56,15 +56,15 @@ export const Container = (props: Props) => {
   const viewerHideTimer = useRef<NodeJS.Timeout>();
   const cdContainer = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const component = ReactDOM.findDOMNode(this);
+  // useEffect(() => {
+  //   const component = ReactDOM.findDOMNode(this);
 
-    if (!component) return;
-    component.addEventListener('scroll', updateOffset);
-    updateOffset();
+  //   if (!component) return;
+  //   component.addEventListener('scroll', updateOffset);
+  //   updateOffset();
 
-    return () => component.removeEventListener('scroll', updateOffset);
-  }, []);
+  //   return () => component.removeEventListener('scroll', updateOffset);
+  // }, []);
 
   useEffect(() => {
     setVisibleViewerId(props.selectedId);
@@ -398,7 +398,7 @@ export const Container = (props: Props) => {
         <ModeToggle
           mode={mode}
           switchMode={switchMode}
-          scrollPosition={props.scrollPosition}
+          verticalOffset={props.verticalOffset}
         />
       )}
       {annotations}

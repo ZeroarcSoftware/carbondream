@@ -30,9 +30,8 @@
  */
 
 .cd-mode-toggle {
-  position: absolute;
-  right: 0px;
-  top: 0px;
+  position: fixed;
+  right: 15px;
   opacity: 0.4;
   -webkit-transition: opacity 200ms ease-in-out;
   -moz-transition: opacity 200ms ease-in-out;

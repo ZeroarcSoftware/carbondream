@@ -87,7 +87,7 @@ export const Annotation = (props: Props): ReactElement => {
     if (props.type === 'marker') e.stopPropagation();
   };
 
-  // Desctructuring is on one line b/c vim indenting gets confused
+  // Destructuring is on one line b/c vim indenting gets confused
   const {
     x1,
     y1,
@@ -152,7 +152,7 @@ export const Annotation = (props: Props): ReactElement => {
       break;
     case 'highlight':
       divStyle.top = y1; // Force back to y1, highlights must stay on same vertical height
-      height = 21 * props.scale; // Force height of highlight to allow correct bubble placement
+      height = 15 * props.scale; // Force height of highlight to allow correct bubble placement
       indicator = (
         <Highlight
           deemphasize={props.deemphasize}

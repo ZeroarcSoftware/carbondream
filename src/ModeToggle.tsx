@@ -2,24 +2,24 @@
 // Controls to toggle annotation modes
 'use strict';
 
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Mode } from './types';
 
 type Props = {
   mode: string;
-  scrollPosition: number;
+  verticalOffset: number;
   switchMode: (mode: Mode) => void;
 };
 
-// This is neccessary to prevent mouseup/down from triggering actions on parents
+// This is necessary to prevent mouseup/down from triggering actions on parents
 const blockEvent = (e: React.MouseEvent<Element, MouseEvent>) => {
   e.stopPropagation();
 };
 
-export const ModeToggle = ({ mode, scrollPosition, switchMode }: Props) => {
+export const ModeToggle = ({ mode, verticalOffset, switchMode }: Props) => {
   const handleClick = (mode: Mode) => {
-    return (e) => {
+    return (e: React.MouseEvent<Element, MouseEvent>) => {
       e.stopPropagation();
       switchMode(mode);
     };
@@ -31,7 +31,7 @@ export const ModeToggle = ({ mode, scrollPosition, switchMode }: Props) => {
       onMouseUp={blockEvent}
       onMouseDown={blockEvent}
       onClick={blockEvent}
-      style={{ top: `${scrollPosition}px` }}
+      style={{ top: `${verticalOffset}px` }}
     >
       <button
         className={mode === 'marker' ? 'selected' : ''}
