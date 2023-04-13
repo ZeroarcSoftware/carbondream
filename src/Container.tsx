@@ -3,7 +3,6 @@
 'use strict';
 
 import React, { useRef, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 
 import Annotation from './Annotation';
@@ -20,6 +19,7 @@ type Props = {
   allowDelete: boolean;
   allowEdit: boolean;
   annotations: Immutable.List<AnnotationType>;
+  debugMode: boolean;
   height: number;
   onDelete: (id: number) => void;
   onDeselect?: () => void;
@@ -55,16 +55,6 @@ export const Container = (props: Props) => {
 
   const viewerHideTimer = useRef<NodeJS.Timeout>();
   const cdContainer = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   const component = ReactDOM.findDOMNode(this);
-
-  //   if (!component) return;
-  //   component.addEventListener('scroll', updateOffset);
-  //   updateOffset();
-
-  //   return () => component.removeEventListener('scroll', updateOffset);
-  // }, []);
 
   useEffect(() => {
     setVisibleViewerId(props.selectedId);
@@ -381,14 +371,17 @@ export const Container = (props: Props) => {
     });
   }
 
+  const containerStyle: React.CSSProperties = {
+    height: `${props.height}px`,
+  };
+  // Debug mode shows a purple overlay of target area
+  if (props.debugMode) containerStyle.backgroundColor = 'rgb(1 19 180 / 10%)';
+
   return (
     <div
       ref={cdContainer}
       className='cd-container'
-      style={{
-        height: `${props.height}px`,
-        // backgroundColor: 'rgb(1 19 180 / 10%)',
-      }}
+      style={containerStyle}
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
