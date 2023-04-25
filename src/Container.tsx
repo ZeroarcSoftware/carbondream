@@ -60,6 +60,10 @@ export const Container = (props: Props) => {
     setVisibleViewerId(props.selectedId);
   }, [props.selectedId]);
 
+  useEffect(() => {
+    cancelAnnotation();
+  }, [props.scale]);
+
   //#endregion
 
   const getOffset = (element: Element): Offset => {
