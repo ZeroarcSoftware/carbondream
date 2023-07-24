@@ -24,6 +24,7 @@ type Props = {
   containerOffset: Offset;
   deemphasize: boolean;
   horizontalOffset: number;
+  hideContent: boolean;
   id?: number;
   pending: boolean;
   priority: number;

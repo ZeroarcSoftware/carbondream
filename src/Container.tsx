@@ -41,6 +41,7 @@ const defaultProps = {
   selectedId: 0,
   scale: 1,
   hidden: false,
+  hideContent: false
 };
 
 export const Container = (props: Props) => {
@@ -289,6 +290,7 @@ export const Container = (props: Props) => {
   const pA = pendingAnnotation;
 
   let pAnnotationComponent: JSX.Element | null = null;
+
   if (pA && !props.hidden) {
     pAnnotationComponent = (
       <Annotation
@@ -304,6 +306,7 @@ export const Container = (props: Props) => {
         deleteAnnotation={deleteAnnotation}
         editAnnotation={editAnnotation}
         deemphasize={false}
+        hideContent={props.hideContent}
         type={pA.get('type')}
         containerOffset={containerOffset}
         horizontalOffset={props.horizontalOffset}
@@ -364,6 +367,7 @@ export const Container = (props: Props) => {
           displayAnnotationViewer={displayAnnotationViewer}
           hideAnnotationViewer={hideAnnotationViewer}
           horizontalOffset={props.horizontalOffset}
+          hideContent={props.hideContent}
           deleteAnnotation={deleteAnnotation}
           editAnnotation={editAnnotation}
           saveAnnotation={saveAnnotation}

@@ -15,6 +15,7 @@ type Props = {
   content: string;
   deleteAnnotation: (id: number) => void;
   editAnnotation: (id: number) => void;
+  hideContent: boolean | undefined;
   id: number;
   invert: boolean;
   offset: Offset;
@@ -58,7 +59,7 @@ export const Content = (props: Props) => {
 
   const viewerClasses = ClassNames({
     'cd-annotation-viewer': true,
-    hidden: props.pending || !props.shouldDisplayViewer, //Hide if we are NOT pending and we SHOULD NOT display
+    hidden: props.pending || !props.shouldDisplayViewer || props.hideContent, //Hide if we are NOT pending and we SHOULD NOT display
   });
 
   const contentClasses = ClassNames({
@@ -84,6 +85,8 @@ export const Content = (props: Props) => {
     if (shadowStyle.left < 6) shadowStyle.left = 6;
     else if (shadowStyle.left > 234) shadowStyle.left = 234;
   }
+
+  console.log('hans', props)
 
   return (
     <div
