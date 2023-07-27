@@ -86,8 +86,6 @@ export const Content = (props: Props) => {
     else if (shadowStyle.left > 234) shadowStyle.left = 234;
   }
 
-  console.log('hans', props)
-
   return (
     <div
       style={{
