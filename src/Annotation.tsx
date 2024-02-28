@@ -23,6 +23,7 @@ type Props = {
   content: string;
   containerOffset: Offset;
   deemphasize: boolean;
+  horizontalOffset: number;
   id?: number;
   pending: boolean;
   priority: number;
@@ -65,7 +66,17 @@ export const Annotation = (props: Props): ReactElement => {
   // This addresses the Input not showing issue #2042
   useEffect(() => {
     const rect = annotationWrapper.current?.getBoundingClientRect();
-    if (rect) setAnnotationWrapperLoc({ top: rect.top, left: rect.left });
+    // Horizontal offset is only used here to compensate for an edge case
+    // when an iframe is causing the page to shift horizontally which breaks
+    // fixed position styling.
+    const leftPageOffset = props.horizontalOffset || 0;
+
+    if (rect) {
+      setAnnotationWrapperLoc({
+        top: rect.top,
+        left: rect.left - leftPageOffset,
+      });
+    }
   }, []);
 
   const handleMouseOver = (e: React.MouseEvent<Element, MouseEvent>) => {
@@ -210,8 +221,8 @@ export const Annotation = (props: Props): ReactElement => {
         pushHorizontal={pushHorizontal}
         pullHorizontal={pullHorizontal}
         offset={offset}
-        top={annotationWrapper.current?.getBoundingClientRect().top || 0}
-        left={annotationWrapper.current?.getBoundingClientRect().left || 0}
+        top={annotationWrapperLoc.top}
+        left={annotationWrapperLoc.left}
         {...other}
       />
     ) : (
@@ -224,8 +235,8 @@ export const Annotation = (props: Props): ReactElement => {
         pushHorizontal={pushHorizontal}
         pullHorizontal={pullHorizontal}
         offset={offset}
-        top={annotationWrapper.current?.getBoundingClientRect().top || 0}
-        left={annotationWrapper.current?.getBoundingClientRect().left || 0}
+        top={annotationWrapperLoc.top}
+        left={annotationWrapperLoc.left}
         {...other}
       />
     ) : (
