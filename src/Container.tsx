@@ -29,6 +29,11 @@ type Props = {
   offsetTop: number;
   scale: number;
   verticalOffset: number;
+
+  // Horizontal offset is only used here to compensate for an edge case
+  // when an iframe is causing the page to shift horizontally which breaks
+  // fixed position styling.
+  horizontalOffset: number;
 } & typeof defaultProps;
 
 const defaultProps = {
@@ -301,6 +306,7 @@ export const Container = (props: Props) => {
         deemphasize={false}
         type={pA.get('type')}
         containerOffset={containerOffset}
+        horizontalOffset={props.horizontalOffset}
         author={pA.get('author')}
         viewOnlyMode={false}
         x1={pA.get('x1')}
@@ -357,6 +363,7 @@ export const Container = (props: Props) => {
           deemphasize={visibleViewerId !== 0 && a.get('id') !== visibleViewerId}
           displayAnnotationViewer={displayAnnotationViewer}
           hideAnnotationViewer={hideAnnotationViewer}
+          horizontalOffset={props.horizontalOffset}
           deleteAnnotation={deleteAnnotation}
           editAnnotation={editAnnotation}
           saveAnnotation={saveAnnotation}

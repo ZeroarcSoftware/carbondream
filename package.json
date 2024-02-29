@@ -1,6 +1,6 @@
 {
   "name": "carbondream",
-  "version": "5.0.6",
+  "version": "5.1.0",
   "description": "React web annotation engine",
   "homepage": "http://carbondream.zeroarc.com/",
   "main": "dist/Container.js",
@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "build": "NODE_ENV=production $(npm bin)/babel src/ -d dist/ --extensions '.ts,.tsx'",
+    "build": "NODE_ENV=production npx babel src/ -d dist/ --extensions '.ts,.tsx'",
+    "watch": "npx babel src/ -d dist/ --extensions '.ts,.tsx' --watch",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
