@@ -54,6 +54,7 @@ const defaultProps = {
 export const Annotation = (props: Props): ReactElement => {
   props = { ...defaultProps, ...props };
   const annotationWrapper = useRef<HTMLDivElement>(null);
+  const leftPageOffset = props.horizontalOffset || 0;
 
   // This isn't actually used anywhere, but causes react to re-render the
   // Input component after the annotationWrapper has been rendered and has coordinates
@@ -70,7 +71,6 @@ export const Annotation = (props: Props): ReactElement => {
     // Horizontal offset is only used here to compensate for an edge case
     // when an iframe is causing the page to shift horizontally which breaks
     // fixed position styling.
-    const leftPageOffset = props.horizontalOffset || 0;
 
     if (rect) {
       setAnnotationWrapperLoc({
@@ -222,8 +222,13 @@ export const Annotation = (props: Props): ReactElement => {
         pushHorizontal={pushHorizontal}
         pullHorizontal={pullHorizontal}
         offset={offset}
-        top={annotationWrapperLoc.top}
-        left={annotationWrapperLoc.left}
+        // Recalculate the position each time the element is rendered, otherwise we end up with stale coordinates
+        // when parent containers shift around
+        top={annotationWrapper.current?.getBoundingClientRect().top || 0}
+        left={
+          (annotationWrapper.current?.getBoundingClientRect().left || 0) -
+          leftPageOffset
+        }
         {...other}
       />
     ) : (
@@ -236,8 +241,13 @@ export const Annotation = (props: Props): ReactElement => {
         pushHorizontal={pushHorizontal}
         pullHorizontal={pullHorizontal}
         offset={offset}
-        top={annotationWrapperLoc.top}
-        left={annotationWrapperLoc.left}
+        // Recalculate the position each time the element is rendered, otherwise we end up with stale coordinates
+        // when parent containers shift around
+        top={annotationWrapper.current?.getBoundingClientRect().top || 0}
+        left={
+          (annotationWrapper.current?.getBoundingClientRect().left || 0) -
+          leftPageOffset
+        }
         {...other}
       />
     ) : (
