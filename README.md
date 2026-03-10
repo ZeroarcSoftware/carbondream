@@ -1,3 +1,8 @@
+# THIS REPOSITORY IS NO LONGER MAINTAINED
+
+Zeroarc no longer uses this component and it is no longer maintained.
+
+
 # carbondream
 
 ## Reactjs Annotation Engine
